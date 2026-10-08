@@ -277,6 +277,13 @@ views:
             variables:
               icon: led-strip-variant
           - type: custom:button-card
+            template: hemma_entity
+            entity: switch.bathroom_lamp
+            name: Bathroom Lamp
+            variables:
+              icon: lightbulb-variant-outline
+              show_toggle: true
+          - type: custom:button-card
             template: hemma_fan
             entity: fan.bathroom_fan_bathroom
             name: Ventilation

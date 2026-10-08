@@ -19,6 +19,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Energy monitoring with a monotonic utility meter
 - Wake-up alarm controls and a dedicated stop action
 - IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
+- Bathroom Lamp control with a filament-style bulb icon
 - Apple-first typography using the native San Francisco system font where available
 - Custom SVG icon set and room artwork
 
