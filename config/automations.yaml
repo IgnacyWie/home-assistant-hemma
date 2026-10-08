@@ -133,6 +133,9 @@
           entity_id: script.leave_home
     - conditions: "{{ trigger.id == 'turn_on' and nighttime }}"
       sequence:
+      - action: switch.turn_on
+        target:
+          entity_id: switch.bathroom_lamp
       - choose:
         - conditions: "{{ not is_state('light.3_in_1_controller_wifi_2_4g', 'on') }}"
           sequence:
@@ -173,6 +176,9 @@
           - light.bedroom_ikea_of_sweden_grillplats_plug
           - light.3_in_1_controller_wifi_2_4g
           - light.bedroom_accent_bedroom
+      - action: switch.turn_off
+        target:
+          entity_id: switch.bathroom_lamp
   mode: restart
 
 - id: 'lelit_espresso_machine_safety'

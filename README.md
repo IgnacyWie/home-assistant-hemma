@@ -84,9 +84,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 - **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
   - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
     LED Bed first, then Bedroom Accent.
-  - Single ON from 23:00 through 05:59 progressively enables LED Bed, Bed Lamp,
-    and Bedroom Accent.
-  - Single OFF turns off all three bedroom lights.
+  - Single ON from 23:00 through 05:59 turns on the Bathroom Lamp and then
+    progressively enables LED Bed, Bed Lamp, and Bedroom Accent.
+  - Single OFF turns off all three bedroom lights and the Bathroom Lamp.
   - Double ON turns on all three bedroom lights.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
     12-entity Leave Home scene, then conditionally turns off the one TV entity also
