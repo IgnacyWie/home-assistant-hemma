@@ -18,6 +18,9 @@ cards:
         - url: /dashboard-hemma/living-room
           label: Living Room
           icon: mdi:sofa
+        - url: /dashboard-hemma/kitchen
+          label: Kitchen
+          icon: mdi:fridge
         - url: /dashboard-hemma/bedroom
           label: Bedroom
           icon: mdi:bed-king

@@ -79,9 +79,10 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 
 ## Kitchen dashboard
 
-The Kitchen view includes a dedicated **Lelit Espresso Machine** switch tile
-using an espresso-maker silhouette. The tile controls the IKEA GRILLPLATS plug
-and reports its current on/off state.
+The Kitchen view is included in the shared room navigation on desktop, tablet,
+and phone. It contains a dedicated **Lelit Espresso Machine** switch tile using
+an espresso-maker silhouette. The tile controls the IKEA GRILLPLATS plug and
+reports its current on/off state.
 
 ## Configuration change workflow
 
