@@ -100,6 +100,45 @@ and phone. It contains a dedicated **Lelit Espresso Machine** switch tile using
 an espresso-maker silhouette. The tile controls the IKEA GRILLPLATS plug and
 reports its current on/off state.
 
+## Potential improvements
+
+The next sensor expansion under consideration is:
+
+- A temperature/humidity sensor in the Bathroom for ventilation control.
+- A second temperature/humidity sensor in the Bedroom, where overnight comfort
+  measurements are likely to be more actionable than Living Room readings. It
+  can also provide a household humidity baseline for the Bathroom.
+- One motion sensor in the Bathroom for occupancy-aware lighting.
+- One motion sensor in the Corridor for nighttime pathway lighting.
+
+Potential follow-up automations:
+
+- **Humidity-driven bathroom fan** — start the fan when Bathroom humidity rises
+  rapidly, exceeds the Bedroom baseline by roughly 8–10 percentage points, or
+  passes a high absolute threshold. Stop it after humidity returns close to the
+  baseline, while retaining a maximum-runtime fallback.
+- **Occupancy-aware bathroom lighting** — turn on the appropriate bathroom light
+  when motion is detected and turn it off after 8–10 minutes without motion.
+  The existing 45-minute forgotten-on automation should remain as a hard
+  fallback because a PIR sensor may not detect someone standing still or behind
+  a shower screen.
+- **Corridor night pathway** — between approximately 23:00 and sunrise, use
+  corridor motion to turn on only a low-impact pathway light, then turn it off
+  after 2–3 minutes without motion.
+- **Bathroom ventilation warning** — notify when high humidity persists despite
+  the fan running or when the bathroom environmental sensor becomes unavailable.
+- **Bedroom comfort monitoring** — expose temperature and humidity on the
+  dashboard and notify only when uncomfortable conditions persist, avoiding
+  noisy alerts for short-lived changes.
+- **Motion-aware cinema behavior** — preserve Jellyfin cinema lighting while
+  allowing brief corridor and bathroom pathway lighting when someone gets up.
+- **Sensor health monitoring** — report low batteries and prolonged unavailable
+  states for the environmental sensors, motion sensors, BILRESA remote, and
+  other important Zigbee devices.
+- **Presence-aware away shutdown** — turn off visible household devices after
+  everyone leaves, with a Guest Mode helper to suppress the shutdown when
+  someone remains home.
+
 ## Configuration change workflow
 
 For every Home Assistant automation or other YAML change:
