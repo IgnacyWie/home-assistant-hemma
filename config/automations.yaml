@@ -201,3 +201,131 @@
           - light.bedroom_accent_bedroom
   mode: restart
 
+- id: 'lelit_espresso_machine_safety'
+  alias: Lelit Espresso Machine - Two-hour safety shutoff
+  description: Keeps a restorable two-hour safety timer while the espresso machine is on.
+  triggers:
+  - trigger: state
+    entity_id: switch.ikea_of_sweden_grillplats_plug_2
+    to: 'on'
+    id: machine_on
+  - trigger: state
+    entity_id: switch.ikea_of_sweden_grillplats_plug_2
+    to: 'off'
+    id: machine_off
+  - trigger: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.lelit_espresso_safety
+    id: timer_finished
+  - trigger: homeassistant
+    event: start
+    id: home_assistant_start
+  conditions: []
+  actions:
+  - choose:
+    - conditions: "{{ trigger.id == 'machine_on' }}"
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.lelit_espresso_safety
+        data:
+          duration: "02:00:00"
+    - conditions: "{{ trigger.id == 'machine_off' }}"
+      sequence:
+      - action: timer.cancel
+        target:
+          entity_id: timer.lelit_espresso_safety
+    - conditions: "{{ trigger.id == 'timer_finished' }}"
+      sequence:
+      - action: switch.turn_off
+        target:
+          entity_id: switch.ikea_of_sweden_grillplats_plug_2
+    - conditions: >-
+        {{ trigger.id == 'home_assistant_start' and
+           is_state('switch.ikea_of_sweden_grillplats_plug_2', 'on') and
+           not is_state('timer.lelit_espresso_safety', 'active') }}
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.lelit_espresso_safety
+        data:
+          duration: "02:00:00"
+  mode: restart
+
+- id: 'jellyfin_cinema_mode'
+  alias: Living Room - Jellyfin cinema mode
+  description: Turns off selected living-room lights during Jellyfin playback and restores their prior states on pause or stop.
+  triggers:
+  - trigger: state
+    entity_id: media_player.tv_w_salonie_4
+    to: playing
+    id: cinema_start
+  - trigger: state
+    entity_id: media_player.tv_w_salonie_4
+    from: playing
+    to: paused
+    id: cinema_restore
+  - trigger: state
+    entity_id: media_player.tv_w_salonie_4
+    from: playing
+    to: idle
+    id: cinema_restore
+  - trigger: state
+    entity_id: media_player.tv_w_salonie_4
+    from: playing
+    to: 'off'
+    id: cinema_restore
+  - trigger: state
+    entity_id: media_player.tv_w_salonie_4
+    from: playing
+    to: unavailable
+    id: cinema_restore
+  conditions: []
+  actions:
+  - choose:
+    - conditions: "{{ trigger.id == 'cinema_start' }}"
+      sequence:
+      - action: scene.create
+        data:
+          scene_id: living_room_before_cinema
+          snapshot_entities:
+          - light.living_room_accent_1
+          - light.living_room_2ch_wi_fi_switch_module_switch_2
+          - light.living_room_2ch_wi_fi_switch_module_2_switch_1
+          - light.living_room_2ch_wi_fi_switch_module_switch_1
+      - action: light.turn_off
+        target:
+          entity_id:
+          - light.living_room_accent_1
+          - light.living_room_2ch_wi_fi_switch_module_switch_2
+          - light.living_room_2ch_wi_fi_switch_module_2_switch_1
+          - light.living_room_2ch_wi_fi_switch_module_switch_1
+    - conditions: >-
+        {{ trigger.id == 'cinema_restore' and
+           states('scene.living_room_before_cinema') not in ['unknown', 'unavailable'] }}
+      sequence:
+      - action: scene.turn_on
+        continue_on_error: true
+        target:
+          entity_id: scene.living_room_before_cinema
+  mode: restart
+
+- id: 'bathroom_lights_forgotten_on'
+  alias: Bathroom - Forgotten lights protection
+  description: Turns off each bathroom light after it has remained on for 45 minutes.
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.sonoff_zbminil2
+    - switch.bathroom_lamp
+    to: 'on'
+    for: "00:45:00"
+  conditions: []
+  actions:
+  - action: homeassistant.turn_off
+    target:
+      entity_id: "{{ trigger.entity_id }}"
+  mode: parallel
+  max: 2
+

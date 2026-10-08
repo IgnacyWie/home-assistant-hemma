@@ -75,6 +75,13 @@ input_datetime:
     has_date: true
     has_time: true
 
+timer:
+  lelit_espresso_safety:
+    name: Lelit Espresso Machine safety shutoff
+    duration: "02:00:00"
+    restore: true
+    icon: mdi:coffee-maker-off
+
 input_number:
   hemma_thermostat_target_temperature:
     name: Thermostat Target Temperature

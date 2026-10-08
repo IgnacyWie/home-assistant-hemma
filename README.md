@@ -18,6 +18,9 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Smart light-group toggles that restore the previous member state
 - Energy monitoring with a monotonic utility meter
 - Wake-up alarm controls and a dedicated stop action
+- Two-hour Lelit espresso-machine safety shutoff with a restart-restorable timer
+- Jellyfin cinema mode with living-room light state restoration
+- Bathroom forgotten-on protection for both bathroom lights
 - IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
 - Bathroom Lamp control with a filament-style bulb icon
 - Apple-first typography using the native San Francisco system font where available
@@ -63,6 +66,18 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   the wake-up helper is enabled.
 - **Stop wake-up music** — stops only the Zeppelin from the dashboard stop
   button; the espresso machine remains on.
+- **Lelit Espresso Machine - Two-hour safety shutoff** — starts a restorable
+  two-hour timer whenever the espresso-machine plug turns on, cancels it when
+  the plug turns off, and switches the machine off when the timer expires. If
+  Home Assistant restarts while the machine is on without an active restored
+  timer, it starts a fresh two-hour safety window.
+- **Living Room - Jellyfin cinema mode** — snapshots the Living Room Accent,
+  TV Overlight, and both shelf-light circuits when Jellyfin playback starts,
+  turns those lights off, and restores their previous states when playback is
+  paused, stopped, switched off, or becomes unavailable.
+- **Bathroom - Forgotten lights protection** — independently switches off the
+  Bathroom LED Strip or Bathroom Lamp after either has remained on for 45
+  minutes.
 - **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
   - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
     LED Bed first, then Bedroom Accent.
