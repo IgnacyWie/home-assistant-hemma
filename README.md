@@ -18,6 +18,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Smart light-group toggles that restore the previous member state
 - Energy monitoring with a monotonic utility meter
 - Wake-up alarm controls and a dedicated stop action
+- A **Welcome Home** scene that restores the captured on-lights and keeps all other lighting off
 - Two-hour Lelit espresso-machine safety shutoff with a restart-restorable timer
 - Jellyfin cinema mode with living-room light state restoration
 - Bathroom forgotten-on protection for both bathroom lights
@@ -43,6 +44,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 ```text
 config/
 ├── automations.yaml             # Household automations and physical remote mappings
+├── scenes.yaml                  # Welcome Home lighting snapshot
 ├── custom_components/hemma/   # Hemma integration snapshot with local tweaks
 ├── dashboards/
 │   ├── hemma/hemma.yaml       # Room and entity configuration
@@ -92,6 +94,17 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - While the configured wake-up alarm is playing, any mapped button press
     stops only the alarm without changing lights, running the bedtime shutdown,
     or switching off the espresso machine.
+
+## Welcome Home scene
+
+[`config/scenes.yaml`](config/scenes.yaml) defines **Welcome Home** as a complete
+physical-lighting snapshot. It turns on the five lights that were active when the
+scene was captured and explicitly keeps the remaining light entities, including
+the Bathroom Lamp switch, off. Derived light groups and disabled infrastructure
+entities are excluded to avoid duplicate or conflicting commands.
+
+The Home view exposes the scene as a **Welcome Home** action tile. Activating the
+tile calls `scene.turn_on` for `scene.welcome_home`.
 
 ## Kitchen dashboard
 

@@ -1,0 +1,29 @@
+- id: welcome_home
+  name: Welcome Home
+  icon: mdi:home-import-outline
+  entities:
+    # Lighting that should be on after arriving home.
+    light.bedroom_accent_bedroom:
+      state: "on"
+    light.living_room_accent_1:
+      state: "on"
+    light.living_room_2ch_wi_fi_switch_module_switch_2:
+      state: "on"
+    light.3_in_1_controller_wifi_2_4g:
+      state: "on"
+    light.bedroom_ikea_of_sweden_grillplats_plug:
+      state: "on"
+
+    # All other physical lighting remains off.
+    light.living_room_2ch_wi_fi_switch_module_2_switch_1:
+      state: "off"
+    light.living_room_2ch_wi_fi_switch_module_2_switch_2:
+      state: "off"
+    light.living_room_2ch_wi_fi_switch_module_switch_1:
+      state: "off"
+    light.living_room_balcony:
+      state: "off"
+    light.sonoff_zbminil2:
+      state: "off"
+    switch.bathroom_lamp:
+      state: "off"
