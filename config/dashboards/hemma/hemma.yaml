@@ -174,6 +174,29 @@ views:
               icon: zeppelin-speaker-v2
 
   - type: custom:grid-layout
+    title: Kitchen
+    path: kitchen
+    theme: Hemma
+    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    cards:
+      - type: custom:button-card
+        template: hemma_room
+        name: Kitchen
+        variables:
+          image: home-demo
+          preload_rooms: *room_images
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
+      - type: custom:hemma-smart-row
+        cards:
+          - type: custom:button-card
+            template: hemma_entity
+            entity: switch.ikea_of_sweden_grillplats_plug_2
+            name: Lelit Espresso Machine
+            variables:
+              icon: coffee-maker-mdi-v1
+              show_toggle: true
+
+  - type: custom:grid-layout
     title: Bedroom
     path: bedroom
     theme: Hemma

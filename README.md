@@ -57,9 +57,11 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 
 - **Bathroom Fan - Delay** — turns off the bathroom fan 20 minutes after it is
   switched on.
-- **Wake up with music - Zeppelin** — plays *Guten Morgen Sonnenschein* at the
-  configured wake-up time when the wake-up helper is enabled.
-- **Stop wake-up music** — stops the Zeppelin from the dashboard stop button.
+- **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
+  then plays *Guten Morgen Sonnenschein* at the configured wake-up time when
+  the wake-up helper is enabled.
+- **Stop wake-up music** — stops only the Zeppelin from the dashboard stop
+  button; the espresso machine remains on.
 - **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
   - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
     LED Bed first, then Bedroom Accent.
@@ -68,13 +70,20 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - Single OFF turns off all three bedroom lights.
   - Double ON turns on all three bedroom lights.
   - Double OFF performs the bedtime shutdown for enabled, visible household
-    devices: dashboard lights, the bathroom fan, Zeppelin playback, and the
-    living-room TV. Hidden, disabled, diagnostic, and infrastructure entities
-    are intentionally excluded.
+    devices: dashboard lights, the Lelit espresso machine, the bathroom fan,
+    Zeppelin playback, and the living-room TV. Hidden, disabled, diagnostic,
+    and infrastructure entities are intentionally excluded.
   - While the configured wake-up alarm is playing, any mapped button press
-    stops the alarm without running its normal lighting or shutdown action.
+    stops only the alarm without changing lights, running the bedtime shutdown,
+    or switching off the espresso machine.
 
-### Configuration change workflow
+## Kitchen dashboard
+
+The Kitchen view includes a dedicated **Lelit Espresso Machine** switch tile
+using an espresso-maker silhouette. The tile controls the IKEA GRILLPLATS plug
+and reports its current on/off state.
+
+## Configuration change workflow
 
 For every Home Assistant automation or other YAML change:
 
