@@ -1,0 +1,302 @@
+button_card_templates: !include_dir_merge_named /config/dashboards/templates/button_cards
+
+kiosk_mode:
+  hide_header: true
+  hide_sidebar: false
+  hide_dialog_light_settings_actions: true
+  hide_dialog_logbook: true
+
+views:
+  - type: custom:grid-layout
+    title: Home
+    path: home
+    theme: Hemma
+    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    cards:
+      - type: custom:button-card
+        template: hemma_room
+        name: Home
+        variables:
+          image: home-apartment
+          image_night: home-apartment
+          preload_rooms: &room_images
+            - home-apartment
+            - home-demo
+            - livingroom-demo
+            - bedroom-demo
+          weather_entity: weather.forecast_home
+          presence_entity_1: person.example_user
+          media_player_1: media_player.tv_w_salonie_4
+          media_player_2: media_player.zeppelin
+          light_entity_1: light.living_room_accent_1
+          light_entity_2: light.bedroom_accent_bedroom
+          light_entity_3: light.sonoff_zbminil2
+          light_entity_4: light.living_room_2ch_wi_fi_switch_module_2_switch_2
+          energy_power_entity: sensor.lsc_smart_power_plug_power
+          energy_usage_month: sensor.lsc_smart_power_plug_monthly_energy
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
+      - type: custom:hemma-smart-row
+        cards:
+          - type: custom:button-card
+            template: hemma_media
+            entity: media_player.living_room_tv_2
+            name: Living Room TV
+            variables:
+              icon: tv
+              show_toggle: true
+          - type: custom:button-card
+            template: hemma_media
+            entity: media_player.zeppelin
+            name: Zeppelin
+            variables:
+              icon: zeppelin-speaker-v2
+          - type: custom:button-card
+            template: hemma_entity
+            entity: person.example_user
+            name: Resident
+            variables:
+              icon: iphone
+          - type: custom:button-card
+            template: hemma_energy
+            entity: sensor.lsc_smart_power_plug_power
+            name: Power
+            variables:
+              room_name: Home
+              entity_power: sensor.lsc_smart_power_plug_power
+              entity_usage_month: sensor.lsc_smart_power_plug_monthly_energy
+
+  - type: custom:grid-layout
+    title: Living Room
+    path: living-room
+    theme: Hemma
+    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    cards:
+      - type: custom:button-card
+        template: hemma_room
+        name: Living Room
+        variables:
+          image: livingroom-demo
+          preload_rooms: *room_images
+          light_entity_1: light.living_room_accent_1
+          light_entity_2: light.living_room_shelves
+          light_entity_3: light.living_room_2ch_wi_fi_switch_module_switch_2
+          light_entity_4: light.living_room_balcony
+          media_player_1: media_player.tv_w_salonie_4
+          media_player_2: media_player.zeppelin
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
+      - type: custom:hemma-smart-row
+        cards:
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.living_room_accent_1
+            name: Accent
+            variables:
+              icon: lightbulb-variant-outline
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.living_room_shelves
+            name: Shelves
+            variables:
+              icon: display-shelf-light
+              lights:
+                - light.living_room_2ch_wi_fi_switch_module_2_switch_1
+                - light.living_room_2ch_wi_fi_switch_module_switch_1
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.living_room_2ch_wi_fi_switch_module_switch_2
+            name: TV Overlight
+            variables:
+              icon: track-light
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.living_room_balcony
+            name: Balcony
+            variables:
+              icon: square-ceiling-light
+          - type: custom:button-card
+            template: hemma_media
+            entity: media_player.living_room_tv_2
+            name: TV
+            variables:
+              icon: tv
+              show_toggle: true
+          - type: custom:button-card
+            template: hemma_entity
+            entity: media_player.living_room_tv_2
+            name: Jellyfin
+            state_display: Open app
+            variables:
+              icon: jellyfin
+              mobile_filter_category: media
+              active_override: |
+                [[[
+                  return states['remote.living_room_tv']?.attributes?.current_activity ===
+                    'com.github.damontecres.wholphin';
+                ]]]
+            tap_action:
+              action: call-service
+              service: media_player.play_media
+              target:
+                entity_id: media_player.living_room_tv_2
+              data:
+                media_content_type: app
+                media_content_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
+            hold_action:
+              action: more-info
+          - type: custom:button-card
+            template: hemma_entity
+            entity: media_player.living_room_tv_2
+            name: YouTube
+            state_display: Open app
+            variables:
+              icon: youtube
+              mobile_filter_category: media
+              active_override: |
+                [[[
+                  return states['remote.living_room_tv']?.attributes?.current_activity ===
+                    'com.google.android.youtube.tv';
+                ]]]
+            tap_action:
+              action: call-service
+              service: media_player.play_media
+              target:
+                entity_id: media_player.living_room_tv_2
+              data:
+                media_content_type: app
+                media_content_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
+            hold_action:
+              action: more-info
+          - type: custom:button-card
+            template: hemma_media
+            entity: media_player.zeppelin
+            name: Zeppelin
+            variables:
+              icon: zeppelin-speaker-v2
+
+  - type: custom:grid-layout
+    title: Bedroom
+    path: bedroom
+    theme: Hemma
+    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    cards:
+      - type: custom:button-card
+        template: hemma_room
+        name: Bedroom
+        variables:
+          image: bedroom-demo
+          preload_rooms: *room_images
+          light_entity_1: light.bedroom_accent_bedroom
+          light_entity_2: light.3_in_1_controller_wifi_2_4g
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
+      - type: custom:hemma-smart-row
+        cards:
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.bedroom_accent_bedroom
+            name: Accent
+            variables:
+              icon: lightbulb-variant-outline
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.3_in_1_controller_wifi_2_4g
+            name: LED Strip
+            variables:
+              icon: led-strip-variant
+          - type: custom:button-card
+            template: hemma_entity
+            entity: input_boolean.wake_up_enabled
+            name: Wake-up Alarm
+            variables:
+              icon: alarm
+              show_toggle: true
+            state_display: |
+              [[[
+                const enabled = states['input_boolean.wake_up_enabled']?.state === 'on';
+                const raw = states['input_datetime.wake_up_time']?.state || '';
+                const time = raw.length >= 5 ? raw.slice(0, 5) : '--:--';
+                return `${enabled ? 'On' : 'Off'} · ${time}`;
+              ]]]
+            hold_action:
+              action: more-info
+              entity: input_datetime.wake_up_time
+          - type: custom:button-card
+            template: hemma_entity
+            entity: input_button.stop_wake_up_music
+            name: Stop Wake-up Music
+            variables:
+              icon: alarm-off-v1
+            tap_action:
+              action: call-service
+              service: input_button.press
+              target:
+                entity_id: input_button.stop_wake_up_music
+
+  - type: custom:grid-layout
+    title: Bathroom
+    path: bathroom
+    theme: Hemma
+    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    cards:
+      - type: custom:button-card
+        template: hemma_room
+        name: Bathroom
+        variables:
+          image: home-demo
+          preload_rooms: *room_images
+          light_entity_1: light.sonoff_zbminil2
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
+      - type: custom:hemma-smart-row
+        cards:
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.sonoff_zbminil2
+            name: LED Strip
+            variables:
+              icon: led-strip-variant
+          - type: custom:button-card
+            template: hemma_fan
+            entity: fan.bathroom_fan_bathroom
+            name: Ventilation
+            variables:
+              icon: bathroom-extractor-v1
+            styles:
+              card:
+                - --hemma-fan-animation: none
+
+  - type: custom:grid-layout
+    title: Corridor
+    path: corridor
+    theme: Hemma
+    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    cards:
+      - type: custom:button-card
+        template: hemma_room
+        name: Corridor
+        variables:
+          image: home-demo
+          preload_rooms: *room_images
+          light_entity_1: light.living_room_2ch_wi_fi_switch_module_2_switch_2
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
+      - type: custom:hemma-smart-row
+        cards:
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.living_room_2ch_wi_fi_switch_module_2_switch_2
+            name: Wardrobe LED
+            variables:
+              icon: led-strip-variant
+            styles:
+              card:
+                - --hemma-icon-circle-bg: |
+                    [[[
+                      return entity?.state === 'on'
+                        ? '#42b9ff'
+                        : 'rgba(0,0,0,0.20)';
+                    ]]]
+              img_cell:
+                - background: |
+                    [[[
+                      return entity?.state === 'on'
+                        ? '#42b9ff !important'
+                        : 'rgba(0,0,0,0.20) !important';
+                    ]]]

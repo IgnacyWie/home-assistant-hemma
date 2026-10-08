@@ -1,0 +1,3063 @@
+# Room
+hemma_room:
+  classes:
+    card:
+      - hemma-room
+  template:
+    - hemma_default
+    - hemma_shared
+
+  variables:
+    image:
+    image_night:
+    image_position:
+
+    # Dashboard-wide typeface. Unset leaves the theme's primary-font-family
+    # alone; 'inter', 'hanken' or 'system' override it for the whole document.
+    font:
+
+    # Per-group switches. A group needs its entities *and* its switch; the
+    # switch off hides it without disturbing what is configured underneath.
+    show_climate: true
+    show_lights: true
+    show_people: true
+    show_security: true
+    show_energy: true
+    show_media: true
+
+    # The bell in the chrome row. On by default: it is dashboard chrome, not a
+    # room feature, and it has content on any install with a lock or a doorbell.
+    show_notifications: true
+    show_assist: true
+    # What the bell reports. Written by Hemma's Notifications section,
+    # which sets every room at once - the bell is dashboard chrome, so two
+    # rooms must not be able to disagree about it. Absent means on.
+    notify_safety: true
+    notify_air: true
+    notify_locks: true
+    notify_alarm: true
+    notify_doorbell: true
+    notify_doors: true
+    notify_people: true
+    notify_vacuum: true
+    notify_appliances: true
+    notify_plants: true
+    notify_battery: true
+    notify_updates: true
+    notify_restart: true
+    # An appliance cannot be detected, so it is named: a list of entities and,
+    # beside it, whichever sensor counts that appliance down.
+    notification_appliances: null
+    notification_appliance_timers: null
+    notification_co2_ppm: null
+    notification_open_minutes: null
+    notification_battery_threshold: null
+    # A glitched reading (100 -> 3 -> 100) must not raise a notice: a battery
+    # counts as low only once it has read low for this long.
+    notification_battery_hold_minutes: null
+    # A helper (input_datetime, input_text or input_number) holding when
+    # notifications were last marked read. Set it and every surface shares
+    # one read state; leave it null and each browser keeps its own.
+    notification_read_entity: null
+
+    # Applied from whichever layout is on screen. force_eval so a change in
+    # Hemma lands on the next render instead of waiting for a reload.
+    hemma_notify_config:
+      force_eval: true
+      value: |
+        [[[
+          // Stash regardless: on a cold load this runs before hemma-core.js,
+          // and the module picks the stash up when it initializes. Without it
+          // a layout that renders once - the phone - never applied its
+          // switches at all.
+          window._hemmaNotifyCfg = variables;
+          if (window._hemmaNotify) window._hemmaNotify.configureFrom(variables);
+          return true;
+        ]]]
+
+    show_climate_inline: false  # true = show individual badges (temp/humidity/air quality) directly on the top row instead of the group badge
+    climate_entity_1:
+    climate_entity_2:
+    climate_entity_3:
+
+    temp_sensor_1:
+    temp_sensor_2:
+    temp_sensor_3:
+    temp_sensor_4:
+    temp_sensor_5:
+    temp_unit: 'F'  # 'F' or 'C' — sets comfort-level thresholds on the temperature sub-badge
+
+    humidity_sensor:
+
+    quality_sensor:
+    room_name:
+    aqi_room_name:
+    aqi_entity_pm25:
+    aqi_entity_pm10:
+    aqi_entity_voc:
+    aqi_entity_co2:
+    aqi_entity_temp:
+    aqi_entity_humidity:
+
+    # The order the badge pills sit in, as a list of category ids:
+    # climate, lights, people, media, security, energy. Absent is the built-in
+    # order, and a list may name only the ones that moved.
+    badge_order:
+
+    presence_entity_1:
+    presence_entity_2:
+    presence_entity_3:
+    presence_entity_4:
+
+    pause_timeout_minutes: 10
+
+    media_player_1:
+    media_player_2:
+    media_player_3:
+    media_player_4:
+    media_player_5:
+    media_player_6:
+    media_player_7:
+    media_player_8:
+    media_player_9:
+    media_player_10:
+
+    plex_stream_1:
+    plex_stream_2:
+
+    psn_1:
+    psn_2:
+
+    show_now_playing: false
+
+    energy_power_entity: null
+    energy_usage_today: null
+    energy_usage_month: null
+    energy_cost_today: null
+    energy_cost_month: null
+
+    energy_popup_name_1: null
+    energy_popup_power_1: null
+    energy_popup_today_1: null
+    energy_popup_month_1: null
+    energy_popup_cost_today_1: null
+    energy_popup_cost_month_1: null
+    energy_popup_name_2: null
+    energy_popup_power_2: null
+    energy_popup_today_2: null
+    energy_popup_month_2: null
+    energy_popup_cost_today_2: null
+    energy_popup_cost_month_2: null
+    energy_popup_name_3: null
+    energy_popup_power_3: null
+    energy_popup_today_3: null
+    energy_popup_month_3: null
+    energy_popup_cost_today_3: null
+    energy_popup_cost_month_3: null
+    energy_popup_name_4: null
+    energy_popup_power_4: null
+    energy_popup_today_4: null
+    energy_popup_month_4: null
+    energy_popup_cost_today_4: null
+    energy_popup_cost_month_4: null
+    energy_popup_name_5: null
+    energy_popup_power_5: null
+    energy_popup_today_5: null
+    energy_popup_month_5: null
+    energy_popup_cost_today_5: null
+    energy_popup_cost_month_5: null
+    energy_popup_name_6: null
+    energy_popup_power_6: null
+    energy_popup_today_6: null
+    energy_popup_month_6: null
+    energy_popup_cost_today_6: null
+    energy_popup_cost_month_6: null
+    energy_entity_1: null
+    energy_label_1: null
+    energy_unit_1: null
+    energy_cost_1: null
+    energy_entity_2: null
+    energy_label_2: null
+    energy_unit_2: null
+    energy_cost_2: null
+    energy_entity_3: null
+    energy_label_3: null
+    energy_unit_3: null
+    energy_cost_3: null
+    energy_entity_4: null
+    energy_label_4: null
+    energy_unit_4: null
+    energy_cost_4: null
+    energy_entity_5: null
+    energy_label_5: null
+    energy_unit_5: null
+    energy_cost_5: null
+    energy_entity_6: null
+    energy_label_6: null
+    energy_unit_6: null
+    energy_cost_6: null
+
+    # Security row. Any mix of lock / binary_sensor / camera / alarm_control_panel
+    # / cover - hemma_badge_security picks icon and wording from the domain.
+    security_locks: null
+    security_locks_label: null
+    security_lock_batteries: null
+    security_door_sensors: null
+    security_lock_entity: null
+    security_lock_entity_2: null
+    security_cameras: null
+    security_cameras_label: null
+    security_entity_1: null
+    security_label_1: null
+    security_entity_2: null
+    security_label_2: null
+    security_entity_3: null
+    security_label_3: null
+    security_entity_4: null
+    security_label_4: null
+    security_entity_5: null
+    security_label_5: null
+    security_entity_6: null
+    security_label_6: null
+    security_entity_7: null
+    security_label_7: null
+    security_entity_8: null
+    security_label_8: null
+    light_group_entity:
+    light_entity_1:
+    light_entity_2:
+    light_entity_3:
+    light_entity_4:
+    light_entity_5:
+    light_entity_6:
+    light_entity_7:
+    light_entity_8:
+    light_entity_9:
+    light_entity_10:
+
+    weather_entity:
+    weather_temp_sensor:
+
+  tap_action: { action: none }
+  hold_action: { action: none }
+  double_tap_action: { action: none }
+
+  styles:
+    card:
+      - "--hemma-chrome-dots-step": '[[[ return variables.hemma_ui_managed ? "46px" : "0px" ]]]'
+      - "--hemma-chrome-bell-step": '[[[ return variables.show_notifications === false ? "0px" : "46px" ]]]'
+
+      - "--hemma-badge-order-climate": >
+          [[[
+            const o = variables.badge_order;
+            if (!Array.isArray(o)) return 1;
+            const i = o.indexOf('climate');
+            return i < 0 ? o.length + 1 : i + 1;
+          ]]]
+      - "--hemma-badge-order-lights": >
+          [[[
+            const o = variables.badge_order;
+            if (!Array.isArray(o)) return 2;
+            const i = o.indexOf('lights');
+            return i < 0 ? o.length + 2 : i + 1;
+          ]]]
+      - "--hemma-badge-order-people": >
+          [[[
+            const o = variables.badge_order;
+            if (!Array.isArray(o)) return 3;
+            const i = o.indexOf('people');
+            return i < 0 ? o.length + 3 : i + 1;
+          ]]]
+      - "--hemma-badge-order-media": >
+          [[[
+            const o = variables.badge_order;
+            if (!Array.isArray(o)) return 4;
+            const i = o.indexOf('media');
+            return i < 0 ? o.length + 4 : i + 1;
+          ]]]
+      - "--hemma-badge-order-security": >
+          [[[
+            const o = variables.badge_order;
+            if (!Array.isArray(o)) return 5;
+            const i = o.indexOf('security');
+            return i < 0 ? o.length + 5 : i + 1;
+          ]]]
+      - "--hemma-badge-order-energy": >
+          [[[
+            const o = variables.badge_order;
+            if (!Array.isArray(o)) return 6;
+            const i = o.indexOf('energy');
+            return i < 0 ? o.length + 6 : i + 1;
+          ]]]
+
+      - --hemma-font-set: >
+          [[[
+            const STACKS = {
+              inter:  '"Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+              hanken: '"Hanken Grotesk", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+              system: '-apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Roboto, sans-serif'
+            };
+            const want = STACKS[String(variables.font || '').trim().toLowerCase()] || '';
+            const ID = 'hemma-font-v1';
+            let el = document.getElementById(ID);
+            if (!want) { if (el) el.remove(); return '0'; }
+            if (!el) {
+              el = document.createElement('style');
+              el.id = ID;
+              document.head.appendChild(el);
+            }
+            const css = 'html{--primary-font-family:' + want + ' !important;}';
+            if (el.textContent !== css) el.textContent = css;
+            return '1';
+          ]]]
+      - --hemma-perf-set: >
+          [[[
+            const p = window._hemmaPerf;
+            return p ? p.dashboard(variables.performance) : '0';
+          ]]]
+      - --hemma-badge-enter-ease: >
+          [[[
+            const st = states['input_select.hemma_expanded_row']?.state;
+            return (st && st !== 'none')
+              ? 'cubic-bezier(0.34, 1.26, 0.44, 1)'
+              : 'cubic-bezier(0.4, 0, 0.2, 1)';
+          ]]]
+      # Shortened by anything placed under the tile row, so the view never scrolls.
+      - height: calc(100svh - var(--hemma-extras-h, 0px))
+      - padding-top: >
+          [[[
+            const mm = (q) => (window.matchMedia ? window.matchMedia(q).matches : false);
+            const isPhonePortrait =
+              (mm('(pointer: coarse)') || mm('(hover: none)')) &&
+              mm('(max-width: 767px)') &&
+              mm('(orientation: portrait)');
+
+            if (isPhonePortrait) return 'calc(var(--hero-top) - 20px)';
+            return 'var(--hero-top)';
+          ]]]
+      - padding-left: var(--hero-gutter)
+      - padding-right: var(--hero-gutter)
+      - padding-bottom: >
+          [[[
+            const mm = (q) => (window.matchMedia ? window.matchMedia(q).matches : false);
+            const isPhonePortrait =
+              (mm('(pointer: coarse)') || mm('(hover: none)')) &&
+              mm('(max-width: 767px)') &&
+              mm('(orientation: portrait)');
+
+            return isPhonePortrait
+              ? `calc(env(safe-area-inset-bottom, 0px) + var(--hemma-entity-mobile-bottom-gap, 20px))`
+              : `calc(130px + env(safe-area-inset-bottom))`;
+          ]]]
+      - box-shadow: none !important
+      - --hero-img-scale: 1.08
+      - --hero-img: >
+          [[[
+            const isDark =
+              typeof hass?.themes?.darkMode === 'boolean'
+                ? hass.themes.darkMode
+                : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            const base = variables.image || 'default';
+            const picked = isDark ? (variables.image_night || `${base}-night`) : base;
+            return `url("/local/hemma/rooms/${picked}.jpg")`;
+          ]]]
+      - --hero-img-pos: >
+          [[[
+            return variables.image_position || 'center center';
+          ]]]
+      - --hemma-time-nav-open: >
+          [[[
+            const navOpen = states['input_boolean.hemma_mobile_navigation']?.state === 'on';
+            return navOpen ? 'none' : 'block';
+          ]]]
+      - --hemma-time-reserve: >
+          [[[
+            const w = window?.innerWidth || 1024;
+            const h = window?.innerHeight || 800;
+            const isTablet = (w >= 768 && w <= 1400 && h > 500);
+            return isTablet ? '140px' : '160px';
+          ]]]
+      - --hemma-room-nav: >
+          [[[
+            const k = variables.image || 'default';
+            const prev = window._hemmaRoomNav;
+            if (!prev || prev.key !== k) {
+              window._hemmaRoomNav = { key: k };
+              const isActive = eid => {
+                if (!eid) return false;
+                const s = hass.states[eid];
+                if (!s) return false;
+                const st = (s.state || '').toLowerCase();
+                if (['playing','buffering','on'].includes(st)) return true;
+                if (st === 'paused') {
+                  const a = s.attributes || {};
+                  const hasContent = !!(
+                    String(a.media_title || '').trim() ||
+                    String(a.media_artist || a.artist || a.media_album_artist || '').trim()
+                  );
+                  if (!hasContent) return false;
+                  const timeout = Number(variables.pause_timeout_minutes ?? 10);
+                  if (timeout <= 0) return true;
+                  return ((new Date() - new Date(s.last_changed)) / 60000) <= timeout;
+                }
+                return false;
+              };
+              const mediaEids = [
+                !!variables.media_player_1 && variables.media_player_1,
+                !!variables.media_player_2 && variables.media_player_2,
+                !!variables.media_player_3 && variables.media_player_3,
+                !!variables.media_player_4 && variables.media_player_4,
+                !!variables.media_player_5 && variables.media_player_5,
+                !!variables.media_player_6 && variables.media_player_6,
+                !!variables.media_player_7 && variables.media_player_7,
+                !!variables.media_player_8 && variables.media_player_8,
+                !!variables.media_player_9 && variables.media_player_9,
+                !!variables.media_player_10 && variables.media_player_10,
+                !!variables.plex_stream_1 && variables.plex_stream_1,
+                !!variables.plex_stream_2 && variables.plex_stream_2,
+                !!variables.psn_1 && variables.psn_1,
+                !!variables.psn_2 && variables.psn_2,
+              ].filter(Boolean);
+              const _pc = window._hemmaPCSources?.(hass.states, variables) || {};
+              const pcActive = !!(_pc.discord || _pc.steam);
+              const opt = (!variables.show_now_playing &&
+                (mediaEids.some(isActive) || pcActive)) ? 'media' : 'none';
+              hass.callService('input_select', 'select_option', {
+                entity_id: 'input_select.hemma_expanded_row',
+                option: opt
+              });
+            }
+            return k;
+          ]]]
+
+    name:
+      - grid-area: n
+      - color: var(--primary-text-color)
+      - opacity: 1
+      - font-size: var(--hero-room-name-size-current, clamp(48px, 6vw + 12px, 100px))
+      - letter-spacing: var(--hero-room-name-letter-spacing-current, -2px)
+      - font-weight: 700
+      - justify-self: start
+      - padding-left: 0
+      - line-height: var(--hero-room-name-line-height-current, 1.2)
+      - margin-left: var(--hero-room-name-margin-left-current, 0px)
+      - overflow: visible
+
+    grid: []  # Inherits from hemma_shared
+
+    custom_fields:
+      temperature:
+        - grid-area: temperature
+        - display: >
+            [[[
+              const w = window?.innerWidth || 1024;
+              const h = window?.innerHeight || 800;
+              const isMobileSize = w <= 767 || h <= 500;
+              const wx = window.hemmaWx ? window.hemmaWx(variables, 'entity') : (variables.weather_entity || '');
+              return (!isMobileSize && !!wx) ? 'block' : 'none';
+            ]]]
+        - position: absolute
+        - top: >
+            calc(
+              var(--hero-top)
+              + var(--hero-temp-reserve, 22px)
+              + var(--hero-header-gap-current, 6px)
+              - var(--hero-weather-hero-height, 48px)
+              + var(--weather-hero-widget-position-nudge, -12px))
+        - left: >
+            calc(
+              var(--hero-gutter)
+              + var(--hero-room-name-margin-left-current, 0px)
+              + var(--hemma-header-temp-nudge, 0px))
+        - z-index: 5
+        - pointer-events: auto
+        - cursor: pointer
+        - overflow: visible
+        - color: var(--primary-text-color)
+        - background: transparent !important
+        - background-color: transparent !important
+
+      time:
+        # Hemma owns the clock on a managed dashboard: unset means no clock,
+        # rather than the sensor.time fallback a hand-written config still gets.
+        - display: >
+            [[[
+              return (variables.hemma_ui_managed && !variables.time_entity) ? 'none' : 'block';
+            ]]]
+        - position: fixed
+        - z-index: 10
+        - pointer-events: auto
+        - "--mdc-ripple-press-opacity": 0
+        - "-webkit-tap-highlight-color": transparent
+        - "--ha-card-padding": "0px"
+
+      weather:
+        - grid-area: weather
+        - display: >
+            [[[
+              const mm = (q) => (window.matchMedia ? window.matchMedia(q).matches : false);
+              const isPhonePortrait =
+                (mm('(pointer: coarse)') || mm('(hover: none)')) &&
+                mm('(max-width: 767px)') &&
+                mm('(orientation: portrait)');
+              const wx = window.hemmaWx ? window.hemmaWx(variables, 'entity') : (variables.weather_entity || '');
+              const wxt = window.hemmaWx ? window.hemmaWx(variables, 'temp') : (variables.weather_temp_sensor || '');
+              const hasData = !!(wx || wxt);
+              const ok = !!wx && hasData;
+              return (isPhonePortrait && ok) ? 'block' : 'none';
+            ]]]
+        - position: absolute
+        - top: >
+            calc(
+              var(--hero-top)
+              + var(--hero-room-name-size-current, 38px) * var(--hero-room-name-line-height-current, 1.1)
+              - var(--hero-weather-title-size, 16px)
+              - var(--hero-weather-sub-size, 13px) * 1.1
+              - 1px
+              + var(--weather-mobile-badge-nudge, 0px))
+        - left: var(--hero-gutter, var(--page-gutter-mobile, 11px))
+        - right: calc(var(--hero-gutter, var(--page-gutter-mobile, 11px)) + 6px)
+        - z-index: 10
+        - text-align: right
+        - justify-self: end
+        - margin: 0
+        - width: auto
+        - max-width: none
+        - overflow: visible
+        - pointer-events: auto
+
+      badges:
+        - grid-area: badges
+        - --hemma-converge-init: >
+            [[[
+              if (!window._hemmaEnterPReg) {
+                window._hemmaEnterPReg = true;
+                try {
+                  CSS.registerProperty({
+                    name: '--hemma-badge-enter-p',
+                    syntax: '<number>',
+                    inherits: true,
+                    initialValue: '0'
+                  });
+                } catch (e) {}
+              }
+              if (!window._hemmaMediaAnim) {
+                window._hemmaMediaAnim = function (rootEl) {
+                  try {
+                    const row = rootEl.querySelector('#badges_media');
+                    if (!row) return;
+                    const SPRING = 'cubic-bezier(0.32, 0.72, 0, 1)';
+                    const OUT    = 'cubic-bezier(0.4, 0, 0.2, 1)';
+                    const dig = (el, out, d) => {
+                      if (!el || d > 8) return out;
+                      for (const c of Array.from(el.children || [])) {
+                        const t = c.localName === 'button-card' && c._config && c._config.template;
+                        if (t) { out.push(c); continue; }
+                        if (c.shadowRoot) dig(c.shadowRoot, out, d + 1);
+                        dig(c, out, d + 1);
+                      }
+                      return out;
+                    };
+                    requestAnimationFrame(() => {
+                      for (const b of dig(row, [], 0)) {
+                        const f = b.parentElement;
+                        if (!f || !f.id) continue;
+                        const op = parseFloat(
+                          getComputedStyle(b).getPropertyValue('--hemma-badge-opacity')) || 0;
+                        const vis = op > 0;
+                        if (b._hemmaVis === vis) continue;
+                        const first = b._hemmaVis === undefined;
+                        b._hemmaVis = vis;
+                        if (b._hemmaA) { b._hemmaA.cancel(); b._hemmaA = null; }
+                        if (f._hemmaA) { f._hemmaA.cancel(); f._hemmaA = null; }
+                        const gap = parseFloat(getComputedStyle(f).marginRight) || 10;
+                        if (first) {
+                          // No animation on the first pass; just settle state.
+                          b.style.setProperty('--hemma-badge-enter-p', vis ? '0' : '1');
+                          continue;
+                        }
+                        if (vis) {
+                          f.style.maxWidth = 'none';
+                          void row.offsetWidth;
+                          const w = b.offsetWidth || 0;
+                          f.style.maxWidth = '';
+                          f.style.setProperty('--hemma-field-ovf', 'hidden');
+                          f._hemmaA = f.animate(
+                            [{ maxWidth: '0px', marginRight: '0px' },
+                             { maxWidth: w + 'px', marginRight: gap + 'px' }],
+                            { duration: 420, easing: SPRING, fill: 'none' });
+                          f._hemmaA.onfinish = () => { f.style.removeProperty('--hemma-field-ovf'); };
+                          b.style.setProperty('--hemma-badge-enter-p', '1');
+                          b._hemmaA = b.animate(
+                            [{ '--hemma-badge-enter-p': 1 }, { '--hemma-badge-enter-p': 0 }],
+                            { duration: 460, easing: SPRING, fill: 'forwards' });
+                        } else {
+                          const w = f.offsetWidth || 0;
+                          b._hemmaA = b.animate(
+                            [{ '--hemma-badge-enter-p': 0 }, { '--hemma-badge-enter-p': 1 }],
+                            { duration: 320, easing: OUT, fill: 'forwards' });
+                          b._hemmaA.onfinish = () => {
+                            f._hemmaA = f.animate(
+                              [{ maxWidth: w + 'px', marginRight: gap + 'px' },
+                               { maxWidth: '0px', marginRight: '0px' }],
+                              { duration: 380, easing: SPRING, fill: 'forwards' });
+                          };
+                        }
+                      }
+                    });
+                  } catch (e) {}
+                };
+              }
+              if (!window._hemmaConverge) {
+                window._hemmaConverge = function (rootEl, rowId, groupTpl, useRects, cold) {
+                  try {
+                    const row = rootEl.querySelector('#' + rowId);
+                    const top = rootEl.querySelector('#badges');
+                    if (!row || !top) return;
+                    if (!cold && getComputedStyle(row).getPropertyValue('--hemma-row-fade').trim() !== '1') return;
+                    const dig = (el, out, d) => {
+                      if (!el || d > 8) return out;
+                      for (const c of Array.from(el.children || [])) {
+                        const t = c.localName === 'button-card' && c._config && c._config.template;
+                        if (t) { out.push(c); continue; }
+                        if (c.shadowRoot) dig(c.shadowRoot, out, d + 1);
+                        dig(c, out, d + 1);
+                      }
+                      return out;
+                    };
+                    const isTpl = (c) => {
+                      const t = c._config && c._config.template;
+                      return Array.isArray(t) ? t.indexOf(groupTpl) >= 0 : t === groupTpl;
+                    };
+                    const group = dig(top, [], 0).filter(isTpl)[0];
+                    if (!group) return;
+                    const cx = (el) => {
+                      if (useRects) {
+                        const r = el.getBoundingClientRect();
+                        return r.width ? r.left + r.width / 2 : null;
+                      }
+                      return el.offsetWidth ? el.offsetLeft + el.offsetWidth / 2 : null;
+                    };
+                    const gx = cx(group);
+                    if (gx === null) return;
+                    for (const b of dig(row, [], 0)) {
+                      // A cold pass must not read a badge it already moved.
+                      if (cold && b.style.getPropertyValue('--hemma-badge-converge-x')) continue;
+                      const bx = cx(b);
+                      if (bx === null) continue;
+                      b.style.setProperty('--hemma-badge-converge-x',
+                        (gx - bx).toFixed(1) + 'px');
+                    }
+                  } catch (e) {}
+                };
+              }
+              return '0';
+            ]]]
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px))
+        - margin-right: auto !important
+        - width: max-content
+        - max-width: 100%
+        - margin-top: var(--hero-header-gap-current, 6px)
+        - margin-bottom: 0
+        - padding-left: 0
+        - pointer-events: auto
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - height: auto !important
+        - display: >
+            [[[
+              return (states['input_boolean.hemma_mobile_navigation']?.state === 'on')
+                ? 'none'
+                : 'block';
+            ]]]
+
+      badges_climate:
+        - grid-area: badges_climate
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px))
+        - margin-right: auto !important
+        - width: max-content
+        - max-width: 100%
+        - margin-top: >
+            [[[
+              if (!(variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) || variables.show_climate_inline) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'climate'
+                ? 'var(--hemma-badge-subrow-gap-current, 6px)' : '0';
+            ]]]
+        - margin-bottom: 0
+        - padding-left: 0
+        - pointer-events: auto
+        - height: auto !important
+        - opacity: >
+            [[[
+              if (!(variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) || variables.show_climate_inline) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'climate' ? 1 : 0;
+            ]]]
+        - display: >
+            [[[
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              if (!(variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) || variables.show_climate_inline) return 'none';
+              return 'block';
+            ]]]
+        - max-height: >
+            [[[
+              if (!(variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) || variables.show_climate_inline) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'climate' ? '200px' : '0';
+            ]]]
+        - overflow-x: auto
+        - overflow-y: hidden
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - --hemma-row-fade: >
+            [[[
+              if (!(variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) || variables.show_climate_inline) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'climate' ? 1 : 0;
+            ]]]
+
+        - --hemma-converge-climate: >
+            [[[
+              const st = states['input_select.hemma_expanded_row']?.state;
+              const token = st + '|' + (window.innerWidth || 0);
+              if (this._hemmaCvClimate !== token) {
+                this._hemmaCvClimate = token;
+                const rootEl = this.shadowRoot;
+                if (st === 'climate' && rootEl) {
+                  const go = (r) => {
+                    if (typeof window._hemmaConverge === 'function') {
+                      window._hemmaConverge(rootEl, 'badges_climate', 'hemma_badge_climate_group', r);
+                    }
+                  };
+                    requestAnimationFrame(() => go(false));
+                  setTimeout(() => go(true), 700);
+                }
+              }
+              return '0';
+            ]]]
+        - transition: >
+            [[[
+              if (!this._hemmaClimateRowMountTime) this._hemmaClimateRowMountTime = Date.now();
+              if (Date.now() - this._hemmaClimateRowMountTime < 400) return 'none';
+
+              const currentState = states['input_select.hemma_expanded_row']?.state;
+              const isExpanded = currentState === 'climate';
+
+              if (isExpanded) return 'max-height 0s, margin-top 0s';
+              const isSwitching = currentState !== 'none';
+              return isSwitching
+                ? 'none'
+                : 'opacity 0s 0.32s, visibility 0s 0.32s, max-height 0s 0.34s, margin-top 0s 0.34s';
+            ]]]
+        - visibility: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'climate' ? 'visible' : 'hidden';
+            ]]]
+        - pointer-events: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'climate' ? 'auto' : 'none';
+            ]]]
+
+      badges_presence:
+        - grid-area: badges_presence
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px))
+        - margin-right: auto !important
+        - width: max-content
+        - max-width: 100%
+        - margin-top: >
+            [[[
+              if (variables.show_people===false || !!!variables.presence_entity_1) return '0';
+              if (variables.presence_entity_1 && !variables.presence_entity_2) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'presence'
+                ? 'var(--hemma-badge-subrow-gap-current, 6px)' : '0';
+            ]]]
+        - margin-bottom: 0
+        - padding-left: 0
+        - height: auto !important
+        - opacity: >
+            [[[
+              if (variables.show_people===false || !!!variables.presence_entity_1) return 0;
+              if (variables.presence_entity_1 && !variables.presence_entity_2) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'presence' ? 1 : 0;
+            ]]]
+        - display: >
+            [[[
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              if (variables.show_people===false || !!!variables.presence_entity_1) return 'none';
+              if (variables.presence_entity_1 && !variables.presence_entity_2) return 'none';
+              return 'block';
+            ]]]
+        - max-height: >
+            [[[
+              if (variables.show_people===false || !!!variables.presence_entity_1) return '0';
+              if (variables.presence_entity_1 && !variables.presence_entity_2) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'presence' ? '200px' : '0';
+            ]]]
+        - overflow-x: auto
+        - overflow-y: hidden
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - --hemma-row-fade: >
+            [[[
+              if (variables.show_people===false || !!!variables.presence_entity_1) return 0;
+              if (variables.presence_entity_1 && !variables.presence_entity_2) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'presence' ? 1 : 0;
+            ]]]
+
+        - --hemma-converge-presence: >
+            [[[
+              const st = states['input_select.hemma_expanded_row']?.state;
+              const token = st + '|' + (window.innerWidth || 0);
+              if (this._hemmaCvPresence !== token) {
+                this._hemmaCvPresence = token;
+                const rootEl = this.shadowRoot;
+                if (st === 'presence' && rootEl) {
+                  const go = (r) => {
+                    if (typeof window._hemmaConverge === 'function') {
+                      window._hemmaConverge(rootEl, 'badges_presence', 'hemma_badge_presence_group', r);
+                    }
+                  };
+                    requestAnimationFrame(() => go(false));
+                  setTimeout(() => go(true), 700);
+                }
+              }
+              return '0';
+            ]]]
+        - transition: >
+            [[[
+              if (!this._hemmaPresenceRowMountTime) this._hemmaPresenceRowMountTime = Date.now();
+              if (Date.now() - this._hemmaPresenceRowMountTime < 400) return 'none';
+
+              const currentState = states['input_select.hemma_expanded_row']?.state;
+              const isExpanded = currentState === 'presence';
+
+              if (isExpanded) return 'max-height 0s, margin-top 0s';
+              const isSwitching = currentState !== 'none';
+              return isSwitching
+                ? 'none'
+                : 'opacity 0s 0.32s, visibility 0s 0.32s, max-height 0s 0.34s, margin-top 0s 0.34s';
+            ]]]
+        - visibility: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'presence' ? 'visible' : 'hidden';
+            ]]]
+        - pointer-events: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'presence' ? 'auto' : 'none';
+            ]]]
+
+      badges_media:
+        - grid-area: badges_media
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-top: >
+            [[[
+              if (!(variables.show_media!==false&&!variables.show_now_playing&&!!variables.media_player_1)) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'media'
+                ? 'var(--hemma-badge-subrow-gap-current, 6px)' : '0';
+            ]]]
+        - margin-right: auto !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px) +
+              var(--hemma-header-media-badge-nudge-current, 0px))
+        - padding-left: 0
+        - padding-top: 0px !important
+        - padding-bottom: 0px !important
+        - height: auto !important
+        - opacity: >
+            [[[
+              if (!(variables.show_media!==false&&!variables.show_now_playing&&!!variables.media_player_1)) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'media' ? 1 : 0;
+            ]]]
+        - min-height: 0 !important
+        - width: max-content
+        - max-width: 100%
+        - display: >
+            [[[
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              if (!(variables.show_media!==false&&!variables.show_now_playing&&!!variables.media_player_1)) return 'none';
+              return 'block';
+            ]]]
+        - max-height: >
+            [[[
+              if (!(variables.show_media!==false&&!variables.show_now_playing&&!!variables.media_player_1)) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'media' ? '500px' : '0';
+            ]]]
+        - overflow-x: auto
+        - overflow-y: hidden
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - --hemma-row-fade: >
+            [[[
+              if (!(variables.show_media!==false&&!variables.show_now_playing&&!!variables.media_player_1)) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'media' ? 1 : 0;
+            ]]]
+
+        - --hemma-width-media: >
+            [[[
+              let sig = '';
+              for (let i = 1; i <= 10; i++) {
+                const e = variables['media_player_' + i];
+                if (!e) continue;
+                const s = states[e];
+                sig += (s ? s.state + '~' + String(s.attributes?.media_title || '') : '') + '|';
+              }
+              for (const k of ['plex_stream_1','plex_stream_2','psn_1','psn_2','discord_game','steam_account','steam_game','steam_online']) {
+                const e = variables[k];
+                const s = e ? states[e] : null;
+                sig += (s ? s.state + '~' + String(s.attributes?.media_title || '') : '') + '|';
+              }
+              const prev = this._hemmaFlipSigMedia;
+              if (prev !== sig) {
+                this._hemmaFlipSigMedia = sig;
+                // Skip the very first run: nothing has moved yet.
+                if (prev !== undefined && this.shadowRoot
+                    && typeof window._hemmaMediaAnim === 'function') {
+                  window._hemmaMediaAnim(this.shadowRoot);
+                }
+              }
+              return '0';
+            ]]]
+
+        - --hemma-converge-media: >
+            [[[
+              const st = states['input_select.hemma_expanded_row']?.state;
+              const token = st + '|' + (window.innerWidth || 0);
+              if (this._hemmaCvMedia !== token) {
+                this._hemmaCvMedia = token;
+                const rootEl = this.shadowRoot;
+                if (st === 'media' && rootEl) {
+                  const go = (r) => {
+                    if (typeof window._hemmaConverge === 'function') {
+                      window._hemmaConverge(rootEl, 'badges_media', 'hemma_badge_media_group', r);
+                    }
+                  };
+                  setTimeout(() => go(true), 700);
+                }
+              }
+              if (!this._hemmaCvMediaCold && this.shadowRoot) {
+                this._hemmaCvMediaCold = 1;
+                const el = this.shadowRoot;
+                setTimeout(() => {
+                  if (typeof window._hemmaConverge === 'function') {
+                    window._hemmaConverge(el, 'badges_media', 'hemma_badge_media_group', true, true);
+                  }
+                }, 1200);
+              }
+              return '0';
+            ]]]
+        - transition: >
+            [[[
+              if (!this._hemmaMediaRowMountTime) this._hemmaMediaRowMountTime = Date.now();
+              if (Date.now() - this._hemmaMediaRowMountTime < 400) return 'none';
+
+              const currentState = states['input_select.hemma_expanded_row']?.state;
+              const isExpanded = currentState === 'media';
+
+              if (isExpanded) {
+                if (!window.hemmaPageLoadTime) window.hemmaPageLoadTime = Date.now();
+                if (Date.now() - window.hemmaPageLoadTime < 3000) return 'none';
+
+                const lastChanged = states['input_select.hemma_expanded_row']?.last_changed;
+                const msSince = lastChanged ? (Date.now() - new Date(lastChanged).getTime()) : Infinity;
+                return msSince < 1500
+                  ? 'max-height 0s, margin-top 0s'
+                  : 'none';
+              }
+
+              const isSwitching = currentState !== 'none';
+
+              return isSwitching
+                ? 'none'
+                : 'opacity 0s 0.32s, visibility 0s 0.32s, max-height 0s 0.34s, margin-top 0s 0.34s';
+            ]]]
+        - visibility: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'media' ? 'visible' : 'hidden';
+            ]]]
+        - pointer-events: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'media' ? 'auto' : 'none';
+            ]]]
+
+      badges_lights:
+        - grid-area: badges_lights
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px))
+        - margin-right: auto !important
+        - width: max-content
+        - max-width: 100%
+        - margin-top: >
+            [[[
+              if (!(variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity))) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'lights'
+                ? 'var(--hemma-badge-subrow-gap-current, 6px)' : '0';
+            ]]]
+        - margin-bottom: 0
+        - padding-left: 0
+        - pointer-events: auto
+        - height: auto !important
+        - opacity: >
+            [[[
+              if (!(variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity))) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'lights' ? 1 : 0;
+            ]]]
+        - display: >
+            [[[
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              if (!(variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity))) return 'none';
+              return 'block';
+            ]]]
+        - max-height: >
+            [[[
+              if (!(variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity))) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'lights' ? '200px' : '0';
+            ]]]
+        - overflow-x: auto
+        - overflow-y: hidden
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - --hemma-row-fade: >
+            [[[
+              if (!(variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity))) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'lights' ? 1 : 0;
+            ]]]
+
+        - --hemma-converge-lights: >
+            [[[
+              const st = states['input_select.hemma_expanded_row']?.state;
+              const token = st + '|' + (window.innerWidth || 0);
+              if (this._hemmaCvLights !== token) {
+                this._hemmaCvLights = token;
+                const rootEl = this.shadowRoot;
+                if (st === 'lights' && rootEl) {
+                  const go = (r) => {
+                    if (typeof window._hemmaConverge === 'function') {
+                      window._hemmaConverge(rootEl, 'badges_lights', 'hemma_badge_light_group', r);
+                    }
+                  };
+                    requestAnimationFrame(() => go(false));
+                  setTimeout(() => go(true), 700);
+                }
+              }
+              return '0';
+            ]]]
+        - transition: >
+            [[[
+              if (!this._hemmaLightsRowMountTime) this._hemmaLightsRowMountTime = Date.now();
+              if (Date.now() - this._hemmaLightsRowMountTime < 400) return 'none';
+
+              const currentState = states['input_select.hemma_expanded_row']?.state;
+              const isExpanded = currentState === 'lights';
+
+              if (isExpanded) return 'max-height 0s, margin-top 0s';
+              const isSwitching = currentState !== 'none';
+              return isSwitching
+                ? 'none'
+                : 'opacity 0s 0.32s, visibility 0s 0.32s, max-height 0s 0.34s, margin-top 0s 0.34s';
+            ]]]
+        - visibility: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'lights' ? 'visible' : 'hidden';
+            ]]]
+        - pointer-events: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'lights' ? 'auto' : 'none';
+            ]]]
+
+      badges_security:
+        - grid-area: badges_security
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px))
+        - margin-right: auto !important
+        - width: max-content
+        - max-width: 100%
+        - margin-top: >
+            [[[
+              if (!(variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length))) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'security'
+                ? 'var(--hemma-badge-subrow-gap-current, 6px)' : '0';
+            ]]]
+        - margin-bottom: 0
+        - padding-left: 0
+        - pointer-events: auto
+        - height: auto !important
+        - opacity: >
+            [[[
+              if (!(variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length))) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'security' ? 1 : 0;
+            ]]]
+        - display: >
+            [[[
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              if (!(variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length))) return 'none';
+              return 'block';
+            ]]]
+        - max-height: >
+            [[[
+              if (!(variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length))) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'security' ? '200px' : '0';
+            ]]]
+        - overflow-x: auto
+        - overflow-y: hidden
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - --hemma-row-fade: >
+            [[[
+              if (!(variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length))) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'security' ? 1 : 0;
+            ]]]
+
+        - --hemma-converge-security: >
+            [[[
+              const st = states['input_select.hemma_expanded_row']?.state;
+              const token = st + '|' + (window.innerWidth || 0);
+              if (this._hemmaCvSecurity !== token) {
+                this._hemmaCvSecurity = token;
+                const rootEl = this.shadowRoot;
+                if (st === 'security' && rootEl) {
+                  const go = (r) => {
+                    if (typeof window._hemmaConverge === 'function') {
+                      window._hemmaConverge(rootEl, 'badges_security', 'hemma_badge_security_group', r);
+                    }
+                  };
+                    requestAnimationFrame(() => go(false));
+                  setTimeout(() => go(true), 700);
+                }
+              }
+              return '0';
+            ]]]
+        - transition: >
+            [[[
+              if (!this._hemmaSecurityRowMountTime) this._hemmaSecurityRowMountTime = Date.now();
+              if (Date.now() - this._hemmaSecurityRowMountTime < 400) return 'none';
+
+              const currentState = states['input_select.hemma_expanded_row']?.state;
+              const isExpanded = currentState === 'security';
+
+              if (isExpanded) return 'max-height 0s, margin-top 0s';
+              const isSwitching = currentState !== 'none';
+              return isSwitching
+                ? 'none'
+                : 'opacity 0s 0.32s, visibility 0s 0.32s, max-height 0s 0.34s, margin-top 0s 0.34s';
+            ]]]
+        - visibility: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'security' ? 'visible' : 'hidden';
+            ]]]
+        - pointer-events: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'security' ? 'auto' : 'none';
+            ]]]
+
+      badges_energy:
+        - grid-area: badges_energy
+        - justify-self: start !important
+        - align-self: start !important
+        - place-self: start !important
+        - text-align: left !important
+        - margin-left: >
+            calc(
+              var(--hero-room-name-margin-left-current, 0px) +
+              var(--hemma-header-badge-nudge, 0px))
+        - margin-right: auto !important
+        - width: max-content
+        - max-width: 100%
+        - margin-top: >
+            [[[
+              if (window._hemmaEnergyOn ? !window._hemmaEnergyOn(variables) : (variables.show_energy===false || !!!variables.energy_power_entity)) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'energy'
+                ? 'var(--hemma-badge-subrow-gap-current, 6px)' : '0';
+            ]]]
+        - margin-bottom: 0
+        - padding-left: 0
+        - pointer-events: auto
+        - height: auto !important
+        - opacity: >
+            [[[
+              if (window._hemmaEnergyOn ? !window._hemmaEnergyOn(variables) : (variables.show_energy===false || !!!variables.energy_power_entity)) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'energy' ? 1 : 0;
+            ]]]
+        - display: >
+            [[[
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              if (window._hemmaEnergyOn ? !window._hemmaEnergyOn(variables) : (variables.show_energy===false || !!!variables.energy_power_entity)) return 'none';
+              return 'block';
+            ]]]
+        - max-height: >
+            [[[
+              if (window._hemmaEnergyOn ? !window._hemmaEnergyOn(variables) : (variables.show_energy===false || !!!variables.energy_power_entity)) return '0';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return '0';
+              return states['input_select.hemma_expanded_row']?.state === 'energy' ? '200px' : '0';
+            ]]]
+        - overflow-x: auto
+        - overflow-y: hidden
+        - touch-action: pan-x
+        - overscroll-behavior-x: contain
+        - --hemma-row-fade: >
+            [[[
+              if (window._hemmaEnergyOn ? !window._hemmaEnergyOn(variables) : (variables.show_energy===false || !!!variables.energy_power_entity)) return 0;
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 0;
+              return states['input_select.hemma_expanded_row']?.state === 'energy' ? 1 : 0;
+            ]]]
+
+        - --hemma-converge-energy: >
+            [[[
+              const st = states['input_select.hemma_expanded_row']?.state;
+              const token = st + '|' + (window.innerWidth || 0);
+              if (this._hemmaCvEnergy !== token) {
+                this._hemmaCvEnergy = token;
+                const rootEl = this.shadowRoot;
+                if (st === 'energy' && rootEl) {
+                  const go = (r) => {
+                    if (typeof window._hemmaConverge === 'function') {
+                      window._hemmaConverge(rootEl, 'badges_energy', 'hemma_badge_energy_group', r);
+                    }
+                  };
+                    requestAnimationFrame(() => go(false));
+                  setTimeout(() => go(true), 700);
+                }
+              }
+              return '0';
+            ]]]
+        - transition: >
+            [[[
+              if (!this._hemmaEnergyRowMountTime) this._hemmaEnergyRowMountTime = Date.now();
+              if (Date.now() - this._hemmaEnergyRowMountTime < 400) return 'none';
+
+              const currentState = states['input_select.hemma_expanded_row']?.state;
+              const isExpanded = currentState === 'energy';
+
+              if (isExpanded) return 'max-height 0s, margin-top 0s';
+              const isSwitching = currentState !== 'none';
+              return isSwitching
+                ? 'none'
+                : 'opacity 0s 0.32s, visibility 0s 0.32s, max-height 0s 0.34s, margin-top 0s 0.34s';
+            ]]]
+        - visibility: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'energy' ? 'visible' : 'hidden';
+            ]]]
+        - pointer-events: >
+            [[[
+              return states['input_select.hemma_expanded_row']?.state === 'energy' ? 'auto' : 'none';
+            ]]]
+
+      now_playing:
+        - --hemma-np-head-inset: >
+            [[[
+              const STEP = 46;
+              const dots = variables.hemma_ui_managed ? STEP : 0;
+              const assist = variables.show_assist !== false && ((hass && hass.config && hass.config.components) || []).includes("conversation") ? STEP : 0;
+              const bell = variables.show_notifications === false ? 0 : STEP;
+              return 'max(0px, calc(' + (dots + assist + bell) + 'px'
+                + ' - var(--hero-room-name-margin-left-current, 0px)))';
+            ]]]
+        - position: fixed
+        - z-index: 12
+        - text-align: left !important
+        - min-width: 0
+        - margin: 0
+        - display: >
+            [[[
+              if (!variables.show_now_playing) return 'none';
+              if (states['input_boolean.hemma_mobile_navigation']?.state === 'on') return 'none';
+              return 'block';
+            ]]]
+        - overflow: visible
+
+      navigation:
+        - position: fixed
+        - top: 46px
+        - left: 0
+        - right: 0
+        - z-index: 50
+        - overflow: visible
+        - pointer-events: auto
+        - touch-action: none
+        - "--mdc-ripple-press-opacity": 0
+        - "-webkit-tap-highlight-color": transparent
+        - filter: none
+
+      settings:
+        - display: '[[[ return variables.hemma_ui_managed ? "block" : "none" ]]]'
+        - position: fixed
+        - top: var(--hemma-chrome-btn-top, 12px)
+        - right: var(--hero-gutter)
+        - left: auto
+        - transform: "translateX(calc(-1 * var(--hemma-chrome-shift, 0px)))"
+        - transition: "transform 420ms cubic-bezier(0.32, 0.72, 0, 1)"
+        - width: var(--hemma-chrome-btn-size, 34px)
+        - height: var(--hemma-chrome-btn-size, 34px)
+        - z-index: 20
+        - pointer-events: auto
+
+      assist:
+        - display: '[[[ return variables.show_assist !== false && ((hass && hass.config && hass.config.components) || []).includes("conversation") ? "block" : "none" ]]]'
+        - position: fixed
+        - top: var(--hemma-chrome-btn-top, 12px)
+        - right: var(--hero-gutter)
+        - left: auto
+        - transform: >
+            [[[
+              const rest = variables.hemma_ui_managed ? '46px' : '0px';
+              return `translateX(calc(-1 * var(--hemma-chrome-shift, ${rest})))`;
+            ]]]
+        - transition: "transform 420ms cubic-bezier(0.32, 0.72, 0, 1)"
+        - width: var(--hemma-chrome-btn-size, 34px)
+        - height: var(--hemma-chrome-btn-size, 34px)
+        - z-index: 21
+        - pointer-events: auto
+
+      notifications:
+        - display: '[[[ return variables.show_notifications === false ? "none" : "block" ]]]'
+        - position: fixed
+        - top: var(--hemma-chrome-btn-top, 12px)
+        - right: var(--hero-gutter)
+        - left: auto
+        - transform: >
+            [[[
+              const rest = (variables.hemma_ui_managed ? 46 : 0) + (variables.show_assist !== false && ((hass && hass.config && hass.config.components) || []).includes("conversation") ? 46 : 0);
+              return `translateX(calc(-1 * var(--hemma-chrome-shift, ${rest}px)))`;
+            ]]]
+        - transition: "transform 420ms cubic-bezier(0.32, 0.72, 0, 1)"
+        - width: var(--hemma-chrome-btn-size, 34px)
+        - height: var(--hemma-chrome-btn-size, 34px)
+        - z-index: 21
+        - pointer-events: auto
+
+      menu:
+        - position: fixed
+        - top: 8px
+        - left: >
+            [[[
+              const w = window?.innerWidth || 1024;
+              const h = window?.innerHeight || 800;
+
+              if (w <= 767 || h <= 500) {
+                return 'calc(var(--hero-gutter) - 11px)';
+              }
+
+              return 'calc(var(--hero-gutter) - 6px)';
+            ]]]
+        - width: 40px
+        - height: 40px
+        - z-index: 10
+        - pointer-events: auto
+        - cursor: pointer
+
+  custom_fields:
+    menu:
+      card:
+        type: custom:button-card
+        template: hemma_menu_icon
+
+    settings:
+      card:
+        type: custom:button-card
+        template: hemma_settings_button
+        variables:
+          shown: '[[[ return !!variables.hemma_ui_managed ]]]'
+          assist_available: >
+            [[[
+              return variables.show_assist !== false
+                && ((hass && hass.config && hass.config.components) || []).includes("conversation");
+            ]]]
+
+    assist:
+      card:
+        type: custom:button-card
+        template: hemma_assist_button
+        variables:
+          shown: '[[[ return variables.show_assist !== false && ((hass && hass.config && hass.config.components) || []).includes("conversation") ]]]'
+
+    notifications:
+      card:
+        type: custom:button-card
+        template: hemma_notifications_button
+        variables:
+          shown: '[[[ return variables.show_notifications !== false ]]]'
+    navigation:
+      card: !include /config/dashboards/templates/includes/hemma_navigation.yaml
+
+
+    temperature:
+      card:
+        type: custom:button-card
+        template: hemma_weather
+        entity: |
+          [[[
+            return window.hemmaWx ? window.hemmaWx(variables, 'entity') : (variables.weather_entity || '');
+          ]]]
+        variables:
+          hero_mode: true
+          weather_temp_sensor: |
+            [[[
+              return window.hemmaWx ? window.hemmaWx(variables, 'temp') : (variables.weather_temp_sensor || '');
+            ]]]
+    weather:
+      card:
+        type: custom:button-card
+        template: hemma_weather
+        entity: |
+          [[[
+            return window.hemmaWx ? window.hemmaWx(variables, 'entity') : (variables.weather_entity || '');
+          ]]]
+        variables:
+          weather_temp_sensor: |
+            [[[
+              return window.hemmaWx ? window.hemmaWx(variables, 'temp') : (variables.weather_temp_sensor || '');
+            ]]]
+
+    time:
+      card:
+        type: custom:button-card
+        template: hemma_time
+        variables:
+          time_entity: '[[[ return variables.time_entity || "sensor.time" ]]]'
+          use_12h: '[[[ return variables.use_12h !== false ]]]'
+          time_suffix: '[[[ return variables.time_suffix || "" ]]]'
+
+    now_playing:
+      card:
+        type: custom:button-card
+        template: hemma_now_playing
+        variables:
+          enabled: '[[[ return variables.show_media!==false && !!variables.show_now_playing ]]]'
+          pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          start_minimized: '[[[ return !!variables.start_minimized ]]]'
+
+          show_media_player_1: '[[[ return !!variables.media_player_1 ]]]'
+          media_player_1: '[[[ return variables.media_player_1 ]]]'
+          show_media_player_2: '[[[ return !!variables.media_player_2 ]]]'
+          media_player_2: '[[[ return variables.media_player_2 ]]]'
+          show_media_player_3: '[[[ return !!variables.media_player_3 ]]]'
+          media_player_3: '[[[ return variables.media_player_3 ]]]'
+          show_media_player_4: '[[[ return !!variables.media_player_4 ]]]'
+          media_player_4: '[[[ return variables.media_player_4 ]]]'
+          show_media_player_5: '[[[ return !!variables.media_player_5 ]]]'
+          media_player_5: '[[[ return variables.media_player_5 ]]]'
+          show_media_player_6: '[[[ return !!variables.media_player_6 ]]]'
+          media_player_6: '[[[ return variables.media_player_6 ]]]'
+          show_media_player_7: '[[[ return !!variables.media_player_7 ]]]'
+          media_player_7: '[[[ return variables.media_player_7 ]]]'
+          show_media_player_8: '[[[ return !!variables.media_player_8 ]]]'
+          media_player_8: '[[[ return variables.media_player_8 ]]]'
+          show_media_player_9: '[[[ return !!variables.media_player_9 ]]]'
+          media_player_9: '[[[ return variables.media_player_9 ]]]'
+          show_media_player_10: '[[[ return !!variables.media_player_10 ]]]'
+          media_player_10: '[[[ return variables.media_player_10 ]]]'
+
+          show_plex_1: '[[[ return !!variables.plex_stream_1 ]]]'
+          plex_stream_1: '[[[ return variables.plex_stream_1 ]]]'
+          plex_hide_users: '[[[ return variables.plex_hide_users ]]]'
+          show_plex_2: '[[[ return !!variables.plex_stream_2 ]]]'
+          plex_stream_2: '[[[ return variables.plex_stream_2 ]]]'
+
+          show_psn_1: '[[[ return !!variables.psn_1 ]]]'
+          psn_1: '[[[ return variables.psn_1 ]]]'
+          show_psn_2: '[[[ return !!variables.psn_2 ]]]'
+          psn_2: '[[[ return variables.psn_2 ]]]'
+
+          show_discord: >
+            [[[
+              return !!(variables.discord_user
+                || (variables.discord_online && variables.discord_game));
+            ]]]
+          discord_user: '[[[ return variables.discord_user ]]]'
+          discord_image: '[[[ return variables.discord_image ]]]'
+          discord_game: '[[[ return variables.discord_game ]]]'
+          discord_online: '[[[ return variables.discord_online ]]]'
+          discord_details: '[[[ return variables.discord_details ]]]'
+          discord_label: '[[[ return variables.discord_label ]]]'
+
+          show_steam: '[[[ return !!(variables.steam_account || variables.steam_game) ]]]'
+          steam_account: '[[[ return variables.steam_account ]]]'
+          steam_online: '[[[ return variables.steam_online ]]]'
+          steam_game: '[[[ return variables.steam_game ]]]'
+          steam_image: '[[[ return variables.steam_image ]]]'
+          steam_label: '[[[ return variables.steam_label ]]]'
+          duplicate_game: '[[[ return variables.duplicate_game ]]]'
+
+    badges:
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+
+        layout:
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-template-columns: none
+          justify-content: start
+          justify-items: start
+          align-items: center
+          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+
+        card_mod:
+          style: |
+            ha-card {
+              overflow: visible !important;
+            }
+
+        cards:
+          - type: custom:button-card
+            template: hemma_badge_climate_group
+            variables:
+              enabled: '[[[ return (variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && !variables.show_climate_inline ]]]'
+              temp_sensor: '[[[ return variables.temp_sensor_1 ]]]'
+              temp_sensor_2: '[[[ return variables.temp_sensor_2 ]]]'
+              temp_sensor_3: '[[[ return variables.temp_sensor_3 ]]]'
+              temp_sensor_4: '[[[ return variables.temp_sensor_4 ]]]'
+              temp_sensor_5: '[[[ return variables.temp_sensor_5 ]]]'
+              humidity_sensor: '[[[ return variables.humidity_sensor ]]]'
+              quality_sensor: '[[[ return variables.quality_sensor ]]]'
+              climate_entity: '[[[ return variables.climate_entity_1 ]]]'
+              climate_entity_2: '[[[ return variables.climate_entity_2 ]]]'
+              climate_entity_3: '[[[ return variables.climate_entity_3 ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_temp
+            entity: '[[[ return variables.temp_sensor_1 ]]]'
+            variables:
+              enabled: '[[[ return !!((variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && variables.show_climate_inline && variables.temp_sensor_1) ]]]'
+              temp_unit: '[[[ return variables.temp_unit ]]]'
+              room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
+              entity_quality: '[[[ return variables.quality_sensor ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              sensors: >-
+                [[[
+                  return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_humidity
+            entity: '[[[ return variables.humidity_sensor ]]]'
+            variables:
+              enabled: '[[[ return !!((variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && variables.show_climate_inline && variables.humidity_sensor) ]]]'
+              room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
+              entity_quality: '[[[ return variables.quality_sensor ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              sensors: >-
+                [[[
+                  return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_air_quality
+            entity: '[[[ return variables.quality_sensor ]]]'
+            variables:
+              enabled: '[[[ return !!((variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && variables.show_climate_inline && variables.quality_sensor) ]]]'
+              room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
+              entity_quality: '[[[ return variables.quality_sensor ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              sensors: >-
+                [[[
+                  return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light_group
+            variables:
+              enabled: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ]]]'
+              light_group_entity: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_group_entity : null ]]]'
+              entity_1: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_1 : null ]]]'
+              entity_2: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_2 : null ]]]'
+              entity_3: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_3 : null ]]]'
+              entity_4: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_4 : null ]]]'
+              entity_5: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_5 : null ]]]'
+              entity_6: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_6 : null ]]]'
+              entity_7: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_7 : null ]]]'
+              entity_8: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_8 : null ]]]'
+              entity_9: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_9 : null ]]]'
+              entity_10: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_10 : null ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_presence_group
+            variables:
+              enabled: '[[[ return variables.show_people!==false && !!variables.presence_entity_1 && !!variables.presence_entity_2 ]]]'
+              entity_1: '[[[ return variables.presence_entity_1 ]]]'
+              entity_2: '[[[ return variables.presence_entity_2 ]]]'
+              entity_3: '[[[ return variables.presence_entity_3 ]]]'
+              entity_4: '[[[ return variables.presence_entity_4 ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_presence
+            entity: '[[[ return variables.presence_entity_1 ]]]'
+            variables:
+              enabled: '[[[ return variables.show_people!==false && !!(!!variables.presence_entity_1 && variables.presence_entity_1 && !variables.presence_entity_2) ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_media_group
+            variables:
+              enabled: '[[[ return (variables.show_media!==false&&!variables.show_now_playing&&!!variables.media_player_1) ]]]'
+              pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+              entity_1: '[[[ return !!variables.media_player_1 ? variables.media_player_1 : null ]]]'
+              entity_2: '[[[ return !!variables.media_player_2 ? variables.media_player_2 : null ]]]'
+              entity_3: '[[[ return !!variables.media_player_3 ? variables.media_player_3 : null ]]]'
+              entity_4: '[[[ return !!variables.media_player_4 ? variables.media_player_4 : null ]]]'
+              entity_5: '[[[ return !!variables.plex_stream_1 ? variables.plex_stream_1 : null ]]]'
+              entity_6: '[[[ return !!variables.psn_1 ? variables.psn_1 : null ]]]'
+              entity_7: '[[[ return !!variables.psn_2 ? variables.psn_2 : null ]]]'
+              entity_8: '[[[ return !!variables.media_player_5 ? variables.media_player_5 : null ]]]'
+              entity_9: '[[[ return !!variables.media_player_6 ? variables.media_player_6 : null ]]]'
+              entity_10: '[[[ return !!variables.media_player_7 ? variables.media_player_7 : null ]]]'
+              entity_11: '[[[ return !!variables.media_player_8 ? variables.media_player_8 : null ]]]'
+              entity_12: '[[[ return !!variables.media_player_9 ? variables.media_player_9 : null ]]]'
+              entity_13: '[[[ return !!variables.media_player_10 ? variables.media_player_10 : null ]]]'
+              entity_14: '[[[ return !!variables.plex_stream_2 ? variables.plex_stream_2 : null ]]]'
+              pc_count: '[[[ const P = window._hemmaPCSources?.(states, variables) || {}; return (P.discord ? 1 : 0) + (P.steam ? 1 : 0) ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_security_group
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) ]]]'
+              locks: '[[[ return variables.security_locks || [] ]]]'
+              lock_entity: '[[[ return variables.security_lock_entity ]]]'
+              lock_entity_2: '[[[ return variables.security_lock_entity_2 ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_energy_group
+            entity: '[[[ return variables.energy_power_entity ]]]'
+            variables:
+              enabled: >
+                [[[
+                  return window._hemmaEnergyOn
+                    ? window._hemmaEnergyOn(variables)
+                    : (variables.show_energy!==false && !!variables.energy_power_entity);
+                ]]]
+              power_entity: '[[[ return variables.energy_power_entity ]]]'
+              # Always the room's own totals - hold opens the whole-room popup.
+              room_name: '[[[ return variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_cost_month ]]]'
+
+    badges_climate:
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+
+        layout:
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-template-columns: none
+          justify-content: start
+          justify-items: start
+          align-items: center
+          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+
+        cards:
+          - type: custom:button-card
+            template: hemma_badge_temp
+            entity: '[[[ return variables.temp_sensor_1 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && !!variables.temp_sensor_1 ]]]'
+              temp_unit: '[[[ return variables.temp_unit ]]]'
+              room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
+              entity_quality: '[[[ return variables.quality_sensor ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              sensors: >-
+                [[[
+                  return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_humidity
+            entity: '[[[ return variables.humidity_sensor ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && !!variables.humidity_sensor ]]]'
+              room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
+              entity_quality: '[[[ return variables.quality_sensor ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              sensors: >-
+                [[[
+                  return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_air_quality
+            entity: '[[[ return variables.quality_sensor ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && !!variables.quality_sensor ]]]'
+              room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
+              entity_quality: '[[[ return variables.quality_sensor ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              sensors: >-
+                [[[
+                  return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
+                ]]]
+
+    badges_presence:
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+
+        layout:
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-template-columns: none
+          justify-content: start
+          justify-items: start
+          align-items: center
+          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+
+        cards:
+          - type: custom:button-card
+            template: hemma_badge_presence
+            entity: '[[[ return variables.presence_entity_1 ]]]'
+            variables:
+              enabled: '[[[ return variables.show_people!==false && !!variables.presence_entity_1 && !!variables.presence_entity_1 ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_presence
+            entity: '[[[ return variables.presence_entity_2 ]]]'
+            variables:
+              enabled: '[[[ return variables.show_people!==false && !!variables.presence_entity_1 && !!variables.presence_entity_2 ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_presence
+            entity: '[[[ return variables.presence_entity_3 ]]]'
+            variables:
+              enabled: '[[[ return variables.show_people!==false && !!variables.presence_entity_1 && !!variables.presence_entity_3 ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_presence
+            entity: '[[[ return variables.presence_entity_4 ]]]'
+            variables:
+              enabled: '[[[ return variables.show_people!==false && !!variables.presence_entity_1 && !!variables.presence_entity_4 ]]]'
+
+    badges_media:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: false
+        show_label: false
+        show_entity_picture: false
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+
+        extra_styles: >
+          [[[
+            const step = 22;
+
+            const PC = window._hemmaPCSources?.(states, variables) || {};
+
+            const fields = [
+              ['mp1',  !!variables.media_player_1  && variables.media_player_1],
+              ['mp2',  !!variables.media_player_2  && variables.media_player_2],
+              ['mp3',  !!variables.media_player_3  && variables.media_player_3],
+              ['mp4',  !!variables.media_player_4  && variables.media_player_4],
+              ['mp5',  !!variables.media_player_5  && variables.media_player_5],
+              ['mp6',  !!variables.media_player_6  && variables.media_player_6],
+              ['mp7',  !!variables.media_player_7  && variables.media_player_7],
+              ['mp8',  !!variables.media_player_8  && variables.media_player_8],
+              ['mp9',  !!variables.media_player_9  && variables.media_player_9],
+              ['mp10', !!variables.media_player_10 && variables.media_player_10],
+              ['plex',   !!variables.plex_stream_1 && variables.plex_stream_1],
+              ['plex_2', !!variables.plex_stream_2 && variables.plex_stream_2],
+              ['activity1', !!variables.psn_1],
+              ['activity2', !!variables.psn_2],
+              ['activity_discord', !!PC.discord],
+              ['activity_steam', !!PC.steam]
+            ];
+
+            let i = 0;
+            let stagger = '';
+            for (const [id, shown] of fields) {
+              if (!shown) continue;
+              stagger += '#' + id + '{--hemma-badge-enter-delay:' + (i * step) + 'ms;}';
+              i++;
+            }
+
+            return (
+              'ha-card{' +
+                'will-change: auto !important;' +
+                'isolation: auto !important;' +
+                'contain: none !important;' +
+              '}' +
+              '#container{' +
+                'will-change: auto !important;' +
+                'isolation: auto !important;' +
+              '}' +
+              stagger +
+              '#mp1, #mp2, #mp3, #mp4, #mp5, #mp6, #mp7, #mp8, #mp9, #mp10,' +
+              '#plex, #plex_2, #activity1, #activity2, #activity_discord, #activity_steam{' +
+                'overflow: var(--hemma-field-ovf, visible) !important;' +
+              '}'
+            );
+          ]]]
+
+        styles:
+          card:
+            - background: transparent !important
+            - box-shadow: none !important
+            - backdrop-filter: none !important
+            - -webkit-backdrop-filter: none !important
+            - padding: 0 !important
+            - margin-top: 3px !important
+            - border-radius: 0 !important
+            - border: none !important
+            - overflow: visible !important
+            - width: max-content !important
+          grid:
+            - display: flex !important
+            - flex-direction: row !important
+            - flex-wrap: nowrap !important
+            - gap: 0 !important
+            - align-items: flex-start !important
+            - justify-content: flex-start !important
+            - overflow: visible !important
+            - padding: 0 !important
+            - margin: 0 !important
+            - width: max-content !important
+          custom_fields:
+            mp1:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_1 || !variables.media_player_1) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_1 || !variables.media_player_1) return '0px';
+                    const s = states[variables.media_player_1]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp2:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_2 || !variables.media_player_2) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_2 || !variables.media_player_2) return '0px';
+                    const s = states[variables.media_player_2]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp3:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_3 || !variables.media_player_3) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_3 || !variables.media_player_3) return '0px';
+                    const s = states[variables.media_player_3]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp4:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_4 || !variables.media_player_4) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_4 || !variables.media_player_4) return '0px';
+                    const s = states[variables.media_player_4]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp5:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_5 || !variables.media_player_5) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_5 || !variables.media_player_5) return '0px';
+                    const s = states[variables.media_player_5]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3,!!variables.media_player_4&&variables.media_player_4].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp6:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_6 || !variables.media_player_6) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_6 || !variables.media_player_6) return '0px';
+                    const s = states[variables.media_player_6]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3,!!variables.media_player_4&&variables.media_player_4,!!variables.media_player_5&&variables.media_player_5].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp7:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_7 || !variables.media_player_7) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_7 || !variables.media_player_7) return '0px';
+                    const s = states[variables.media_player_7]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3,!!variables.media_player_4&&variables.media_player_4,!!variables.media_player_5&&variables.media_player_5,!!variables.media_player_6&&variables.media_player_6].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp8:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_8 || !variables.media_player_8) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_8 || !variables.media_player_8) return '0px';
+                    const s = states[variables.media_player_8]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3,!!variables.media_player_4&&variables.media_player_4,!!variables.media_player_5&&variables.media_player_5,!!variables.media_player_6&&variables.media_player_6,!!variables.media_player_7&&variables.media_player_7].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp9:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_9 || !variables.media_player_9) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_9 || !variables.media_player_9) return '0px';
+                    const s = states[variables.media_player_9]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3,!!variables.media_player_4&&variables.media_player_4,!!variables.media_player_5&&variables.media_player_5,!!variables.media_player_6&&variables.media_player_6,!!variables.media_player_7&&variables.media_player_7,!!variables.media_player_8&&variables.media_player_8].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            mp10:
+              - max-width: >
+                  [[[
+                    if (!!!variables.media_player_10 || !variables.media_player_10) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.media_player_10 || !variables.media_player_10) return '0px';
+                    const s = states[variables.media_player_10]; if (!s) return '0px';
+                    const st = String(s.state || '');
+                    if (['unavailable','unknown','off','standby'].includes(st)) return '0px';
+                    const a = s.attributes || {};
+                    if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
+                    if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 10); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
+                    const _ck=e=>{const a2=states[e]?.attributes||{};return`${String(a2.media_title||'').trim()}|${String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim()}`};
+                    const _ia=e=>{if(!e)return false;const s2=states[e];if(!s2)return false;const st2=String(s2.state||'');if(['unavailable','unknown','off','standby'].includes(st2))return false;const a2=s2.attributes||{};if(!String(a2.media_title||'').trim()&&!String(a2.media_artist||a2.artist||a2.media_album_artist||'').trim())return false;if(['playing','buffering','on','idle'].includes(st2))return true;if(st2==='paused'){const t=Number(variables.pause_timeout_minutes??10);return t<=0||((new Date()-new Date(s2.last_changed))/60000)<=t;}return false;};
+                    const _myKey=`${String(a.media_title||'').trim()}|${String(a.media_artist||a.artist||a.media_album_artist||'').trim()}`;
+                    if([!!variables.media_player_1&&variables.media_player_1,!!variables.media_player_2&&variables.media_player_2,!!variables.media_player_3&&variables.media_player_3,!!variables.media_player_4&&variables.media_player_4,!!variables.media_player_5&&variables.media_player_5,!!variables.media_player_6&&variables.media_player_6,!!variables.media_player_7&&variables.media_player_7,!!variables.media_player_8&&variables.media_player_8,!!variables.media_player_9&&variables.media_player_9].filter(Boolean).filter(_ia).some(e=>_ck(e)===_myKey))return'0px';
+                    return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            plex:
+              - max-width: >
+                  [[[
+                    if (!variables.plex_stream_1) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!variables.plex_stream_1) return '0px';
+                    const s = states[variables.plex_stream_1];
+                    if (window._hemmaPlexHidden?.(variables, s?.attributes?.user)) return '0px';
+                    return (s && s.state === 'playing') ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            plex_2:
+              - max-width: >
+                  [[[
+                    if (!variables.plex_stream_2) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!variables.plex_stream_2) return '0px';
+                    const s = states[variables.plex_stream_2];
+                    if (window._hemmaPlexHidden?.(variables, s?.attributes?.user)) return '0px';
+                    return (s && s.state === 'playing') ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            activity1:
+              - max-width: >
+                  [[[
+                    if (!!!variables.psn_1 || !variables.psn_1) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.psn_1 || !variables.psn_1) return '0px';
+                    const s = states[variables.psn_1]; if (!s) return '0px';
+                    const st = String(s.state || '').toLowerCase();
+                    const a = s.attributes || {};
+                    if (['playing','buffering','paused'].includes(st)) return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                    const title = String(a.media_title || a.title || '').trim();
+                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
+                    const app = String(a.app_name || a.source || '').trim();
+                    return (title || artist || app) ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            activity2:
+              - max-width: >
+                  [[[
+                    if (!!!variables.psn_2 || !variables.psn_2) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    if (!!!variables.psn_2 || !variables.psn_2) return '0px';
+                    const s = states[variables.psn_2]; if (!s) return '0px';
+                    const st = String(s.state || '').toLowerCase();
+                    const a = s.attributes || {};
+                    if (['playing','buffering','paused'].includes(st)) return 'var(--badge-gap-current, var(--badge-gap, 10px))';
+                    const title = String(a.media_title || a.title || '').trim();
+                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
+                    const app = String(a.app_name || a.source || '').trim();
+                    return (title || artist || app) ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            activity_discord:
+              - max-width: >
+                  [[[
+                    if (!variables.discord_user
+                        && (!variables.discord_online || !variables.discord_game)) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    const P = window._hemmaPCSources?.(states, variables);
+                    return P?.discord ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+            activity_steam:
+              - max-width: >
+                  [[[
+                    if (!variables.steam_account && !variables.steam_game) return '0px';
+                    return '450px';
+                  ]]]
+              - margin-right: >
+                  [[[
+                    const P = window._hemmaPCSources?.(states, variables);
+                    return P?.steam ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
+                  ]]]
+              - transition: >
+                  [[[
+                    return 'none';
+                  ]]]
+        custom_fields:
+          mp1:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_1 ]]]'
+                entity: '[[[ return variables.media_player_1 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp2:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_2 ]]]'
+                entity: '[[[ return variables.media_player_2 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp3:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_3 ]]]'
+                entity: '[[[ return variables.media_player_3 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp4:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_4 ]]]'
+                entity: '[[[ return variables.media_player_4 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp5:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_5 ]]]'
+                entity: '[[[ return variables.media_player_5 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp6:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_6 ]]]'
+                entity: '[[[ return variables.media_player_6 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp7:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_7 ]]]'
+                entity: '[[[ return variables.media_player_7 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp8:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_8 ]]]'
+                entity: '[[[ return variables.media_player_8 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp9:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_9 ]]]'
+                entity: '[[[ return variables.media_player_9 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          mp10:
+            card:
+              type: custom:button-card
+              template: hemma_badge_media_player
+              variables:
+                enabled: '[[[ return !!variables.media_player_10 ]]]'
+                entity: '[[[ return variables.media_player_10 ]]]'
+                pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
+          plex:
+            card:
+              type: custom:button-card
+              template: hemma_badge_plex
+              entity: '[[[ return variables.plex_stream_1 ]]]'
+              variables:
+                enabled: '[[[ return !!variables.plex_stream_1 ]]]'
+                session_entity: '[[[ return variables.plex_stream_1 ]]]'
+
+          plex_2:
+            card:
+              type: custom:button-card
+              template: hemma_badge_plex
+              entity: '[[[ return variables.plex_stream_2 ]]]'
+              variables:
+                enabled: '[[[ return !!variables.plex_stream_2 ]]]'
+                session_entity: '[[[ return variables.plex_stream_2 ]]]'
+          activity1:
+            card:
+              type: custom:button-card
+              template: hemma_badge_activity
+              entity: '[[[ return variables.psn_1 ]]]'
+              variables:
+                enabled: '[[[ return !!variables.psn_1 ]]]'
+          activity2:
+            card:
+              type: custom:button-card
+              template: hemma_badge_activity
+              entity: '[[[ return variables.psn_2 ]]]'
+              variables:
+                enabled: '[[[ return !!variables.psn_2 ]]]'
+          activity_discord:
+            card:
+              type: custom:button-card
+              template: hemma_badge_activity
+              entity: '[[[ return variables.discord_image ]]]'
+              entity_picture: >
+                [[[
+                  const P = window._hemmaPCSources?.(states, variables);
+                  if (P?.discord?.img) this._discordImgUrl = P.discord.img;
+                  return this._discordImgUrl || null;
+                ]]]
+              variables:
+                enabled: >
+                  [[[
+                    const P = window._hemmaPCSources?.(states, variables);
+                    return !!P?.discord;
+                  ]]]
+              styles:
+                card:
+                  - --hemma-badge-opacity: >
+                      [[[
+                        const P = window._hemmaPCSources?.(states, variables);
+                        return P?.discord ? '1' : '0';
+                      ]]]
+                  - --hemma-badge-ptr: >
+                      [[[
+                        const P = window._hemmaPCSources?.(states, variables);
+                        return P?.discord ? 'auto' : 'none';
+                      ]]]
+                  - --bg-url: >
+                      [[[
+                        const P = window._hemmaPCSources?.(states, variables);
+                        if (P?.discord?.img) this._discordImgUrlBg = `url("${P.discord.img}")`;
+                        return this._discordImgUrlBg || 'none';
+                      ]]]
+              name: >
+                [[[
+                  const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split('{' + p + '}').join(String(v[p])); return s; });
+                  const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+                  const P = window._hemmaPCSources?.(states, variables);
+                  const row = P?.discord;
+                  const title = row ? row.label : 'Discord';
+                  const sub = row ? (row.details ? `${row.game} — ${row.details}` : row.game) : T('presence.online', 'Online');
+                  return `<div class="badge-wrap"><div class="badge-title">${esc(title)}</div><div class="badge-sub">${esc(sub)}</div></div>`;
+                ]]]
+          activity_steam:
+            card:
+              type: custom:button-card
+              template: hemma_badge_activity
+              entity: '[[[ return variables.steam_image ]]]'
+              entity_picture: >
+                [[[
+                  const P = window._hemmaPCSources?.(states, variables);
+                  if (P?.steam?.img) this._steamImgUrl = P.steam.img;
+                  return this._steamImgUrl || null;
+                ]]]
+              variables:
+                enabled: >
+                  [[[
+                    const P = window._hemmaPCSources?.(states, variables);
+                    return !!P?.steam;
+                  ]]]
+              styles:
+                card:
+                  - --hemma-badge-opacity: >
+                      [[[
+                        const P = window._hemmaPCSources?.(states, variables);
+                        return P?.steam ? '1' : '0';
+                      ]]]
+                  - --hemma-badge-ptr: >
+                      [[[
+                        const P = window._hemmaPCSources?.(states, variables);
+                        return P?.steam ? 'auto' : 'none';
+                      ]]]
+                  - --bg-url: >
+                      [[[
+                        const P = window._hemmaPCSources?.(states, variables);
+                        if (P?.steam?.img) this._steamImgUrlBg = `url("${P.steam.img}")`;
+                        return this._steamImgUrlBg || 'none';
+                      ]]]
+              name: >
+                [[[
+                  const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split('{' + p + '}').join(String(v[p])); return s; });
+                  const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+                  const P = window._hemmaPCSources?.(states, variables);
+                  const row = P?.steam;
+                  const title = row ? row.label : 'Steam';
+                  const sub = row ? (row.details ? `${row.game} — ${row.details}` : row.game) : T('presence.online', 'Online');
+                  return `<div class="badge-wrap"><div class="badge-title">${esc(title)}</div><div class="badge-sub">${esc(sub)}</div></div>`;
+                ]]]
+    badges_lights:
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+
+        layout:
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-template-columns: none
+          justify-content: start
+          justify-items: start
+          align-items: center
+          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+
+        cards:
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[0] || null) : (variables.light_entity_1 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[0];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_1;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[1] || null) : (variables.light_entity_2 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[1];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_2;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[2] || null) : (variables.light_entity_3 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[2];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_3;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[3] || null) : (variables.light_entity_4 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[3];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_4;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[4] || null) : (variables.light_entity_5 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[4];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_5;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[5] || null) : (variables.light_entity_6 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[5];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_6;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[6] || null) : (variables.light_entity_7 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[6];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_7;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[8] || null) : (variables.light_entity_8 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[8];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_8;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[9] || null) : (variables.light_entity_9 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[9];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_9;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1 || variables.light_group_entity;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[10] || null) : (variables.light_entity_10 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1 || variables.light_group_entity;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!m[10];
+                  return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) && !!variables.light_entity_10;
+                ]]]
+
+    badges_security:
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+
+        layout:
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-template-columns: none
+          justify-content: start
+          justify-items: start
+          align-items: center
+          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+
+        cards:
+          - type: custom:button-card
+            template: hemma_badge_lock_group
+            entity: '[[[ return variables.security_lock_entity ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_locks ]]]'
+              label: '[[[ return variables.security_locks_label ]]]'
+              locks: '[[[ return variables.security_locks || [] ]]]'
+              battery_entities: '[[[ return variables.security_lock_batteries || {} ]]]'
+              door_sensors: '[[[ return variables.security_door_sensors || {} ]]]'
+              room_name: '[[[ return variables.room_name || variables.aqi_room_name ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_camera_group
+            entity: '[[[ return (variables.security_cameras || [])[0] ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!(variables.security_cameras || []).length ]]]'
+              label: '[[[ return variables.security_cameras_label ]]]'
+              cameras: '[[[ return variables.security_cameras || [] ]]]'
+              room_name: '[[[ return variables.room_name || variables.aqi_room_name ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_1 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_1 ]]]'
+              label: '[[[ return variables.security_label_1 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_2 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_2 ]]]'
+              label: '[[[ return variables.security_label_2 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_3 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_3 ]]]'
+              label: '[[[ return variables.security_label_3 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_4 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_4 ]]]'
+              label: '[[[ return variables.security_label_4 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_5 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_5 ]]]'
+              label: '[[[ return variables.security_label_5 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_6 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_6 ]]]'
+              label: '[[[ return variables.security_label_6 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_7 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_7 ]]]'
+              label: '[[[ return variables.security_label_7 ]]]'
+          - type: custom:button-card
+            template: hemma_badge_security
+            entity: '[[[ return variables.security_entity_8 ]]]'
+            variables:
+              enabled: '[[[ return (variables.show_security!==false&&(!!variables.security_lock_entity||!!variables.security_entity_1||!!(variables.security_locks||[]).length||!!(variables.security_cameras||[]).length)) && !!variables.security_entity_8 ]]]'
+              label: '[[[ return variables.security_label_8 ]]]'
+
+    badges_energy:
+      card:
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+
+        layout:
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-template-columns: none
+          justify-content: start
+          justify-items: start
+          align-items: center
+          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+
+        cards:
+          - type: custom:button-card
+            template: hemma_badge_energy
+            entity: '[[[ return variables.energy_entity_1 ]]]'
+            variables:
+              enabled: '[[[ return (window._hemmaEnergyOn ? window._hemmaEnergyOn(variables) : !!variables.energy_power_entity) && !!variables.energy_entity_1 ]]]'
+              label: '[[[ return variables.energy_label_1 ]]]'
+              unit: '[[[ return variables.energy_unit_1 ]]]'
+              cost_entity: '[[[ return variables.energy_cost_1 ]]]'
+              room_name: '[[[ return variables.energy_popup_power_1 ? (variables.energy_popup_name_1 || variables.energy_label_1) : variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_popup_power_1 || variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_popup_power_1 ? variables.energy_popup_today_1 : variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_popup_power_1 ? variables.energy_popup_month_1 : variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_popup_power_1 ? variables.energy_popup_cost_today_1 : variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_popup_power_1 ? variables.energy_popup_cost_month_1 : variables.energy_cost_month ]]]'
+          - type: custom:button-card
+            template: hemma_badge_energy
+            entity: '[[[ return variables.energy_entity_2 ]]]'
+            variables:
+              enabled: '[[[ return (window._hemmaEnergyOn ? window._hemmaEnergyOn(variables) : !!variables.energy_power_entity) && !!variables.energy_entity_2 ]]]'
+              label: '[[[ return variables.energy_label_2 ]]]'
+              unit: '[[[ return variables.energy_unit_2 ]]]'
+              cost_entity: '[[[ return variables.energy_cost_2 ]]]'
+              room_name: '[[[ return variables.energy_popup_power_2 ? (variables.energy_popup_name_2 || variables.energy_label_2) : variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_popup_power_2 || variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_popup_power_2 ? variables.energy_popup_today_2 : variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_popup_power_2 ? variables.energy_popup_month_2 : variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_popup_power_2 ? variables.energy_popup_cost_today_2 : variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_popup_power_2 ? variables.energy_popup_cost_month_2 : variables.energy_cost_month ]]]'
+          - type: custom:button-card
+            template: hemma_badge_energy
+            entity: '[[[ return variables.energy_entity_3 ]]]'
+            variables:
+              enabled: '[[[ return (window._hemmaEnergyOn ? window._hemmaEnergyOn(variables) : !!variables.energy_power_entity) && !!variables.energy_entity_3 ]]]'
+              label: '[[[ return variables.energy_label_3 ]]]'
+              unit: '[[[ return variables.energy_unit_3 ]]]'
+              cost_entity: '[[[ return variables.energy_cost_3 ]]]'
+              room_name: '[[[ return variables.energy_popup_power_3 ? (variables.energy_popup_name_3 || variables.energy_label_3) : variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_popup_power_3 || variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_popup_power_3 ? variables.energy_popup_today_3 : variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_popup_power_3 ? variables.energy_popup_month_3 : variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_popup_power_3 ? variables.energy_popup_cost_today_3 : variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_popup_power_3 ? variables.energy_popup_cost_month_3 : variables.energy_cost_month ]]]'
+          - type: custom:button-card
+            template: hemma_badge_energy
+            entity: '[[[ return variables.energy_entity_4 ]]]'
+            variables:
+              enabled: '[[[ return (window._hemmaEnergyOn ? window._hemmaEnergyOn(variables) : !!variables.energy_power_entity) && !!variables.energy_entity_4 ]]]'
+              label: '[[[ return variables.energy_label_4 ]]]'
+              unit: '[[[ return variables.energy_unit_4 ]]]'
+              cost_entity: '[[[ return variables.energy_cost_4 ]]]'
+              room_name: '[[[ return variables.energy_popup_power_4 ? (variables.energy_popup_name_4 || variables.energy_label_4) : variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_popup_power_4 || variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_popup_power_4 ? variables.energy_popup_today_4 : variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_popup_power_4 ? variables.energy_popup_month_4 : variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_popup_power_4 ? variables.energy_popup_cost_today_4 : variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_popup_power_4 ? variables.energy_popup_cost_month_4 : variables.energy_cost_month ]]]'
+          - type: custom:button-card
+            template: hemma_badge_energy
+            entity: '[[[ return variables.energy_entity_5 ]]]'
+            variables:
+              enabled: '[[[ return (window._hemmaEnergyOn ? window._hemmaEnergyOn(variables) : !!variables.energy_power_entity) && !!variables.energy_entity_5 ]]]'
+              label: '[[[ return variables.energy_label_5 ]]]'
+              unit: '[[[ return variables.energy_unit_5 ]]]'
+              cost_entity: '[[[ return variables.energy_cost_5 ]]]'
+              room_name: '[[[ return variables.energy_popup_power_5 ? (variables.energy_popup_name_5 || variables.energy_label_5) : variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_popup_power_5 || variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_popup_power_5 ? variables.energy_popup_today_5 : variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_popup_power_5 ? variables.energy_popup_month_5 : variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_popup_power_5 ? variables.energy_popup_cost_today_5 : variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_popup_power_5 ? variables.energy_popup_cost_month_5 : variables.energy_cost_month ]]]'
+          - type: custom:button-card
+            template: hemma_badge_energy
+            entity: '[[[ return variables.energy_entity_6 ]]]'
+            variables:
+              enabled: '[[[ return (window._hemmaEnergyOn ? window._hemmaEnergyOn(variables) : !!variables.energy_power_entity) && !!variables.energy_entity_6 ]]]'
+              label: '[[[ return variables.energy_label_6 ]]]'
+              unit: '[[[ return variables.energy_unit_6 ]]]'
+              cost_entity: '[[[ return variables.energy_cost_6 ]]]'
+              room_name: '[[[ return variables.energy_popup_power_6 ? (variables.energy_popup_name_6 || variables.energy_label_6) : variables.room_name || variables.aqi_room_name ]]]'
+              entity_power: '[[[ return variables.energy_popup_power_6 || variables.energy_power_entity ]]]'
+              entity_usage_today: '[[[ return variables.energy_popup_power_6 ? variables.energy_popup_today_6 : variables.energy_usage_today ]]]'
+              entity_usage_month: '[[[ return variables.energy_popup_power_6 ? variables.energy_popup_month_6 : variables.energy_usage_month ]]]'
+              entity_cost_today: '[[[ return variables.energy_popup_power_6 ? variables.energy_popup_cost_today_6 : variables.energy_cost_today ]]]'
+              entity_cost_month: '[[[ return variables.energy_popup_power_6 ? variables.energy_popup_cost_month_6 : variables.energy_cost_month ]]]'
+
+  extra_styles: |
+    /* Same exemption themes/hemma/hemma.yaml gives .hemma-entity cards via
+       :host(.hemma-entity){ contain: none !important; } — this card doesn't
+       carry that class, but contain establishes a backdrop root just like
+       transform/filter/isolation, and it sits above every Now Playing tile. */
+    :host{
+      contain: none !important;
+    }
+    ha-card{
+      contain: none !important;
+    }
+
+    #mp1, #mp2, #mp3, #mp4,
+    #plex, #plex_2,
+    #activity1, #activity2 {
+      overflow: visible;
+    }
+
+    #badges,
+    #badges_climate,
+    #badges_presence,
+    #badges_media,
+    #badges_lights,
+    #badges_security,
+    #badges_energy {
+      overflow-x: visible !important;
+      overflow-y: visible !important;
+      overscroll-behavior-x: contain !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    #badges::-webkit-scrollbar,
+    #badges_climate::-webkit-scrollbar,
+    #badges_presence::-webkit-scrollbar,
+    #badges_media::-webkit-scrollbar,
+    #badges_lights,
+    #badges_security,
+    #badges_energy::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (max-width: 767px) and (orientation: portrait) {
+      :host .button-card-main {
+        padding-top: var(--hero-top) !important;
+      }
+
+      #badges,
+      #badges_climate,
+      #badges_presence,
+      #badges_media,
+      #badges_lights,
+      #badges_security,
+      #badges_energy {
+        overflow-x: auto !important;
+        width: calc(100% + 2 * var(--hero-gutter) - var(--hemma-header-badge-nudge, 0px)) !important;
+        max-width: none !important;
+        margin-left: calc(-1 * var(--hero-gutter) + var(--hemma-header-badge-nudge, 0px)) !important;
+        padding-left: var(--hero-gutter) !important;
+        padding-right: var(--hero-gutter) !important;
+        box-sizing: border-box !important;
+      }
+
+      #badges_media {
+        padding-left: calc(var(--hero-gutter) + var(--hemma-header-media-badge-nudge-current, 0px)) !important;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 600px) {
+      #badges,
+      #badges_climate,
+      #badges_presence,
+      #badges_media,
+      #badges_lights,
+      #badges_security,
+      #badges_energy {
+        max-width: calc(100vw - (2 * var(--hemma-entity-col-width-landscape, 200px)) - 8px - var(--hemma-tiles-right-pad-landscape, 0px) - var(--hero-gutter, 18px) - var(--hemma-landscape-badge-stop-pad, 60px)) !important;
+        overflow-x: auto !important;
+        box-sizing: border-box !important;
+      }
+    }
+
+    #time {
+      display: none;
+    }
+
+    @media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+      #time {
+        display: var(--hemma-time-nav-open, block);
+        top: calc(env(safe-area-inset-top, 0px) + var(--hemma-chrome-row-center-desktop, 56px)
+          - (var(--hemma-chrome-font-size, 18px) / 2));
+        left: var(--hemma-time-left, calc(var(--hero-gutter) + var(--hero-room-name-margin-left-current, 0px)));
+      }
+    }
+
+    @media (min-width: 600px) and (max-width: 767px) and (min-height: 501px) {
+      #time {
+        display: var(--hemma-time-nav-open, block);
+        top: calc(env(safe-area-inset-top, 0px) + var(--hemma-nav-top-current, 46px) - var(--hemma-time-nudge-small-tablet, 43px));
+        left: var(--hemma-time-left, calc(var(--hero-gutter) + var(--hero-room-name-margin-left-current, 0px)));
+      }
+    }
+
+    /* Tablet - Time: leading rail, optical center on the navbar label row. */
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: landscape) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: landscape) and (hover: none) {
+      #time {
+        display: var(--hemma-time-nav-open, block);
+        top: calc(env(safe-area-inset-top, 0px) + var(--hemma-chrome-row-top-tablet, 30px) + var(--hemma-time-row-offset-tablet, 12px));
+        left: var(--hero-gutter);
+        right: auto;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (hover: none) {
+      #time {
+        display: var(--hemma-time-nav-open, block);
+        top: calc(env(safe-area-inset-top, 0px) + var(--hemma-chrome-row-top-tablet-portrait, 32px) + var(--hemma-time-row-offset-tablet, 12px));
+        left: var(--hero-gutter);
+        right: auto;
+      }
+    }
+
+    /* Now Playing Text - Hidden on Tablet */
+    /* The settings button and the Now Playing waveform share this row, so one
+       number moves both and they cannot drift apart. Desktop is measured off the
+       nav label (y 16, height 26, center 29) less half a 34px button. */
+    :host {
+      --hemma-chrome-btn-size: 34px;
+      --hemma-chrome-btn-top: calc(var(--hemma-chrome-row-center-desktop, 56px)
+        - (var(--hemma-chrome-btn-size, 34px) / 2));
+    }
+
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: landscape) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: landscape) and (hover: none) {
+      :host {
+        --hemma-chrome-btn-top: calc(var(--hemma-chrome-row-top-tablet, 30px)
+          + (var(--hemma-nav-pill-height-tablet, 46px) / 2)
+          - (var(--hemma-chrome-btn-size, 34px) / 2));
+      }
+    }
+
+    /* Portrait sits the pill 2px lower, so the buttons follow it. Without this
+       the row fell back to the desktop center and every button sat 9px low. */
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (hover: none) {
+      :host {
+        --hemma-chrome-btn-top: calc(var(--hemma-chrome-row-top-tablet-portrait, 32px)
+          + (var(--hemma-nav-pill-height-tablet, 46px) / 2)
+          - (var(--hemma-chrome-btn-size, 34px) / 2));
+      }
+
+      /* Portrait alone cannot fit the waveform beside the pill, so it gives up
+         its seat in the row and takes the one below. Assist is already in the
+         dots menu on every tablet - see the block after this one. */
+      #now_playing { --hemma-np-head-inset: 0px !important; }
+    }
+
+    /* A tablet keeps Assist in the dots menu in BOTH orientations. Landscape has
+       the width for it, but a control that moves when the iPad is turned is
+       worse than one that lives in one place. The row collapses the way a UIKit
+       toolbar does; the bell then closes Assist's gap and the waveform's own
+       reserve drops a step with it. !important because every one of these is
+       stamped inline from styles.custom_fields.
+       --hemma-chrome-side-reserve-tablet* in the theme counts what is left;
+       changing what shows here means changing those. */
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (hover: none) {
+      #assist { display: none !important; }
+
+      #notifications {
+        transform: translateX(calc(-1 * var(--hemma-chrome-dots-step, 46px))) !important;
+      }
+
+      #now_playing {
+        --hemma-np-head-inset: calc(var(--hemma-chrome-dots-step, 46px)
+          + var(--hemma-chrome-bell-step, 46px)) !important;
+      }
+    }
+
+    /* Portrait again, last: its waveform is not in the row at all, so it
+       reserves nothing. Same weight as the block above, so order settles it. */
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (hover: none) {
+      #now_playing { --hemma-np-head-inset: 0px !important; }
+    }
+
+    #now_playing {
+      --np-vp: 0;
+      pointer-events: none;
+    }
+
+    /* The container is only a positioning box: right-anchored and up to 560px
+       wide, it reaches across chrome it does not draw. Left capturing pointer
+       events it swallowed every click on the settings button beside it whenever
+       media was playing - and did nothing when nothing was. Only what it
+       actually paints should be clickable, so the box stays transparent to
+       pointers and its content opts back in. This does not depend on z-index. */
+    #now_playing { pointer-events: none !important; }
+    #now_playing > * { pointer-events: auto; }
+
+    @media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+      #now_playing {
+        --np-vp: 1;
+        pointer-events: auto;
+        top: calc(env(safe-area-inset-top, 0px) + var(--hemma-chrome-btn-top, 12px));
+        right: calc(var(--hero-gutter) + var(--hero-room-name-margin-left-current, 0px));
+        max-width: min(560px, 34vw);
+      }
+    }
+
+    /* Tablet - Now Playing */
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: landscape) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: landscape) and (hover: none) {
+      #now_playing {
+        --np-vp: 1;
+        pointer-events: auto;
+        top: calc(env(safe-area-inset-top, 0px) + var(--hemma-chrome-btn-top, 12px));
+        right: var(--hero-gutter);
+        max-width: min(480px, 52vw);
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (pointer: coarse),
+           (min-width: 768px) and (max-width: 1600px) and (min-height: 501px) and (orientation: portrait) and (hover: none) {
+      #now_playing {
+        --np-vp: 1;
+        pointer-events: auto;
+        top: calc(env(safe-area-inset-top, 0px)
+          + var(--hemma-now-playing-top-tablet-portrait,
+              calc(var(--hemma-chrome-row-top-tablet-portrait, 32px)
+                + var(--hemma-nav-pill-height-tablet, 46px) + 8px)));
+        right: var(--hero-gutter);
+        max-width: min(420px, 60vw);
+      }
+    }

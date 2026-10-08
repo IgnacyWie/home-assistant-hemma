@@ -1,0 +1,35 @@
+hemma_popup_base:
+  # window.hemmaIconUrl load-race guard - see hemma_default.yaml for why.
+  variables:
+    hemma_icon_url_guard:
+      force_eval: true
+      value: |
+        [[[
+          if (typeof window.hemmaIconUrl !== 'function') {
+            window.hemmaIconUrl = (name) =>
+              (window.HEMMA_ICONS && window.HEMMA_ICONS[name]) ||
+              `/local/hemma/icons/${name}.svg`;
+          }
+          return true;
+        ]]]
+
+  tap_action:
+    haptic: light
+    action: |
+      [[[
+        return window.hemmaPopupAction ? window.hemmaPopupAction() : 'more-info';
+      ]]]
+    entity: "[[[ return entity?.entity_id; ]]]"
+    hemma_popup:
+      title: ""
+      dismissable: true
+  icon_tap_action:
+    haptic: light
+    action: |
+      [[[
+        return window.hemmaPopupAction ? window.hemmaPopupAction() : 'more-info';
+      ]]]
+    entity: "[[[ return entity?.entity_id; ]]]"
+    hemma_popup:
+      title: ""
+      dismissable: true

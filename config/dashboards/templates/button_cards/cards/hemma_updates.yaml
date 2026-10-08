@@ -1,0 +1,78 @@
+hemma_updates:
+  template:
+    - hemma_entity
+    - hemma_popup_updates
+
+  variables:
+    icon: updates
+    show_when: active
+    idle: |
+      [[[
+        const restart = Object.keys(states)
+          .filter(id => id.startsWith('update.'))
+          .some(id => {
+            const e = states[id], a = (e && e.attributes) || {};
+            return e && e.state === 'off'
+              && a.installed_version && a.installed_version === a.latest_version
+              && String(a.release_summary || '').toLowerCase().includes('restart');
+          });
+        const n = Number(entity?.state);
+        return !(Number.isFinite(n) && n > 0) && !restart;
+      ]]]
+
+  icon_tap_action:
+    action: more-info
+
+  hold_action:
+    action: more-info
+
+  state_display: |
+    [[[
+      const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split('{' + p + '}').join(String(v[p])); return s; });
+      const restart = Object.keys(states)
+        .filter(id => id.startsWith('update.'))
+        .some(id => {
+          const e = states[id], a = (e && e.attributes) || {};
+          return e && e.state === 'off'
+            && a.installed_version && a.installed_version === a.latest_version
+            && String(a.release_summary || '').toLowerCase().includes('restart');
+        });
+      const n = Number(entity.state);
+      if (Number.isFinite(n) && n === 1) return T('updates.one', '1 Update');
+      if (Number.isFinite(n) && n > 1) return T('updates.n', '{n} Updates', { n });
+      return restart ? T('updates.restart_required', 'Restart required') : T('updates.up_to_date', 'Up to date');
+    ]]]
+
+  state:
+    - operator: template
+      value: |
+        [[[
+          const restart = Object.keys(states)
+            .filter(id => id.startsWith('update.'))
+            .some(id => {
+              const e = states[id], a = (e && e.attributes) || {};
+              return e && e.state === 'off'
+                && a.installed_version && a.installed_version === a.latest_version
+                && String(a.release_summary || '').toLowerCase().includes('restart');
+            });
+          const n = Number(entity.state);
+          return (Number.isFinite(n) && n > 0) || restart;
+        ]]]
+      styles:
+        card:
+          - "--hemma-active-overlay-opacity": "1"
+          - --hemma-entity-overlay-tint: var(--hemma-entity-active-tint-current, rgba(255,255,255,0.94))
+          - "--hemma-active-overlay-dur": "0s"
+          - --hemma-entity-top-gradient: none
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+        name:
+          - color: var(--hemma-entity-name-active, var(--primary-text-color))
+        state:
+          - color: var(--hemma-entity-state-active-color)
+        img_cell:
+          - opacity: "1 !important"
+          - filter: none !important
+          - background: "var(--hemma-color-teal, #00c3d0) !important"
+        entity_picture:
+          - opacity: "1 !important"
+          - filter: none !important

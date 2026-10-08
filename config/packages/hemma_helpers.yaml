@@ -1,0 +1,418 @@
+
+input_boolean:
+  hemma_dashboard_redirect:
+    name: Hemma Dashboard Redirect
+    initial: on
+
+  hemma_now_playing_minimized:
+    name: Hemma Now Playing Minimized
+    initial: off
+
+  hemma_thermostat_overlay:
+    name: Thermostat Overlay
+    initial: off
+
+  hemma_actions_overlay:
+    name: Entity Actions Overlay
+    initial: off
+
+  hemma_mobile_navigation:
+    name: Mobile Navigation
+    initial: off
+
+  hemma_lock_overlay:
+    name: Lock Overlay
+    initial: off
+
+  hemma_motion_badges:
+    name: Motion Badges
+    initial: on
+
+  hemma_restart_confirm_1:
+    name: Network Restart Confirm 1
+    initial: off
+
+  hemma_restart_confirm_2:
+    name: Network Restart Confirm 2
+    initial: off
+
+  hemma_restart_done_1:
+    name: Network Restart Done 1
+    initial: off
+
+  hemma_restart_done_2:
+    name: Network Restart Done 2
+    initial: off
+
+input_text:
+  # Which Now Playing source is pinned to the primary slot
+  hemma_now_playing_pinned:
+    name: "Hemma Now Playing - Pinned"
+    initial: ""
+    max: 32
+
+  hemma_motion_living_room:
+    name: "Hemma Motion - Living Room"
+    initial: ""
+  hemma_motion_bedroom:
+    name: "Hemma Motion - Bedroom"
+    initial: ""
+  hemma_motion_kitchen:
+    name: "Hemma Motion - Kitchen"
+    initial: ""
+
+  hemma_thermostat_active_entity:
+    name: "Hemma Thermostat - Active Entity"
+    initial: ""
+
+  hemma_actions_active_entity:
+    name: "Hemma Entity Actions - Active Entity"
+    initial: ""
+
+input_datetime:
+  hemma_notifications_read:
+    name: "Hemma Notifications - Last Read"
+    has_date: true
+    has_time: true
+
+input_number:
+  hemma_thermostat_target_temperature:
+    name: Thermostat Target Temperature
+    # Celsius users: min: 15, max: 30, step: 0.5, unit_of_measurement: "°C"
+    min: 68
+    max: 75
+    step: 1
+    unit_of_measurement: "°F"
+    mode: slider
+
+# Mobile badge filters
+input_select:
+  hemma_mobile_filter:
+    name: Mobile Dashboard Filter
+    options:
+      - all
+      - climate
+      - lights
+      - presence
+      - media
+      - security
+      - energy
+      - room_scenes
+      - room_livingroom
+      - room_kitchen
+      - room_bedroom
+      - room_office
+    initial: all
+
+  # Badges row
+  hemma_expanded_row:
+    name: Expanded Badge Row
+    options:
+      - none
+      - climate
+      - presence
+      - media
+      - lights
+      - security
+      - energy
+    initial: none
+
+  # Thermostat mode
+  hemma_thermostat_mode:
+    name: Thermostat Mode
+    options:
+      - cool
+      - heat
+    initial: cool
+
+# Tuya's raw total-energy entity periodically drops to zero, so integrate the
+# stable power reading and expose a monotonic monthly meter for the dashboard.
+sensor:
+  - platform: integration
+    source: sensor.lsc_smart_power_plug_power
+    name: LSC Smart Power Plug Calculated Energy
+    unique_id: lsc_smart_power_plug_calculated_energy
+    unit_prefix: k
+    unit_time: h
+    round: 3
+    method: left
+    max_sub_interval:
+      minutes: 5
+
+utility_meter:
+  lsc_smart_power_plug_monthly_energy:
+    source: sensor.lsc_smart_power_plug_calculated_energy
+    name: LSC Smart Power Plug Monthly Energy
+    cycle: monthly
+    periodically_resetting: false
+    always_available: true
+
+# Derived template sensors used by dashboard badges and media summaries.
+template:
+  # Badge icon colors
+  - sensor:
+      - name: Temp Color
+        unique_id: hemma_temp_color
+        state: >
+          {% set v = states('sensor.temperature') | float(0) %}
+          {% if v <= 65 %}
+            var(--hemma-badge-temp-very-cold-color)
+          {% elif v <= 70 %}
+            var(--hemma-badge-temp-cool-color)
+          {% elif v <= 76 %}
+            var(--hemma-badge-temp-comfortable-color)
+          {% elif v <= 81 %}
+            var(--hemma-badge-temp-warm-color)
+          {% elif v <= 85 %}
+            var(--hemma-badge-temp-hot-color)
+          {% else %}
+            var(--hemma-badge-temp-very-hot-color)
+          {% endif %}
+
+      - name: Humidity Color
+        unique_id: hemma_humidity_color
+        state: >
+          {% set v = states('sensor.humidity') | float(0) %}
+          {% if v <= 29.99 %}
+            var(--hemma-badge-humidity-dry-color)
+          {% elif v >= 61 %}
+            var(--hemma-badge-humidity-high-color)
+          {% else %}
+            var(--hemma-badge-climate-color)
+          {% endif %}
+
+      - name: "Plex Recently Added Count"
+        unique_id: plex_recently_added_count
+        state: >
+          {% set movies = state_attr('sensor.recently_added_movies', 'data') %}
+          {% set tv = state_attr('sensor.recently_added_tv', 'data') %}
+          {% set m_items = movies[1:] if movies and movies | length > 1 else [] %}
+          {% set tv_items = tv[1:] if tv and tv | length > 1 else [] %}
+          {% set all_items = m_items + tv_items %}
+          {% set cutoff = (utcnow() - timedelta(days=7)).strftime('%Y-%m-%dT%H:%M:%SZ') %}
+          {% set ns = namespace(count=0) %}
+          {% for item in all_items %}
+            {% if item.airdate is defined and item.airdate > cutoff %}
+              {% set ns.count = ns.count + 1 %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.count }}
+
+# Updates restart button
+script:
+  hemma_restart_toggle:
+    alias: "Hemma - Restart Toggle"
+    description: >
+      One-button handler: first tap enters confirm mode, second tap
+      restarts the device and shows a done state, tapping done dismisses it.
+    mode: single
+    fields:
+      button_entity:
+        required: true
+      helper_entity:
+        required: true
+      done_entity:
+        required: false
+    sequence:
+      - choose:
+          - conditions:
+              - "{{ done_entity | default('') != '' and is_state(done_entity | default('x'), 'on') }}"
+            sequence:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: "{{ done_entity }}"
+          - conditions:
+              - "{{ is_state(helper_entity, 'on') }}"
+            sequence:
+              - service: button.press
+                target:
+                  entity_id: "{{ button_entity }}"
+              - if:
+                  - "{{ done_entity | default('') != '' }}"
+                then:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: "{{ done_entity }}"
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: "{{ helper_entity }}"
+        default:
+          - service: input_boolean.turn_on
+            target:
+              entity_id: "{{ helper_entity }}"
+
+  # Lights - smart toggle
+  hemma_light_smart_toggle:
+    alias: "Hemma - Smart Light Toggle"
+    description: >
+      Saves the current light state before turning off.
+      For light groups, snapshots each individual member so only
+      the lights that were on get restored (not the whole group).
+      Falls back to a plain turn_on if no saved state exists yet.
+    fields:
+      light_entity:
+        description: "Entity ID of the light or light group to toggle"
+        required: true
+        selector:
+          entity:
+            domain: light
+    mode: queued
+    max: 5
+    sequence:
+      - variables:
+          scene_id: "hemma_restore_{{ light_entity | replace('.', '_') }}"
+          scene_entity: "scene.hemma_restore_{{ light_entity | replace('.', '_') }}"
+      - choose:
+          # Light is ON → snapshot current state then turn off
+          - conditions:
+              - condition: template
+                value_template: "{{ states(light_entity) == 'on' }}"
+            sequence:
+              - service: scene.create
+                data:
+                  scene_id: "{{ scene_id }}"
+                  snapshot_entities: >-
+                    {% set m = state_attr(light_entity, 'entity_id') %}
+                    {% if m %}{{ m }}{% else %}{{ [light_entity] }}{% endif %}
+              - service: light.turn_off
+                continue_on_error: true
+                target:
+                  entity_id: "{{ light_entity }}"
+        # Light is OFF → restore snapshot if it exists, otherwise turn on normally
+        default:
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ scene_entity in (states.scene | map(attribute='entity_id') | list) }}
+                sequence:
+                  - service: scene.turn_on
+                    data:
+                      entity_id: "{{ scene_entity }}"
+            default:
+              - service: light.turn_on
+                target:
+                  entity_id: "{{ light_entity }}"
+
+  # Thermostat toggle
+  hemma_thermostat_overlay_toggle:
+    alias: "Hemma - Thermostat Overlay Toggle"
+    description: >
+      Debounced open/close/switch for the thermostat temperature controls
+      overlay. Tapping a card opens its controls; tapping the same card again
+      closes them; tapping a different card switches the overlay to that
+      card instead of stacking a second open card. mode: single means any
+      taps that arrive while this script is running (including the 400ms
+      cooldown) are silently dropped, preventing the rapid-fire queue buildup
+      that causes the animation to stutter.
+    mode: single
+    fields:
+      thermostat_entity_id:
+        description: entity_id of the thermostat card that was tapped
+        required: true
+    sequence:
+      - if:
+          - condition: state
+            entity_id: input_boolean.hemma_thermostat_overlay
+            state: "on"
+          - condition: template
+            value_template: "{{ states('input_text.hemma_thermostat_active_entity') == thermostat_entity_id }}"
+        then:
+          - service: input_boolean.turn_off
+            data:
+              entity_id: input_boolean.hemma_thermostat_overlay
+        else:
+          - service: input_text.set_value
+            data:
+              entity_id: input_text.hemma_thermostat_active_entity
+              value: "{{ thermostat_entity_id }}"
+          - service: input_boolean.turn_on
+            data:
+              entity_id: input_boolean.hemma_thermostat_overlay
+      - delay:
+          milliseconds: 400
+
+  # Entity actions toggle
+  hemma_actions_overlay_toggle:
+    alias: "Hemma - Entity Actions Overlay Toggle"
+    description: >
+      Open/close/switch for the hemma_entity_actions inline controls. Same
+      shape as the thermostat overlay: the boolean alone cannot say WHICH
+      card was tapped, so the companion input_text carries the entity and
+      every visibility gate checks both.
+    mode: single
+    fields:
+      actions_entity_id:
+        description: entity_id of the actions card that was tapped
+        required: true
+    sequence:
+      - if:
+          - condition: state
+            entity_id: input_boolean.hemma_actions_overlay
+            state: "on"
+          - condition: template
+            value_template: "{{ states('input_text.hemma_actions_active_entity') == actions_entity_id }}"
+        then:
+          - service: input_boolean.turn_off
+            data:
+              entity_id: input_boolean.hemma_actions_overlay
+        else:
+          - service: input_text.set_value
+            data:
+              entity_id: input_text.hemma_actions_active_entity
+              value: "{{ actions_entity_id }}"
+          - service: input_boolean.turn_on
+            data:
+              entity_id: input_boolean.hemma_actions_overlay
+      - delay:
+          milliseconds: 400
+
+# Network popup buttons
+
+automation:
+  - alias: "Hemma - Auto clear restart done state 1"
+    id: hemma_auto_clear_restart_done_1
+    trigger:
+      - platform: state
+        entity_id: input_boolean.hemma_restart_done_1
+        to: "on"
+    action:
+      - delay: "00:00:03"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.hemma_restart_done_1
+
+  - alias: "Hemma - Auto clear restart done state 2"
+    id: hemma_auto_clear_restart_done_2
+    trigger:
+      - platform: state
+        entity_id: input_boolean.hemma_restart_done_2
+        to: "on"
+    action:
+      - delay: "00:00:03"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.hemma_restart_done_2
+
+  - alias: "Hemma - Auto-expand media row when playing"
+    id: hemma_auto_expand_media_row
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: template
+        value_template: >
+          {{ states.media_player
+             | selectattr('state', 'in', ['playing', 'buffering'])
+             | list | count > 0 }}
+    condition:
+      - condition: template
+        value_template: >
+          {{ states('input_select.hemma_expanded_row') == 'none'
+             and (states.media_player
+                  | selectattr('state', 'in', ['playing', 'buffering'])
+                  | list | count > 0) }}
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.hemma_expanded_row
+          option: media

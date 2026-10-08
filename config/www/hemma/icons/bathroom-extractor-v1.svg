@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path fill="white" fill-rule="evenodd" d="M5 2.5h14A2.5 2.5 0 0 1 21.5 5v14a2.5 2.5 0 0 1-2.5 2.5H5A2.5 2.5 0 0 1 2.5 19V5A2.5 2.5 0 0 1 5 2.5Zm.2 2.1a.6.6 0 0 0-.6.6v13.6a.6.6 0 0 0 .6.6h13.6a.6.6 0 0 0 .6-.6V5.2a.6.6 0 0 0-.6-.6H5.2Z"/>
+  <circle cx="12" cy="12" r="7.1" fill="none" stroke="white" stroke-width="1.25" opacity="0.75"/>
+  <circle cx="12" cy="12" r="1.15" fill="white"/>
+  <path id="blade" fill="white" d="M11.35 10.75C9.9 9.75 9.35 7.9 10.15 6.55c.57-.96 1.92-1.08 2.65-.25.93 1.07.62 3.15-.8 4.5l-.65-.05Z"/>
+  <use href="#blade" transform="rotate(90 12 12)"/>
+  <use href="#blade" transform="rotate(180 12 12)"/>
+  <use href="#blade" transform="rotate(270 12 12)"/>
+</svg>

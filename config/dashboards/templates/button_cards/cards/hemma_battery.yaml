@@ -1,0 +1,69 @@
+hemma_battery:
+  template:
+    - hemma_entity
+    - hemma_popup_battery
+
+  variables:
+    icon: battery
+    batteries: null
+
+  hold_action:
+    action: none
+
+  state_display: |
+    [[[
+      const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split('{' + p + '}').join(String(v[p])); return s; });
+      const list = variables.batteries || variables.entity_filter;
+      const batteries = (list
+        ? list.map(id => states[id]).filter(Boolean)
+        : Object.values(states)
+      ).filter(e => {
+        if (e.state === 'unavailable' || e.state === 'unknown') return false;
+        if (isNaN(parseFloat(e.state))) return false;
+        return e.attributes.device_class === 'battery';
+      });
+      if (batteries.length === 0) return T('battery.no_sensors', 'No Sensors');
+      const anyLow = batteries.some(e => parseFloat(e.state) <= 20);
+      return anyLow ? T('state.needs_attention', 'Needs Attention') : T('state.healthy', 'Healthy');
+    ]]]
+
+  state:
+    - operator: template
+      value: |
+        [[[
+          const list = variables.batteries || variables.entity_filter;
+          return (list
+            ? list.map(id => states[id]).filter(Boolean)
+            : Object.values(states)
+          ).some(e => {
+            if (e.state === 'unavailable' || e.state === 'unknown') return false;
+            const pct = parseFloat(e.state);
+            if (isNaN(pct)) return false;
+            return e.attributes.device_class === 'battery' && pct <= 20;
+          });
+        ]]]
+      styles:
+        card:
+          - "--hemma-active-overlay-opacity": "1"
+          - --hemma-entity-overlay-tint: var(--hemma-entity-active-tint-current, rgba(255,255,255,0.94))
+          - "--hemma-active-overlay-dur": "0s"
+          - --hemma-entity-top-gradient: none
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+          - --hemma-icon-color-current: "var(--hemma-battery-yellow, #FFD600)"
+          - --hemma-icon-circle-bg: var(--hemma-icon-color-current)
+          - --hemma-icon-mask-active: "0"
+        name:
+          - color: var(--hemma-entity-name-active, var(--primary-text-color))
+        state:
+          - color: var(--hemma-entity-state-active-color)
+        img_cell:
+          - opacity: "1 !important"
+          - filter: none !important
+          - background: "var(--hemma-icon-color-current) !important"
+        entity_picture:
+          - opacity: "1 !important"
+          - filter: none !important
+
+  styles:
+    card:
+      - --hemma-icon-inactive-color: "var(--hemma-color-green, #30D158)"

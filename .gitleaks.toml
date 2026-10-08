@@ -1,0 +1,7 @@
+title = "Home Assistant Hemma public repository"
+
+[allowlist]
+description = "Known non-secret browser localStorage key in upstream Hemma scene code"
+regexes = [
+  '''hemma_scene_ignore_v1'''
+]

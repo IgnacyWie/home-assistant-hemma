@@ -1,0 +1,28 @@
+hemma_camera:
+  template:
+    - hemma_entity
+    - hemma_popup_camera
+
+  variables:
+    icon: doorbell
+    mobile_filter_category: security
+    cameras: '[[[ return entity?.entity_id ? [entity.entity_id] : [] ]]]'
+
+  show_entity_picture: true
+  show_name: true
+  show_state: true
+
+  hold_action:
+    action: more-info
+
+  icon_tap_action:
+    action: more-info
+    entity: '[[[ return entity?.entity_id ]]]'
+
+  styles:
+    card:
+      - --hemma-icon-mask-scale: 63.6%
+    img_cell:
+      - color: var(--hemma-entity-name-active, var(--primary-text-color)) !important
+    icon:
+      - color: var(--hemma-entity-name-active, var(--primary-text-color)) !important

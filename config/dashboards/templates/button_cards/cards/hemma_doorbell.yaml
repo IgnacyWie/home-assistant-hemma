@@ -1,0 +1,6 @@
+hemma_doorbell:
+  template:
+    - hemma_camera
+
+  # Kept so existing tiles that relied on the template's default keep their label.
+  name: Doorbell

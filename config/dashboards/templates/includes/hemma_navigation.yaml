@@ -1,0 +1,44 @@
+type: conditional
+conditions:
+  - condition: screen
+    media_query: "(min-width: 769px) and (min-height: 501px) and (hover: hover) and (pointer: fine)"
+
+card:
+  type: custom:hemma-nav
+  variant: desktop
+  routes:
+    - url: /dashboard-hemma/home
+      label: Home
+      icon: mdi:home-variant
+
+    - url: /dashboard-hemma/living-room
+      label: Living Room
+      icon: mdi:sofa
+      badge:
+        show: >
+          [[[
+            const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+            return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+              && !!_s && hass.states[_s]?.state === 'on';
+          ]]]
+        color: '#ffd700'
+
+    - url: /dashboard-hemma/kitchen
+      label: Kitchen
+      icon: mdi:fridge
+
+    - url: /dashboard-hemma/bedroom
+      label: Bedroom
+      icon: mdi:bed-king
+      badge:
+        show: >
+          [[[
+            const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+            return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+              && !!_s && hass.states[_s]?.state === 'on';
+          ]]]
+        color: '#ffd700'
+
+    - label: Scenes
+      icon: mdi:layers
+      menu: scenes

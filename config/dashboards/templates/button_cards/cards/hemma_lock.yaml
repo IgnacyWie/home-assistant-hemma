@@ -1,0 +1,95 @@
+hemma_lock:
+  template: [hemma_entity]
+
+  show_entity_picture: true
+  show_icon: true
+  show_label: false
+
+  variables:
+    mobile_filter_category: security
+    show_toggle: true
+    icon_locked: lock-fill
+    icon_unlocked: lock-open-fill
+
+  entity_picture: |
+    [[[
+      if (entity.state === 'unlocked') return window.hemmaIconUrl(variables.icon_unlocked || 'lock-open-fill');
+      if (entity.state === 'unlocking') return window.hemmaIconUrl('lock-unlocking-fill');
+      return window.hemmaIconUrl(variables.icon_locked || 'lock-fill');
+    ]]]
+
+  state_display: |
+    [[[
+      if (!entity) return "";
+      // Switching HA's language swaps localize while the new strings are
+      // still loading, and formatEntityState throws for that window.
+      try { return hass.formatEntityState(entity) || entity.state; }
+      catch (e) { return entity.state; }
+    ]]]
+
+  tap_action:
+    action: more-info
+    entity: '[[[ return entity?.entity_id ]]]'
+
+  hold_action:
+    action: more-info
+    entity: '[[[ return entity?.entity_id ]]]'
+
+  icon_tap_action:
+    action: call-service
+    service: |
+      [[[
+        const s = (entity?.state || '').toLowerCase();
+        return ['unlocked', 'unlocking', 'open', 'opening'].includes(s)
+          ? 'lock.lock'
+          : 'lock.unlock';
+      ]]]
+    service_data:
+      entity_id: '[[[ return entity?.entity_id ]]]'
+
+  icon_hold_action:
+    action: more-info
+    entity: '[[[ return entity?.entity_id ]]]'
+
+  state:
+    - value: unlocked
+      styles:
+        card:
+          - "--hemma-active-overlay-opacity": "1"
+          - --hemma-entity-overlay-tint: var(--hemma-entity-active-tint-current, rgba(255,255,255,0.94))
+          - "--hemma-active-overlay-dur": "0s"
+          - --hemma-entity-top-gradient: none
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+          - --hemma-icon-color-current: "var(--hemma-popup-primary-color, #00c3d0)"
+          - --hemma-icon-svg-url: "[[[ return `url('${window.hemmaIconUrl(variables.icon_unlocked || 'lock-open-fill')}')`; ]]]"
+          - --hemma-icon-use-mask: "1"
+          - --hemma-icon-circle-bg: var(--hemma-icon-color-current)
+        name:
+          - color: var(--hemma-entity-name-active, var(--primary-text-color))
+        state:
+          - color: var(--hemma-entity-state-active-color)
+        img_cell:
+          - opacity: "1 !important"
+          - filter: none !important
+          - background: "var(--hemma-popup-primary-color, #00c3d0) !important"
+        entity_picture:
+          - opacity: "1 !important"
+          - filter: none !important
+    - value: unlocking
+      styles:
+        state:
+          - color: var(--hemma-entity-state, rgba(255,255,255,0.65))
+
+  styles:
+    card:
+      - --hemma-icon-mask-scale: 63.6%
+      - --hemma-icon-mask-image: |
+          [[[
+            if (entity.state === 'unlocked') return `url('${window.hemmaIconUrl(variables.icon_unlocked || 'lock-open-fill')}')`;
+            if (entity.state === 'unlocking') return `url('${window.hemmaIconUrl('lock-unlocking-fill')}')`;
+            return `url('${window.hemmaIconUrl(variables.icon_locked || 'lock-fill')}')`;
+          ]]]
+    img_cell:
+      - color: var(--hemma-entity-name-active, var(--primary-text-color)) !important
+    icon:
+      - color: var(--hemma-entity-name-active, var(--primary-text-color)) !important

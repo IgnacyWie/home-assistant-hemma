@@ -1,0 +1,37 @@
+# Example only — merge these sections into your own configuration.yaml.
+
+default_config:
+
+homeassistant:
+  packages: !include_dir_named packages
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+lovelace:
+  mode: storage
+  dashboards:
+    dashboard-hemma:
+      mode: yaml
+      title: Home
+      icon: mdi:home-variant
+      show_in_sidebar: true
+      require_admin: false
+      filename: dashboards/hemma/hemma.yaml
+
+# Optional helpers referenced by the included bedroom view.
+input_boolean:
+  wake_up_enabled:
+    name: Wake-up alarm enabled
+    icon: mdi:alarm-check
+
+input_datetime:
+  wake_up_time:
+    name: Wake-up time
+    has_date: false
+    has_time: true
+
+input_button:
+  stop_wake_up_music:
+    name: Stop wake-up music
+    icon: mdi:alarm-off

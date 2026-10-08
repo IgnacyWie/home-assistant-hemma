@@ -1,0 +1,31 @@
+# Home Assistant private/runtime data
+config/.storage/
+config/.cloud/
+config/.HA_VERSION
+config/.uuid
+config/secrets.yaml
+config/home-assistant_v2.db*
+config/home-assistant.log*
+config/backups/
+config/tts/
+config/deps/
+config/.gitignore
+
+# Certificates and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.token
+.env
+.env.*
+
+# Generated/cache files
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+*.bak
+*.bak-*
+*.tmp

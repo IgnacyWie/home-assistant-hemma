@@ -1,0 +1,68 @@
+type: vertical-stack
+cards:
+  # Desktop navigation.
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.hemma_mobile_navigation
+        state: "off"
+      - condition: screen
+        media_query: "(min-width: 768px) and (min-height: 501px) and (hover: hover) and (pointer: fine)"
+    card:
+      type: custom:hemma-nav
+      variant: desktop
+      routes: &hemma_routes
+        - url: /dashboard-hemma/home
+          label: Home
+          icon: mdi:home-variant
+        - url: /dashboard-hemma/living-room
+          label: Living Room
+          icon: mdi:sofa
+        - url: /dashboard-hemma/bedroom
+          label: Bedroom
+          icon: mdi:bed-king
+        - url: /dashboard-hemma/bathroom
+          label: Bathroom
+          icon: mdi:shower
+        - url: /dashboard-hemma/corridor
+          label: Corridor
+          icon: mdi:door-open
+
+  # Phones: a fixed bottom room bar with all destinations visible.
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.hemma_mobile_navigation
+        state: "off"
+      - condition: screen
+        media_query: "(max-width: 767px)"
+    card:
+      type: custom:hemma-nav
+      variant: mobile
+      routes: *hemma_routes
+
+  # Tablet portrait: use the same text-and-underline navigation as desktop.
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.hemma_mobile_navigation
+        state: "off"
+      - condition: screen
+        media_query: "(orientation: portrait) and (min-width: 768px) and (max-width: 1600px) and (hover: none) and (pointer: coarse)"
+    card:
+      type: custom:hemma-nav
+      variant: desktop
+      routes: *hemma_routes
+
+  # Tablet landscape: keep the same text-and-underline navigation.
+  - type: conditional
+    conditions:
+      - condition: state
+        entity: input_boolean.hemma_mobile_navigation
+        state: "off"
+      - condition: screen
+        media_query: "(orientation: landscape) and (min-width: 768px) and (max-width: 1600px) and (pointer: coarse) and (hover: none)"
+    card:
+      type: custom:hemma-nav
+      variant: desktop
+      routes: *hemma_routes

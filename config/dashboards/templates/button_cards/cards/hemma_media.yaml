@@ -1,0 +1,207 @@
+# Media Card
+hemma_media:
+  show_empty: false
+  template:
+    - hemma_entity
+
+  variables:
+    mobile_filter_category: media
+    icon: ''
+    is_active: |
+      [[[
+        const s = String(entity?.state || '').toLowerCase();
+        if (s === 'playing') return true;
+        const extra = Array.isArray(variables.active_states) ? variables.active_states.map(v => String(v).toLowerCase()) : [];
+        return extra.includes(s);
+      ]]]
+    has_artwork: |
+      [[[
+        if (String(entity?.state || "").toLowerCase() !== "playing") return false;
+        const a = entity?.attributes || {};
+        const id = entity?.entity_id || '';
+        const type = String(a.media_content_type || '').toLowerCase();
+        const app = String(a.app_name || '').trim();
+        const title = (a.media_title || a.title || '').trim();
+        const source = (a.source || a.media_channel || '').trim();
+        const isSonos = id.includes('sonos') || (a.friendly_name || '').toLowerCase().includes('sonos');
+        const bareInputs = ['tv','hdmi','arc','hdmi arc','optical','line-in','line in'];
+        let looksLikeBareInput = false;
+        if (isSonos && title) {
+          const tLow = title.toLowerCase();
+          looksLikeBareInput = bareInputs.includes(tLow) || (!!source && tLow === source.toLowerCase());
+        }
+        const isYouTube = app.toLowerCase().includes('youtube');
+        const pic = isYouTube
+          ? (states['sensor.youtube_watching']?.attributes?.thumbnail || a.entity_picture || '')
+          : (a.entity_picture || '');
+        const hasRichMeta = !!(a.media_series_title || a.media_episode_title);
+        const fromRichApp = /youtube|plex|netflix|hulu|disney|max|prime|spotify|apple tv|apple music|paramount|peacock/i.test(app);
+        return !!pic && !looksLikeBareInput && (hasRichMeta || ['music','movie','video','tvshow','game'].includes(type) || fromRichApp);
+      ]]]
+    art_url: |
+      [[[
+        const a = entity?.attributes || {};
+        const isYouTube = String(a.app_name || '').toLowerCase().includes('youtube');
+        const pic = isYouTube
+          ? (states['sensor.youtube_watching']?.attributes?.thumbnail || a.entity_picture || '')
+          : (a.entity_picture || '');
+        if (!pic) return '';
+        return pic.startsWith('/') ? window.location.origin + pic : pic;
+      ]]]
+    icon_never_masked: '[[[ return variables.icon === "ps5"; ]]]'
+
+  show_last_changed: false
+  show_entity_picture: true
+  show_icon: false
+
+  entity_picture: >
+    [[[
+      if (variables.has_artwork && variables.art_url) return variables.art_url;
+      const icon = variables?.icon;
+      if (icon === 'ps5') {
+        if (variables.is_active) {
+          return `${window.hemmaIconUrl('ps5')}#s=${encodeURIComponent(entity.last_changed || '')}`;
+        }
+        return window.hemmaIconUrl('ps5_off');
+      }
+      if (icon) return window.hemmaIconUrl(icon);
+      return window.hemmaIconUrl('speaker');
+    ]]]
+
+  state_display: |
+    [[[
+      const L = (k, en) => { const v = hass?.localize?.(k); return (v && v !== k) ? v : en; };
+      const sRaw = String(entity?.state || "");
+      const s    = sRaw.toLowerCase();
+      const a    = entity?.attributes || {};
+      const cap  = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
+      const esc  = (t) => String(t ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .trim();
+      if (s === "playing") {
+        const id       = entity?.entity_id || "";
+        const friendly = (a.friendly_name || "").toLowerCase();
+        const type   = String(a.media_content_type || "").toLowerCase();
+        const title  = (a.media_title || a.title || "").trim();
+        const artist =
+          (a.media_artist || a.artist || a.media_album_artist || "").trim();
+        const app    = (a.app_name || "").trim();
+        const source = (a.source || a.media_channel || "").trim();
+        const isMusic =
+          type === "music" ||
+          id.includes("spotify") ||
+          (!!artist && !["movie","video","tvshow"].includes(type));
+        let label = "";
+        if (isMusic) {
+          if (artist && title) label = `${artist} - ${title}`;
+          else label = title || artist || app || source || L('component.media_player.entity_component._.state.' + s, cap(s));
+        } else {
+          label = title || app || source || L('component.media_player.entity_component._.state.' + s, cap(s));
+        }
+        const isSonos = id.includes("sonos") || friendly.includes("sonos");
+        const bareInputs = ["tv","hdmi","arc","hdmi arc","optical","line-in","line in"];
+        let looksLikeBareInput = false;
+        if (isSonos) {
+          const tLow = title.toLowerCase();
+          const sLow = source.toLowerCase();
+          if (
+            title && (
+              bareInputs.includes(tLow) ||
+              (source && tLow === sLow)
+            )
+          ) {
+            looksLikeBareInput = true;
+          }
+        }
+        const hasRichMeta =
+          !!(a.media_artist || a.media_album_artist || a.media_series_title || a.media_episode_title);
+        const mediaTypes = ["music","movie","video","tvshow","game"];
+        const fromRichApp =
+          /youtube|plex|netflix|hulu|disney|max|prime|spotify|apple tv|apple music|paramount|peacock/i
+            .test(app);
+        const isRichPlayback = !looksLikeBareInput && (
+          hasRichMeta ||
+          mediaTypes.includes(type) ||
+          fromRichApp
+        );
+        if (!isRichPlayback) return esc(label) || L('component.media_player.entity_component._.state.' + s, cap(s));
+        return `<span class="hemma-media-state">${esc(label)}</span>`;
+      }
+      if (["off","idle","paused","standby","unavailable","unknown"].includes(s)) {
+        return L('component.media_player.entity_component._.state.' + s, cap(s));
+      }
+      return s ? L('component.media_player.entity_component._.state.' + s, cap(s)) : L('component.media_player.entity_component._.state.off', 'Off');
+    ]]]
+
+
+  tap_action:
+    action: more-info
+  hold_action:
+    action: more-info
+
+  # 'none' binds no icon handler, so an un-toggleable player falls through to the card.
+  icon_tap_action:
+    action: |
+      [[[
+        const s = String(entity?.state || '').toLowerCase();
+        if (s === 'unavailable' || s === 'unknown') return 'none';
+        const feats = Number(entity?.attributes?.supported_features || 0);
+        return (s === 'off' ? (feats & 128) : (feats & 256)) ? 'call-service' : 'none';
+      ]]]
+    service: |
+      [[[
+        return String(entity?.state || '').toLowerCase() === 'off'
+          ? 'media_player.turn_on'
+          : 'media_player.turn_off';
+      ]]]
+    service_data: |
+      [[[ return { entity_id: entity.entity_id }; ]]]
+
+  styles:
+    card:
+
+      - --hemma-progress-track-color: rgba(0,0,0,0.12)
+
+      # Icon circle
+      - --hemma-media-icon-size: '[[[ return variables.has_artwork ? "100%" : "var(--hemma-icon-mask-scale, 60%)"; ]]]'
+      - --hemma-media-icon-fit: '[[[ return variables.has_artwork ? "cover" : "contain"; ]]]'
+      - --hemma-icon-mask-image: |
+          [[[
+            const icon = variables.icon;
+            if (icon === 'ps5') return `url('${window.hemmaIconUrl(variables.is_active ? 'ps5' : 'ps5_off')}')`;
+            return `url('${window.hemmaIconUrl(icon || 'speaker')}')`;
+          ]]]
+      - --hemma-media-icon-bg: |
+          [[[
+            if (variables.has_artwork) return 'rgba(255,255,255,0.10)';
+            if (!variables.is_active) return 'var(--hemma-icon-circle-bg, rgba(0,0,0,0.20))';
+            if (variables.icon === 'ps5') return 'rgba(10,10,10,0.85)';
+            return 'var(--hemma-icon-color-current)';
+          ]]]
+      - --hemma-icon-circle-shadow: |
+          [[[
+            if (!variables.has_artwork) return '0 2px 6px rgba(0,0,0,0.04)';
+            return '0 3px 12px rgba(0,0,0,0.15)';
+          ]]]
+
+  extra_styles: |
+    #img-cell {
+      background: var(--hemma-media-icon-bg, var(--hemma-icon-circle-bg, rgba(0,0,0,0.20))) !important;
+      width: var(--hemma-icon-circle-size, 44px) !important;
+      height: var(--hemma-icon-circle-size, 44px) !important;
+      /* Forces a square whichever rule wins on each axis. */
+      aspect-ratio: 1 / 1 !important;
+    }
+
+    :host #img-cell img {
+      width: var(--hemma-media-icon-size, var(--hemma-icon-mask-scale, 60%)) !important;
+      height: var(--hemma-media-icon-size, var(--hemma-icon-mask-scale, 60%)) !important;
+      max-width: var(--hemma-media-icon-size, var(--hemma-icon-mask-scale, 60%)) !important;
+      max-height: var(--hemma-media-icon-size, var(--hemma-icon-mask-scale, 60%)) !important;
+      aspect-ratio: 1 / 1 !important;
+      object-fit: var(--hemma-media-icon-fit, contain) !important;
+      transition: opacity 0.3s ease, width 0.3s ease, height 0.3s ease !important;
+    }

@@ -1,0 +1,78 @@
+hemma_plex_recently_added:
+  template:
+    - hemma_entity
+    - hemma_popup_recently_added
+
+  variables:
+    icon: plex
+    show_watched: true
+    show_when: active
+    idle: |
+      [[[
+        const cutoff = Date.now() - 3 * 24 * 60 * 60 * 1000;
+        const items = (id) => {
+          const d = states[id]?.attributes?.data;
+          return Array.isArray(d) ? d.slice(1) : [];
+        };
+        return ![...items('sensor.recently_added_movies'), ...items('sensor.recently_added_tv')]
+          .some(i => i && i.title && i.airdate && new Date(i.airdate).getTime() >= cutoff);
+      ]]]
+
+  hold_action:
+    action: more-info
+    entity: sensor.plex_recently_added_count
+
+  state_display: |
+    [[[
+      const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split('{' + p + '}').join(String(v[p])); return s; });
+      const moviesData = states['sensor.recently_added_movies']?.attributes?.data;
+      const tvData     = states['sensor.recently_added_tv']?.attributes?.data;
+      const rawM = Array.isArray(moviesData) ? moviesData.slice(1).filter(i => i && i.title) : [];
+      const rawT = Array.isArray(tvData)     ? tvData.slice(1).filter(i => i && i.title)     : [];
+      const cutoff = Date.now() - 3 * 24 * 60 * 60 * 1000;
+      const count = [...rawM, ...rawT].filter(i => i.airdate && new Date(i.airdate).getTime() >= cutoff).length;
+      if (count <= 0) return T('plex.up_to_date', 'Up to date');
+      return count === 1 ? T('plex.one_added', '1 Added') : T('plex.n_added', '{n} Added', { n: count });
+    ]]]
+
+  state:
+    - operator: template
+      value: |
+        [[[
+          const moviesData = states['sensor.recently_added_movies']?.attributes?.data;
+          const tvData     = states['sensor.recently_added_tv']?.attributes?.data;
+          const rawM = Array.isArray(moviesData) ? moviesData.slice(1).filter(i => i && i.title) : [];
+          const rawT = Array.isArray(tvData)     ? tvData.slice(1).filter(i => i && i.title)     : [];
+          const cutoff = Date.now() - 3 * 24 * 60 * 60 * 1000;
+          const count = [...rawM, ...rawT].filter(i => i.airdate && new Date(i.airdate).getTime() >= cutoff).length;
+          return count > 0;
+        ]]]
+      styles:
+        card:
+          - "--hemma-active-overlay-opacity": "1"
+          - --hemma-entity-overlay-tint: var(--hemma-entity-active-tint-current, rgba(255,255,255,0.94))
+          - "--hemma-active-overlay-dur": "0s"
+          - --hemma-entity-top-gradient: none
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+        name:
+          - color: var(--hemma-entity-name-active, var(--primary-text-color))
+        state:
+          - color: var(--hemma-entity-state-active-color)
+        img_cell:
+          - opacity: "1 !important"
+          - filter: none !important
+          - background: "var(--hemma-color-yellow, #FFCC00) !important"
+        entity_picture:
+          - opacity: "1 !important"
+          - filter: none !important
+
+  extra_styles: |
+    #img-cell::before { opacity: 0 !important; }
+    #img-cell img {
+      width: 57% !important;
+      height: 57% !important;
+      max-width: 57% !important;
+      max-height: 57% !important;
+      object-fit: contain !important;
+      flex: none !important;
+    }

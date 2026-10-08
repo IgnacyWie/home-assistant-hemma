@@ -1,0 +1,82 @@
+hemma_energy:
+  template:
+    - hemma_entity
+    - hemma_popup_energy
+
+  show_name: true
+  show_state: true
+  show_entity_picture: true
+
+  variables:
+    mobile_filter_category: energy
+    icon: energy
+    high_threshold: 500
+    # Drop-out point for the active state. Null scales it to 80% of
+    # high_threshold; set it explicitly to widen or narrow the dead band.
+    release_threshold: null
+    normal_threshold: 200
+    heavy_threshold: 1000
+    extreme_threshold: 3000
+    room_name: null
+    entity_power: null
+    entity_usage_today: null
+    entity_usage_month: null
+    entity_cost_today: null
+    entity_cost_month: null
+    usage_shows: null
+
+  icon_tap_action:
+    action: more-info
+
+  hold_action:
+    action: more-info
+
+  name: Current Consumption
+
+  # Idle · Normal · Heavy Usage · Extreme Usage (same tiers as the popup pill)
+  state_display: |
+    [[[
+      const L = (k, en) => { const v = hass?.localize?.(k); return (v && v !== k) ? v : en; };
+      const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split('{' + p + '}').join(String(v[p])); return s; });
+      const id = variables.entity_power || entity?.entity_id;
+      const w = parseFloat(states[id]?.state);
+      if (!Number.isFinite(w)) return L('state.default.unavailable', 'Unavailable');
+      if (w >= Number(variables.extreme_threshold ?? 3000)) return T('energy.extreme_usage', 'Extreme Usage');
+      if (w >= Number(variables.heavy_threshold   ?? 1000)) return T('energy.heavy_usage', 'Heavy Usage');
+      if (w >= Number(variables.normal_threshold  ?? 200))  return T('energy.normal', 'Normal');
+      return T('energy.idle', 'Idle');
+    ]]]
+
+  state:
+    - operator: template
+      value: |
+        [[[
+          const w = parseFloat(entity?.state);
+          if (!Number.isFinite(w)) { this._hemmaEnergyActive = false; return false; }
+          const on  = Number(variables.high_threshold ?? 500);
+          const off = Number(variables.release_threshold ?? on * 0.8);
+          const now = this._hemmaEnergyActive === true ? (w >= off) : (w >= on);
+          this._hemmaEnergyActive = now;
+          return now;
+        ]]]
+      styles:
+        card:
+          - "--hemma-active-overlay-opacity": "1"
+          - --hemma-entity-overlay-tint: var(--hemma-entity-active-tint-current, rgba(255,255,255,0.94))
+          - "--hemma-active-overlay-dur": "0s"
+          - --hemma-entity-top-gradient: none
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+          - --hemma-icon-color-current: var(--hemma-icon-inactive-color)
+          - --hemma-icon-circle-bg: var(--hemma-icon-color-current)
+          - --hemma-icon-mask-active: "0"
+        name:
+          - color: var(--hemma-entity-name-active, var(--primary-text-color))
+        state:
+          - color: var(--hemma-entity-state-active-color)
+        img_cell:
+          - opacity: "1 !important"
+          - filter: none !important
+          - background: "var(--hemma-icon-color-current) !important"
+        entity_picture:
+          - opacity: "1 !important"
+          - filter: none !important

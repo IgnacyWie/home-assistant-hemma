@@ -1,0 +1,152 @@
+# HomeKit-ready Sony BRAVIA wrapper.
+# Adds app inputs and forwards the iPhone Remote keys to Android TV.
+
+input_select:
+  homekit_tv_source:
+    name: TV Source
+    icon: mdi:video-input-hdmi
+    options:
+      - HDMI 1
+      - HDMI 2
+      - HDMI 3/ARC
+      - HDMI 4
+      - AV
+      - Kopia ekranu
+      - Jellyfin
+      - YouTube
+
+script:
+  homekit_tv_select_source:
+    alias: HomeKit TV — Select source
+    mode: restart
+    fields:
+      source:
+        name: Source
+        required: true
+        selector:
+          text:
+    sequence:
+      - choose:
+          - conditions: "{{ source == 'Jellyfin' }}"
+            sequence:
+              - action: media_player.play_media
+                target:
+                  entity_id: media_player.living_room_tv_2
+                data:
+                  media_content_type: app
+                  media_content_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
+          - conditions: "{{ source == 'YouTube' }}"
+            sequence:
+              - action: media_player.play_media
+                target:
+                  entity_id: media_player.living_room_tv_2
+                data:
+                  media_content_type: app
+                  media_content_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
+        default:
+          - action: media_player.select_source
+            target:
+              entity_id: media_player.living_room_tv_2
+            data:
+              source: "{{ source }}"
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.homekit_tv_source
+        data:
+          option: "{{ source }}"
+
+media_player:
+  - platform: universal
+    name: HomeKit TV
+    unique_id: homekit_living_room_tv
+    device_class: tv
+    children:
+      - media_player.living_room_tv_2
+    commands:
+      select_source:
+        action: script.homekit_tv_select_source
+        data:
+          source: "{{ source }}"
+    attributes:
+      source: input_select.homekit_tv_source
+      source_list: input_select.homekit_tv_source|options
+
+homeassistant:
+  customize:
+    media_player.homekit_tv:
+      friendly_name: TV
+      icon: mdi:television
+
+automation:
+  - id: homekit_tv_forward_remote_keys
+    alias: HomeKit TV — Forward iPhone remote keys
+    mode: queued
+    max: 30
+    triggers:
+      - trigger: event
+        event_type: homekit_tv_remote_key_pressed
+    conditions:
+      - condition: template
+        value_template: >-
+          {{ trigger.event.data.entity_id in
+             ['media_player.homekit_tv', 'media_player.living_room_tv_2'] }}
+    actions:
+      - variables:
+          command: >-
+            {{ {
+              'rewind': 'MEDIA_REWIND',
+              'fast_forward': 'MEDIA_FAST_FORWARD',
+              'next_track': 'MEDIA_NEXT',
+              'previous_track': 'MEDIA_PREVIOUS',
+              'arrow_up': 'DPAD_UP',
+              'arrow_down': 'DPAD_DOWN',
+              'arrow_left': 'DPAD_LEFT',
+              'arrow_right': 'DPAD_RIGHT',
+              'select': 'DPAD_CENTER',
+              'back': 'BACK',
+              'exit': 'HOME',
+              'play_pause': 'MEDIA_PLAY_PAUSE',
+              'information': 'INFO'
+            }.get(trigger.event.data.key_name, '') }}
+      - condition: template
+        value_template: "{{ command | length > 0 }}"
+      - action: remote.send_command
+        target:
+          entity_id: remote.living_room_tv
+        data:
+          command: "{{ command }}"
+
+  - id: homekit_tv_sync_source
+    alias: HomeKit TV — Sync current source
+    mode: restart
+    triggers:
+      - trigger: homeassistant
+        event: start
+      - trigger: state
+        entity_id: media_player.living_room_tv
+      - trigger: state
+        entity_id: media_player.living_room_tv_2
+    actions:
+      - variables:
+          selected: >-
+            {% set app = state_attr('media_player.living_room_tv', 'app_id') %}
+            {% set source = state_attr('media_player.living_room_tv_2', 'source') %}
+            {% set inputs = state_attr('input_select.homekit_tv_source', 'options') or [] %}
+            {% if app == 'com.github.damontecres.wholphin' %}
+              Jellyfin
+            {% elif app == 'com.google.android.youtube.tv' %}
+              YouTube
+            {% elif source in inputs %}
+              {{ source }}
+            {% else %}
+              {{ '' }}
+            {% endif %}
+      - condition: template
+        value_template: >-
+          {{ selected | trim | length > 0 and
+             states('input_select.homekit_tv_source') != selected | trim }}
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.homekit_tv_source
+        data:
+          option: "{{ selected | trim }}"
