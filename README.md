@@ -103,8 +103,10 @@ scene was captured and explicitly keeps the remaining light entities, including
 the Bathroom Lamp switch, off. Derived light groups and disabled infrastructure
 entities are excluded to avoid duplicate or conflicting commands.
 
-The Home view exposes the scene as a **Welcome Home** action tile. Activating the
-tile calls `scene.turn_on` for `scene.welcome_home`.
+The Home view exposes the scene as a **Welcome Home** action tile. It is kept
+first in the configured Home rail so Hemma's active-card sorting cannot push the
+stateless scene beyond the initially visible controls. Activating the tile calls
+`scene.turn_on` for `scene.welcome_home`.
 
 ### Updating the captured lighting state
 
