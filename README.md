@@ -89,10 +89,10 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - Single OFF turns off all three bedroom lights.
   - Double ON turns on all three bedroom lights.
   - Double OFF activates `scene.leave_home`. That centralized scene switches off
-    the same 14 enabled, visible household entities formerly listed directly in
-    the automation: ten lights, the Lelit espresso machine, bathroom fan,
-    Zeppelin, and living-room TV. Hidden, disabled, diagnostic, and
-    infrastructure entities are intentionally excluded.
+    13 enabled, visible and currently responsive household entities: nine lights,
+    the Lelit espresso machine, bathroom fan, Zeppelin, and living-room TV.
+    Hidden, disabled, diagnostic, unavailable, and infrastructure entities are
+    intentionally excluded.
   - While the configured wake-up alarm is playing, any mapped button press
     stops only the alarm without changing lights, running the bedtime shutdown,
     or switching off the espresso machine.
@@ -101,16 +101,21 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 
 [`config/scenes.yaml`](config/scenes.yaml) defines **Welcome Home** as a complete
 physical-lighting snapshot. It turns on the five lights that were active when the
-scene was captured and explicitly keeps the remaining light entities, including
-the Bathroom Lamp switch, off. Derived light groups and disabled infrastructure
-entities are excluded to avoid duplicate or conflicting commands.
+scene was captured and explicitly keeps the remaining responsive lighting
+entities, including the Bathroom Lamp switch, off. The unavailable Bathroom
+Sonoff LED is temporarily excluded from this scene and its active-state sensor,
+so it cannot block activation or the Hemma status indication. Derived light
+groups and disabled infrastructure entities are excluded to avoid duplicate or
+conflicting commands.
 
 The Home view exposes the scene as a **Welcome Home** action tile. It is kept
 first in the configured Home rail so Hemma's active-card sorting cannot push the
 stateless scene beyond the initially visible controls. A template binary sensor,
-`binary_sensor.welcome_home_scene_active`, compares all 11 physical lighting
-controls with the scene and drives both the tile highlight and its **Active** or
-**Inactive** label. Unknown or unavailable accessories do not count as matching.
+`binary_sensor.welcome_home_scene_active`, compares the 10 currently included
+physical lighting controls with the scene and drives both the tile highlight and
+its **Active** or **Inactive** label. Unknown or unavailable included accessories
+do not count as matching; the unavailable Bathroom Sonoff LED is not currently
+included.
 Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 
 ### Updating the captured lighting state
@@ -144,16 +149,18 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 [`config/scenes.yaml`](config/scenes.yaml) defines **Leave Home** from the exact
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
-registry. The scene sets ten physical lights, the Lelit espresso-machine switch,
-the bathroom fan, Zeppelin, and the physical living-room TV to `off`. It does not
-include the Bathroom Lamp because that entity was not part of the established
-bedside shutdown allowlist, and it does not include hidden, disabled, diagnostic,
-or infrastructure entities.
+registry. The scene sets nine responsive physical lights, the Lelit
+espresso-machine switch, the bathroom fan, Zeppelin, and the physical living-room
+TV to `off`. It does not include the Bathroom Lamp because that entity was not
+part of the established bedside shutdown allowlist. The unavailable Bathroom
+Sonoff LED is temporarily excluded from both Leave Home and its active-state
+sensor, so it cannot block execution or status feedback. Hidden, disabled,
+diagnostic, and infrastructure entities remain excluded.
 
 The bedside double-OFF branch now performs one `scene.turn_on` call against
 `scene.leave_home`, making `config/scenes.yaml` the single source of truth for the
 shutdown target set. The Hemma Home rail also exposes a **Leave Home** tile.
-`binary_sensor.leave_home_scene_active` compares all 14 target states and drives
+`binary_sensor.leave_home_scene_active` compares all 13 included target states and drives
 the tile's **Active**/**Inactive** label and active highlight. Unknown or
 unavailable targets do not count as matching.
 

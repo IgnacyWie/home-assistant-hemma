@@ -23,8 +23,6 @@
       state: "off"
     light.living_room_balcony:
       state: "off"
-    light.sonoff_zbminil2:
-      state: "off"
     switch.bathroom_lamp:
       state: "off"
 
@@ -38,8 +36,6 @@
     light.living_room_accent_1:
       state: "off"
     light.living_room_2ch_wi_fi_switch_module_switch_2:
-      state: "off"
-    light.sonoff_zbminil2:
       state: "off"
     light.living_room_2ch_wi_fi_switch_module_2_switch_1:
       state: "off"
