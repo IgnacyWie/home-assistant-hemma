@@ -71,7 +71,7 @@ views:
                   : 'Inactive';
               ]]]
             variables:
-              icon: power_off
+              icon: door-open
               active_override: |
                 [[[
                   return states['binary_sensor.leave_home_scene_active']?.state === 'on';
