@@ -106,6 +106,30 @@ entities are excluded to avoid duplicate or conflicting commands.
 The Home view exposes the scene as a **Welcome Home** action tile. Activating the
 tile calls `scene.turn_on` for `scene.welcome_home`.
 
+### Updating the captured lighting state
+
+1. Set every physical light to the state you want after arriving home.
+2. Inventory the enabled, non-hidden lighting entities in Home Assistant. Include
+   each physical `light.*` entity and any `switch.*` entity that directly controls
+   a lamp, such as `switch.bathroom_lamp`. Exclude derived light groups, disabled
+   gateways, diagnostics, and infrastructure controls.
+3. Update the `entities` map in the live `/config/scenes.yaml` and the matching
+   [`config/scenes.yaml`](config/scenes.yaml) file in this repository:
+   - Set the desired active lights to `state: "on"`.
+   - Preserve supported appearance attributes such as `brightness`,
+     `color_temp_kelvin`, or `rgb_color` when the light exposes them and the
+     appearance is part of the scene.
+   - Keep every remaining physical lighting control in the scene with
+     `state: "off"`; do not simply remove lights that should stay dark.
+4. Back up the live file, upload the replacement under a temporary filename, and
+   move it into place only after the backup exists.
+5. Run `ha core check`, then reload **Scenes** from Home Assistant Developer Tools
+   or restart Home Assistant. Confirm that `scene.welcome_home` is available.
+6. Check that the Hemma Home view still contains exactly one `scene.welcome_home`
+   tile. Activate the scene only when changing household lighting is acceptable.
+7. Run `git diff --check` and `gitleaks`, update this documentation if the entity
+   set changed, then commit and push only the intended files to `main`.
+
 ## Kitchen dashboard
 
 The Kitchen view is included in the shared room navigation on desktop, tablet,
