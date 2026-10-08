@@ -127,10 +127,10 @@
           - light.bedroom_accent_bedroom
     - conditions: "{{ trigger.id == 'turn_off_double' }}"
       sequence:
-      - action: scene.turn_on
+      - action: script.turn_on
         continue_on_error: true
         target:
-          entity_id: scene.leave_home
+          entity_id: script.leave_home
     - conditions: "{{ trigger.id == 'turn_on' and nighttime }}"
       sequence:
       - choose:

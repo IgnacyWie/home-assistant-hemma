@@ -88,10 +88,12 @@ copy of the active `/config/automations.yaml` file. It currently contains:
     and Bedroom Accent.
   - Single OFF turns off all three bedroom lights.
   - Double ON turns on all three bedroom lights.
-  - Double OFF activates `scene.leave_home`. That centralized scene switches off
-    13 enabled, visible and currently responsive household entities: nine lights,
-    the Lelit espresso machine, bathroom fan, Zeppelin, and living-room TV.
-    Hidden, disabled, diagnostic, unavailable, and infrastructure entities are
+  - Double OFF activates `script.leave_home`. The centralized routine applies the
+    12-entity Leave Home scene, then conditionally turns off the one TV entity also
+    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 13 enabled,
+    visible household entities are managed: nine lights, the Lelit espresso
+    machine, bathroom fan, Zeppelin, and the living-room TV. Hidden, disabled,
+    diagnostic, unavailable, duplicate-TV, and infrastructure entities are
     intentionally excluded.
   - While the configured wake-up alarm is playing, any mapped button press
     stops only the alarm without changing lights, running the bedtime shutdown,
@@ -150,28 +152,37 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
 registry. The scene sets nine responsive physical lights, the Lelit
-espresso-machine switch, the bathroom fan, Zeppelin, and the physical living-room
-TV to `off`. It does not include the Bathroom Lamp because that entity was not
-part of the established bedside shutdown allowlist. The unavailable Bathroom
-Sonoff LED is temporarily excluded from both Leave Home and its active-state
-sensor, so it cannot block execution or status feedback. Hidden, disabled,
-diagnostic, and infrastructure entities remain excluded.
+espresso-machine switch, the bathroom fan, and Zeppelin to `off`. The physical
+living-room TV is handled separately by `script.leave_home`, using only
+`media_player.living_room_tv_2`—the same entity displayed by Hemma. The script
+skips the TV command when that entity is already `off`, `unknown`, or
+`unavailable`, avoiding the Sony integration error caused by asking an already-off
+BRAVIA to turn off again. Other entities representing the same physical TV are
+not shutdown targets.
 
-The bedside double-OFF branch now performs one `scene.turn_on` call against
-`scene.leave_home`, making `config/scenes.yaml` the single source of truth for the
-shutdown target set. The Hemma Home rail also exposes a **Leave Home** tile.
-`binary_sensor.leave_home_scene_active` compares all 13 included target states and drives
-the tile's **Active**/**Inactive** label and active highlight. Unknown or
-unavailable targets do not count as matching.
+Leave Home does not include the Bathroom Lamp because that entity was not part of
+the established bedside shutdown allowlist. The unavailable Bathroom Sonoff LED
+is temporarily excluded from both Leave Home and its active-state sensor, so it
+cannot block execution or status feedback. Hidden, disabled, diagnostic, and
+infrastructure entities remain excluded.
 
-When changing the Leave Home allowlist, update these four places together:
+The bedside double-OFF branch and Hemma **Leave Home** tile both call
+`script.leave_home`. The script applies `scene.leave_home`, then turns off the
+selected Hemma TV only when needed. `binary_sensor.leave_home_scene_active`
+compares all 13 target states—including only `media_player.living_room_tv_2` for
+the TV—and drives the tile's **Active**/**Inactive** label and active highlight.
+Unknown or unavailable targets do not count as matching.
 
-1. `scene.leave_home` in `config/scenes.yaml`.
-2. `binary_sensor.leave_home_scene_active` in
+When changing the Leave Home allowlist, update these places together:
+
+1. The non-TV targets in `scene.leave_home` in `config/scenes.yaml`.
+2. The conditional TV target in `script.leave_home` in `config/scripts.yaml`.
+3. `binary_sensor.leave_home_scene_active` in
    `config/packages/hemma_helpers.yaml`.
-3. The allowlist description in this README.
-4. The live files under `/config`, followed by `ha core check` and a Core restart
-   or the appropriate scene/template/automation reloads.
+4. The Hemma TV card if the selected TV entity changes.
+5. The allowlist description in this README.
+6. The live files under `/config`, followed by `ha core check` and a Core restart
+   or the appropriate scene/script/template/automation reloads.
 
 Before adding any entity, confirm in `core.entity_registry` that `disabled_by`,
 `hidden_by`, and `entity_category` are null. Never add broad domains, areas,

@@ -55,5 +55,3 @@
       state: "off"
     media_player.zeppelin:
       state: "off"
-    media_player.living_room_tv_2:
-      state: "off"

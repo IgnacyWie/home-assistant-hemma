@@ -1,0 +1,18 @@
+leave_home:
+  alias: Leave Home
+  icon: mdi:home-export-outline
+  mode: single
+  sequence:
+    - action: scene.turn_on
+      target:
+        entity_id: scene.leave_home
+    - if:
+        - condition: template
+          value_template: >-
+            {{ states('media_player.living_room_tv_2') not in
+               ['off', 'unknown', 'unavailable'] }}
+      then:
+        - action: media_player.turn_off
+          continue_on_error: true
+          target:
+            entity_id: media_player.living_room_tv_2
