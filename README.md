@@ -105,8 +105,11 @@ entities are excluded to avoid duplicate or conflicting commands.
 
 The Home view exposes the scene as a **Welcome Home** action tile. It is kept
 first in the configured Home rail so Hemma's active-card sorting cannot push the
-stateless scene beyond the initially visible controls. Activating the tile calls
-`scene.turn_on` for `scene.welcome_home`.
+stateless scene beyond the initially visible controls. A template binary sensor,
+`binary_sensor.welcome_home_scene_active`, compares all 11 physical lighting
+controls with the scene and drives both the tile highlight and its **Active** or
+**Inactive** label. Unknown or unavailable accessories do not count as matching.
+Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 
 ### Updating the captured lighting state
 
@@ -116,7 +119,9 @@ stateless scene beyond the initially visible controls. Activating the tile calls
    a lamp, such as `switch.bathroom_lamp`. Exclude derived light groups, disabled
    gateways, diagnostics, and infrastructure controls.
 3. Update the `entities` map in the live `/config/scenes.yaml` and the matching
-   [`config/scenes.yaml`](config/scenes.yaml) file in this repository:
+   [`config/scenes.yaml`](config/scenes.yaml) file in this repository. Update the
+   `binary_sensor.welcome_home_scene_active` template in the live and repository
+   copies of `config/packages/hemma_helpers.yaml` with the same entity/state set:
    - Set the desired active lights to `state: "on"`.
    - Preserve supported appearance attributes such as `brightness`,
      `color_temp_kelvin`, or `rgb_color` when the light exposes them and the

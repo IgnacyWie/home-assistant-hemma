@@ -43,9 +43,18 @@ views:
             template: hemma_entity
             entity: scene.welcome_home
             name: Welcome Home
-            state_display: Activate
+            state_display: |
+              [[[
+                return states['binary_sensor.welcome_home_scene_active']?.state === 'on'
+                  ? 'Active'
+                  : 'Inactive';
+              ]]]
             variables:
               icon: home
+              active_override: |
+                [[[
+                  return states['binary_sensor.welcome_home_scene_active']?.state === 'on';
+                ]]]
             tap_action:
               action: call-service
               service: scene.turn_on

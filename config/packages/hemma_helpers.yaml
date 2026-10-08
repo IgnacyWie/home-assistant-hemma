@@ -205,6 +205,25 @@ template:
           {% endfor %}
           {{ ns.count }}
 
+  # A Home Assistant scene only records its last activation time. This sensor
+  # reports whether every physical lighting control still matches Welcome Home.
+  - binary_sensor:
+      - name: Welcome Home Scene Active
+        unique_id: welcome_home_scene_active
+        icon: mdi:home-check
+        state: >-
+          {{ is_state('light.bedroom_accent_bedroom', 'on')
+             and is_state('light.living_room_accent_1', 'on')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_switch_2', 'on')
+             and is_state('light.3_in_1_controller_wifi_2_4g', 'on')
+             and is_state('light.bedroom_ikea_of_sweden_grillplats_plug', 'on')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_2_switch_1', 'off')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_2_switch_2', 'off')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_switch_1', 'off')
+             and is_state('light.living_room_balcony', 'off')
+             and is_state('light.sonoff_zbminil2', 'off')
+             and is_state('switch.bathroom_lamp', 'off') }}
+
 # Updates restart button
 script:
   hemma_restart_toggle:
