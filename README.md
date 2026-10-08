@@ -18,6 +18,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Smart light-group toggles that restore the previous member state
 - Energy monitoring with a monotonic utility meter
 - Wake-up alarm controls and a dedicated stop action
+- IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
 - Apple-first typography using the native San Francisco system font where available
 - Custom SVG icon set and room artwork
 
@@ -37,6 +38,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 
 ```text
 config/
+├── automations.yaml             # Household automations and physical remote mappings
 ├── custom_components/hemma/   # Hemma integration snapshot with local tweaks
 ├── dashboards/
 │   ├── hemma/hemma.yaml       # Room and entity configuration
@@ -47,6 +49,43 @@ config/
 ├── themes/hemma/              # Hemma theme and typography
 └── www/hemma/                 # Icons and room images
 ```
+
+## Automations
+
+[`config/automations.yaml`](config/automations.yaml) is the source-controlled
+copy of the active `/config/automations.yaml` file. It currently contains:
+
+- **Bathroom Fan - Delay** — turns off the bathroom fan 20 minutes after it is
+  switched on.
+- **Wake up with music - Zeppelin** — plays *Guten Morgen Sonnenschein* at the
+  configured wake-up time when the wake-up helper is enabled.
+- **Stop wake-up music** — stops the Zeppelin from the dashboard stop button.
+- **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
+  - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
+    LED Bed first, then Bedroom Accent.
+  - Single ON from 23:00 through 05:59 progressively enables LED Bed, Bed Lamp,
+    and Bedroom Accent.
+  - Single OFF turns off all three bedroom lights.
+  - Double ON turns on all three bedroom lights.
+  - Double OFF performs the bedtime shutdown for enabled, visible household
+    devices: dashboard lights, the bathroom fan, Zeppelin playback, and the
+    living-room TV. Hidden, disabled, diagnostic, and infrastructure entities
+    are intentionally excluded.
+  - While the configured wake-up alarm is playing, any mapped button press
+    stops the alarm without running its normal lighting or shutdown action.
+
+### Configuration change workflow
+
+For every Home Assistant automation or other YAML change:
+
+1. Back up the live file and edit a fresh copy from `/config`.
+2. Update the matching file in this repository and document changed behavior
+   in this README.
+3. Deploy the reviewed YAML and run `ha core check`.
+4. Reload the affected domain or restart Home Assistant, then verify the live
+   entity or automation.
+5. Scan the repository for secrets, commit only the intended files, and push to
+   `IgnacyWie/home-assistant-hemma` on `main`.
 
 ## Requirements
 
