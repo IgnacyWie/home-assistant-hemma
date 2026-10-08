@@ -27,3 +27,37 @@
       state: "off"
     switch.bathroom_lamp:
       state: "off"
+
+- id: leave_home
+  name: Leave Home
+  icon: mdi:home-export-outline
+  entities:
+    # Exact enabled, visible allowlist formerly used by the bedside double-OFF branch.
+    light.bedroom_accent_bedroom:
+      state: "off"
+    light.living_room_accent_1:
+      state: "off"
+    light.living_room_2ch_wi_fi_switch_module_switch_2:
+      state: "off"
+    light.sonoff_zbminil2:
+      state: "off"
+    light.living_room_2ch_wi_fi_switch_module_2_switch_1:
+      state: "off"
+    light.living_room_2ch_wi_fi_switch_module_2_switch_2:
+      state: "off"
+    light.living_room_2ch_wi_fi_switch_module_switch_1:
+      state: "off"
+    light.living_room_balcony:
+      state: "off"
+    light.3_in_1_controller_wifi_2_4g:
+      state: "off"
+    light.bedroom_ikea_of_sweden_grillplats_plug:
+      state: "off"
+    switch.ikea_of_sweden_grillplats_plug_2:
+      state: "off"
+    fan.bathroom_fan_bathroom:
+      state: "off"
+    media_player.zeppelin:
+      state: "off"
+    media_player.living_room_tv_2:
+      state: "off"

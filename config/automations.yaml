@@ -127,36 +127,10 @@
           - light.bedroom_accent_bedroom
     - conditions: "{{ trigger.id == 'turn_off_double' }}"
       sequence:
-      - action: light.turn_off
+      - action: scene.turn_on
         continue_on_error: true
         target:
-          entity_id:
-          - light.bedroom_accent_bedroom
-          - light.living_room_accent_1
-          - light.living_room_2ch_wi_fi_switch_module_switch_2
-          - light.sonoff_zbminil2
-          - light.living_room_2ch_wi_fi_switch_module_2_switch_1
-          - light.living_room_2ch_wi_fi_switch_module_2_switch_2
-          - light.living_room_2ch_wi_fi_switch_module_switch_1
-          - light.living_room_balcony
-          - light.3_in_1_controller_wifi_2_4g
-          - light.bedroom_ikea_of_sweden_grillplats_plug
-      - action: switch.turn_off
-        continue_on_error: true
-        target:
-          entity_id: switch.ikea_of_sweden_grillplats_plug_2
-      - action: fan.turn_off
-        continue_on_error: true
-        target:
-          entity_id: fan.bathroom_fan_bathroom
-      - action: media_player.media_stop
-        continue_on_error: true
-        target:
-          entity_id: media_player.zeppelin
-      - action: media_player.turn_off
-        continue_on_error: true
-        target:
-          entity_id: media_player.living_room_tv_2
+          entity_id: scene.leave_home
     - conditions: "{{ trigger.id == 'turn_on' and nighttime }}"
       sequence:
       - choose:

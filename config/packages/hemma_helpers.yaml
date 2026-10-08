@@ -224,6 +224,25 @@ template:
              and is_state('light.sonoff_zbminil2', 'off')
              and is_state('switch.bathroom_lamp', 'off') }}
 
+      - name: Leave Home Scene Active
+        unique_id: leave_home_scene_active
+        icon: mdi:home-export-outline
+        state: >-
+          {{ is_state('light.bedroom_accent_bedroom', 'off')
+             and is_state('light.living_room_accent_1', 'off')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_switch_2', 'off')
+             and is_state('light.sonoff_zbminil2', 'off')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_2_switch_1', 'off')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_2_switch_2', 'off')
+             and is_state('light.living_room_2ch_wi_fi_switch_module_switch_1', 'off')
+             and is_state('light.living_room_balcony', 'off')
+             and is_state('light.3_in_1_controller_wifi_2_4g', 'off')
+             and is_state('light.bedroom_ikea_of_sweden_grillplats_plug', 'off')
+             and is_state('switch.ikea_of_sweden_grillplats_plug_2', 'off')
+             and is_state('fan.bathroom_fan_bathroom', 'off')
+             and is_state('media_player.zeppelin', 'off')
+             and is_state('media_player.living_room_tv_2', 'off') }}
+
 # Updates restart button
 script:
   hemma_restart_toggle:

@@ -19,6 +19,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Energy monitoring with a monotonic utility meter
 - Wake-up alarm controls and a dedicated stop action
 - A **Welcome Home** scene that restores the captured on-lights and keeps all other lighting off
+- A centralized **Leave Home** scene for the bedside double-OFF shutdown and Hemma dashboard
 - Two-hour Lelit espresso-machine safety shutoff with a restart-restorable timer
 - Jellyfin cinema mode with living-room light state restoration
 - Bathroom forgotten-on protection for both bathroom lights
@@ -87,10 +88,11 @@ copy of the active `/config/automations.yaml` file. It currently contains:
     and Bedroom Accent.
   - Single OFF turns off all three bedroom lights.
   - Double ON turns on all three bedroom lights.
-  - Double OFF performs the bedtime shutdown for enabled, visible household
-    devices: dashboard lights, the Lelit espresso machine, the bathroom fan,
-    Zeppelin playback, and the living-room TV. Hidden, disabled, diagnostic,
-    and infrastructure entities are intentionally excluded.
+  - Double OFF activates `scene.leave_home`. That centralized scene switches off
+    the same 14 enabled, visible household entities formerly listed directly in
+    the automation: ten lights, the Lelit espresso machine, bathroom fan,
+    Zeppelin, and living-room TV. Hidden, disabled, diagnostic, and
+    infrastructure entities are intentionally excluded.
   - While the configured wake-up alarm is playing, any mapped button press
     stops only the alarm without changing lights, running the bedtime shutdown,
     or switching off the espresso machine.
@@ -136,6 +138,39 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
    tile. Activate the scene only when changing household lighting is acceptable.
 7. Run `git diff --check` and `gitleaks`, update this documentation if the entity
    set changed, then commit and push only the intended files to `main`.
+
+## Leave Home scene
+
+[`config/scenes.yaml`](config/scenes.yaml) defines **Leave Home** from the exact
+allowlist previously embedded in the bedside remote's double-OFF branch. Every
+included entity is enabled, visible, and non-diagnostic in the live entity
+registry. The scene sets ten physical lights, the Lelit espresso-machine switch,
+the bathroom fan, Zeppelin, and the physical living-room TV to `off`. It does not
+include the Bathroom Lamp because that entity was not part of the established
+bedside shutdown allowlist, and it does not include hidden, disabled, diagnostic,
+or infrastructure entities.
+
+The bedside double-OFF branch now performs one `scene.turn_on` call against
+`scene.leave_home`, making `config/scenes.yaml` the single source of truth for the
+shutdown target set. The Hemma Home rail also exposes a **Leave Home** tile.
+`binary_sensor.leave_home_scene_active` compares all 14 target states and drives
+the tile's **Active**/**Inactive** label and active highlight. Unknown or
+unavailable targets do not count as matching.
+
+When changing the Leave Home allowlist, update these four places together:
+
+1. `scene.leave_home` in `config/scenes.yaml`.
+2. `binary_sensor.leave_home_scene_active` in
+   `config/packages/hemma_helpers.yaml`.
+3. The allowlist description in this README.
+4. The live files under `/config`, followed by `ha core check` and a Core restart
+   or the appropriate scene/template/automation reloads.
+
+Before adding any entity, confirm in `core.entity_registry` that `disabled_by`,
+`hidden_by`, and `entity_category` are null. Never add broad domains, areas,
+groups containing unreviewed members, servers, infrastructure switches, or
+maintenance controls. Validate the scene and automation statically; activate the
+scene only when a whole-home shutdown is safe.
 
 ## Kitchen dashboard
 
