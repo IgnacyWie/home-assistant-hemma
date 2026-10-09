@@ -149,6 +149,51 @@ hemma_tv_app_button:
   hold_action:
     action: more-info
 
+# App launchers stay visually compact so the popup remains a remote first.
+hemma_tv_hub_shortcut:
+  template: hemma_tv_app_button
+  styles:
+    card:
+      - width: 72px
+      - height: 50px
+      - padding: 4px
+      - border-radius: 15px
+    custom_fields:
+      g:
+        - font-size: 22px
+  extra_styles: |
+    ha-icon {
+      --mdc-icon-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+    img {
+      width: 27px;
+      height: 27px;
+      object-fit: contain;
+    }
+
+hemma_tv_cinema_button:
+  template: hemma_tv_remote_visual
+  tap_action:
+    haptic: medium
+    action: call-service
+    service: script.hemma_tv_cinema
+  hold_action:
+    action: none
+  styles:
+    card:
+      - width: 72px
+      - height: 50px
+      - padding: 4px
+      - border-radius: 15px
+      - background: rgba(255,69,58,0.15)
+      - color: '#ff6b63'
+    custom_fields:
+      g:
+        - font-size: 22px
+        - color: '#ff6b63'
+
 # Use native button-card actions for volume steps. Raw HTML onclick handlers
 # inside a custom field are not reliable in the iOS Home Assistant WebView.
 hemma_tv_volume_step_button:
@@ -432,7 +477,7 @@ hemma_tv_volume_control:
 
 hemma_tv_remote_panel:
   template: hemma_default
-  entity: '[[[ return variables.volume_entity || "media_player.living_room_tv_2"; ]]]'
+  entity: '[[[ return variables.playback_entity || "media_player.tv_w_salonie_4"; ]]]'
   show_icon: false
   show_state: false
   show_label: false
@@ -440,6 +485,7 @@ hemma_tv_remote_panel:
   variables:
     remote_entity: remote.living_room_tv
     volume_entity: media_player.living_room_tv_2
+    playback_entity: media_player.tv_w_salonie_4
 
   tap_action:
     action: none
@@ -450,7 +496,7 @@ hemma_tv_remote_panel:
     card:
       - width: calc(var(--popup-min-width, 360px) - 32px)
       - max-width: 100%
-      - min-height: 318px
+      - min-height: 458px
       - padding: 0
       - box-sizing: border-box
       - border-radius: 0
@@ -458,13 +504,17 @@ hemma_tv_remote_panel:
       - box-shadow: none !important
       - border: none !important
     grid:
-      - grid-template-areas: '"volume back home pause" "volume jellyfin up youtube" "volume left select right" "volume . down ."'
+      - grid-template-areas: '"media media media media" "volume jellyfin youtube cinema" "volume back home pause" "volume . up ." "volume left select right" "volume . down ."'
       - grid-template-columns: repeat(4, 72px)
-      - grid-template-rows: repeat(4, 72px)
+      - grid-template-rows: 70px 50px repeat(4, 72px)
       - column-gap: 10px
       - row-gap: 10px
       - justify-content: center
     custom_fields:
+      media:
+        - grid-area: media
+        - align-self: stretch
+        - justify-self: stretch
       back:
         - grid-area: back
         - align-self: center
@@ -509,8 +559,34 @@ hemma_tv_remote_panel:
         - grid-area: youtube
         - align-self: center
         - justify-self: center
+      cinema:
+        - grid-area: cinema
+        - align-self: center
+        - justify-self: center
 
   custom_fields:
+    media: >-
+      [[[
+        const id = variables.playback_entity || 'media_player.tv_w_salonie_4';
+        const player = states[id];
+        const a = player?.attributes || {};
+        const active = ['playing', 'paused', 'buffering'].includes(player?.state);
+        const title = active ? (a.media_title || a.media_series_title || a.friendly_name || 'Now Playing') : 'Living Room TV';
+        const subtitle = active
+          ? ([a.media_series_title, a.media_season && a.media_episode ? `${a.media_season} · ${a.media_episode}` : '', a.media_artist, a.app_name]
+              .filter((value, index, all) => value && all.indexOf(value) === index && value !== title)[0] || (player.state === 'paused' ? 'Paused' : 'Playing'))
+          : 'Entertainment hub';
+        const picture = active
+          ? (a.entity_picture_local || a.entity_picture || a.media_image_url || a.media_album_cover_url || a.image_url || '')
+          : '';
+        const esc = value => String(value ?? '')
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        const image = picture
+          ? `<img class="hemma-tv-now-art" src="${esc(picture)}" alt="" onerror="this.style.display='none'">`
+          : `<span class="hemma-tv-now-fallback"><ha-icon icon="mdi:television-play"></ha-icon></span>`;
+        return `<div class="hemma-tv-now${active ? ' is-active' : ''}">${image}<div class="hemma-tv-now-copy"><div class="hemma-tv-now-title">${esc(title)}</div><div class="hemma-tv-now-subtitle">${esc(subtitle)}</div></div></div>`;
+      ]]]
     back:
       card:
         type: custom:button-card
@@ -593,7 +669,7 @@ hemma_tv_remote_panel:
     jellyfin:
       card:
         type: custom:button-card
-        template: hemma_tv_app_button
+        template: hemma_tv_hub_shortcut
         variables:
           app_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
           glyph: '<img src="/local/hemma/icons/jellyfin-purple.svg" alt="Jellyfin">'
@@ -602,12 +678,19 @@ hemma_tv_remote_panel:
     youtube:
       card:
         type: custom:button-card
-        template: hemma_tv_app_button
+        template: hemma_tv_hub_shortcut
         variables:
           app_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
           glyph: '<ha-icon icon="mdi:youtube"></ha-icon>'
           label: YouTube
           accent: '#ff453a'
+    cinema:
+      card:
+        type: custom:button-card
+        template: hemma_tv_cinema_button
+        variables:
+          glyph: '<ha-icon icon="mdi:movie-open"></ha-icon>'
+          label: Cinema
 
   extra_styles: |
     :host {
@@ -619,4 +702,57 @@ hemma_tv_remote_panel:
     }
     ha-card {
       overflow: visible !important;
+    }
+    .hemma-tv-now {
+      width: 100%;
+      height: 70px;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      align-items: center;
+      gap: 11px;
+      padding: 6px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.075);
+      overflow: hidden;
+    }
+    .hemma-tv-now-art,
+    .hemma-tv-now-fallback {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      object-fit: cover;
+      background: rgba(255,255,255,0.09);
+      color: rgba(255,255,255,0.80);
+    }
+    .hemma-tv-now-fallback ha-icon {
+      width: 25px;
+      height: 25px;
+      --mdc-icon-size: 25px;
+    }
+    .hemma-tv-now-copy {
+      min-width: 0;
+      padding-right: 7px;
+    }
+    .hemma-tv-now-title,
+    .hemma-tv-now-subtitle {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .hemma-tv-now-title {
+      color: rgba(255,255,255,0.98);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.25;
+    }
+    .hemma-tv-now-subtitle {
+      margin-top: 4px;
+      color: rgba(255,255,255,0.58);
+      font-size: 11px;
+      font-weight: 550;
+      line-height: 1.2;
     }

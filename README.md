@@ -14,7 +14,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Responsive desktop, tablet, and phone layouts
 - Jellyfin playback metadata, artwork, progress, and transport controls
 - Separate physical TV power controls and Android TV app launchers
-- Touch-friendly living-room TV remote popup with an Apple-like D-pad, Home, back, play/pause, compact Jellyfin/YouTube shortcuts, and a left-side 0–60% volume slider with reliable native button-card +1%/−1% actions and integrated mute control
+- Compact living-room entertainment hub opened from the TV tile, with current Jellyfin title/artwork, an Apple-like D-pad, Home, back, play/pause, compact Jellyfin/YouTube launchers, a one-tap Cinema routine, and a left-side 0–60% volume slider with native +1%/−1% and mute controls
 - Custom HomeKit TV wrapper with iPhone Remote key forwarding
 - Smart light-group toggles that restore the previous member state
 - Energy monitoring with a monotonic utility meter and a Home header chip that shows the current power draw in watts
@@ -95,7 +95,11 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   that snapshot during a pause/resume cycle by using
   `input_boolean.jellyfin_cinema_active` as the session guard. The Living Room
   **Cinema Mode** chip toggles the behavior; turning it off during playback
-  restores the captured lights immediately.
+  restores the captured lights immediately. The TV popup’s **Cinema** button
+  enables that mode, launches the verified Wholphin/Jellyfin app, and prepares
+  the same guarded snapshot workflow. If playback is already active it dims
+  immediately; otherwise the existing playback automation snapshots and turns
+  off those five circuits when viewing starts.
 - **Bathroom - Forgotten lights protection** — independently switches off the
   Bathroom LED Strip or Bathroom Lamp after either has remained on for 45
   minutes.
