@@ -8,6 +8,11 @@ input_boolean:
     name: Jellyfin cinema lighting active
     icon: mdi:movie-open-outline
 
+  jellyfin_cinema_mode_enabled:
+    name: Cinema Mode
+    initial: on
+    icon: mdi:popcorn
+
   hemma_dashboard_redirect:
     name: Hemma Dashboard Redirect
     initial: on

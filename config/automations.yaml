@@ -236,11 +236,12 @@
 - id: 'jellyfin_cinema_mode'
   alias: Living Room - Jellyfin cinema mode
   description: >-
-    Turns off all physical living-room lights during Jellyfin playback. The
-    first play in each session snapshots their states; pausing or stopping
-    restores that snapshot. Resuming after a pause takes a fresh snapshot of
-    the restored state, so repeated pause/resume cycles do not overwrite it
-    with the cinema-mode off state.
+    Turns off all physical living-room lights during Jellyfin playback while
+    Cinema Mode is enabled. The first play in each session snapshots their
+    states; pausing, stopping, or disabling Cinema Mode restores that snapshot.
+    Resuming after a pause takes a fresh snapshot of the restored state, so
+    repeated pause/resume cycles do not overwrite it with the cinema-mode off
+    state.
   triggers:
   - trigger: state
     entity_id: media_player.tv_w_salonie_4
@@ -266,11 +267,16 @@
     from: playing
     to: unavailable
     id: cinema_restore
+  - trigger: state
+    entity_id: input_boolean.jellyfin_cinema_mode_enabled
+    to: 'off'
+    id: cinema_disabled
   conditions: []
   actions:
   - choose:
     - conditions: >-
         {{ trigger.id == 'cinema_start' and
+           is_state('input_boolean.jellyfin_cinema_mode_enabled', 'on') and
            is_state('input_boolean.jellyfin_cinema_active', 'off') }}
       sequence:
       - action: scene.create
@@ -286,7 +292,9 @@
         target:
           entity_id: input_boolean.jellyfin_cinema_active
   - choose:
-    - conditions: "{{ trigger.id == 'cinema_start' }}"
+    - conditions: >-
+        {{ trigger.id == 'cinema_start' and
+           is_state('input_boolean.jellyfin_cinema_mode_enabled', 'on') }}
       sequence:
       - action: light.turn_off
         target:
@@ -297,7 +305,7 @@
           - light.living_room_2ch_wi_fi_switch_module_switch_1
           - light.living_room_balcony
     - conditions: >-
-        {{ trigger.id == 'cinema_restore' and
+        {{ trigger.id in ['cinema_restore', 'cinema_disabled'] and
            is_state('input_boolean.jellyfin_cinema_active', 'on') }}
       sequence:
       # Dynamic scenes intentionally report state "unknown"; the helper is the

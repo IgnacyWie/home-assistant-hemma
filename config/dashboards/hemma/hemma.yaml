@@ -159,6 +159,13 @@ views:
       - type: custom:hemma-smart-row
         cards:
           - type: custom:button-card
+            template: hemma_entity
+            entity: input_boolean.jellyfin_cinema_mode_enabled
+            name: Cinema Mode
+            variables:
+              icon: popcorn-cinema-v1
+              show_toggle: true
+          - type: custom:button-card
             template: hemma_light
             entity: light.living_room_accent_1
             name: Accent

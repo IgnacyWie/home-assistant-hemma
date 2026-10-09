@@ -80,7 +80,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   Balcony light. It turns them off when playback starts, restores their exact
   pre-cinema states when playback is paused or stopped, and avoids overwriting
   that snapshot during a pause/resume cycle by using
-  `input_boolean.jellyfin_cinema_active` as the session guard.
+  `input_boolean.jellyfin_cinema_active` as the session guard. The Living Room
+  **Cinema Mode** tile toggles the behavior; turning it off during playback
+  restores the captured lights immediately.
 - **Bathroom - Forgotten lights protection** — independently switches off the
   Bathroom LED Strip or Bathroom Lamp after either has remained on for 45
   minutes.
