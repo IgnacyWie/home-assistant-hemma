@@ -9,8 +9,8 @@ hemma_fan:
   name: Fan
 
   tap_action:
-    action: more-info
-    entity: '[[[ return entity?.entity_id ]]]'
+    haptic: light
+    action: toggle
 
   hold_action:
     action: more-info

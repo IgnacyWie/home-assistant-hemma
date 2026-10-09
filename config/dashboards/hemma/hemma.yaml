@@ -324,9 +324,6 @@ views:
             name: LED Strip
             variables:
               icon: led-strip-variant
-            tap_action:
-              action: more-info
-              entity: light.3_in_1_controller_wifi_2_4g
           - type: custom:button-card
             template: hemma_entity
             entity: input_button.stop_wake_up_music

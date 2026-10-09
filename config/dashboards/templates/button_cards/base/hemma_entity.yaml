@@ -50,6 +50,27 @@ hemma_entity:
       - running
       - active
 
+  # Dashboard interaction model: tap performs the primary action, hold opens
+  # native details, and double tap stays unused unless a card opts into it.
+  tap_action:
+    haptic: light
+    action: |
+      [[[
+        const domain = String(entity?.entity_id || '').split('.')[0];
+        if (['light', 'switch', 'fan', 'input_boolean', 'automation'].includes(domain)) return 'toggle';
+        if (domain === 'input_button') return 'call-service';
+        return 'more-info';
+      ]]]
+    service: input_button.press
+    service_data:
+      entity_id: '[[[ return entity?.entity_id ]]]'
+  hold_action:
+    haptic: medium
+    action: more-info
+    entity: '[[[ return entity?.entity_id ]]]'
+  double_tap_action:
+    action: none
+
   extra_styles: |
     /* Diagonal specular hairline */
     ha-card::before{

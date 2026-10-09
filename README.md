@@ -32,6 +32,11 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 
 ## Dashboard conventions
 
+- Accessory interactions follow one rule throughout the dashboard: tap performs
+  the primary action, long press opens detailed or native controls, and double
+  tap is disabled unless a card has a deliberate secondary action. Lights,
+  switches, and fans toggle on tap. The Living Room TV opens its remote on tap
+  and native device information on long press.
 - Scene controls use compact Hemma header chips rather than large action tiles. New
   scenes should follow the `hemma_badge_scene` template, use a circular orange
   HomeKit-style icon, and expose an active-state sensor when one is available.

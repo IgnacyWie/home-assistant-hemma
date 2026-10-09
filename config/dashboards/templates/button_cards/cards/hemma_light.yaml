@@ -6,6 +6,14 @@ hemma_light:
   show_icon: false
   show_last_changed: false
 
+  tap_action:
+    haptic: light
+    action: call-service
+    service: script.turn_on
+    service_data:
+      entity_id: script.hemma_light_smart_toggle
+      variables:
+        light_entity: '[[[ return entity?.entity_id ]]]'
 
   hold_action:
     haptic: medium
