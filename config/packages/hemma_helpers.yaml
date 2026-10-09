@@ -1,5 +1,14 @@
 
 input_boolean:
+  lsc_energy_monthly_seeded:
+    name: LSC calculated monthly energy seeded
+    icon: mdi:counter
+
+  jellyfin_cinema_active:
+    name: Jellyfin cinema lighting active
+    initial: off
+    icon: mdi:movie-open-outline
+
   hemma_dashboard_redirect:
     name: Hemma Dashboard Redirect
     initial: on
@@ -154,7 +163,9 @@ utility_meter:
     periodically_resetting: false
     always_available: true
 
-# Derived template sensors used by dashboard badges and media summaries.
+# The recorder's existing total-increasing statistics show 13.655 kWh used in
+# October before this calculated meter was introduced. Seed once, then restore
+# the flag across restarts so future months reset and accumulate normally.
 template:
   # Badge icon colors
   - sensor:
@@ -238,8 +249,8 @@ template:
              and is_state('light.bedroom_ikea_of_sweden_grillplats_plug', 'off')
              and is_state('switch.ikea_of_sweden_grillplats_plug_2', 'off')
              and is_state('fan.bathroom_fan_bathroom', 'off')
-             and is_state('media_player.zeppelin', 'off')
-             and is_state('media_player.living_room_tv_2', 'off') }}
+             and states('media_player.zeppelin') in ['off', 'idle', 'paused', 'standby']
+             and states('media_player.tv_w_salonie_4') in ['off', 'idle', 'paused', 'standby', 'unavailable'] }}
 
 # Updates restart button
 script:
@@ -410,9 +421,33 @@ script:
       - delay:
           milliseconds: 400
 
-# Network popup buttons
+# Network popup buttons and one-time energy-meter seed
 
 automation:
+  - alias: "LSC - Seed calculated monthly energy"
+    id: lsc_seed_calculated_monthly_energy
+    trigger:
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.lsc_energy_monthly_seeded
+        state: "off"
+    action:
+      - wait_template: >-
+          {{ states('sensor.lsc_smart_power_plug_monthly_energy') not in
+             ['unknown', 'unavailable'] }}
+        timeout: "00:10:00"
+        continue_on_timeout: false
+      - service: utility_meter.calibrate
+        target:
+          entity_id: sensor.lsc_smart_power_plug_monthly_energy
+        data:
+          value: 13.655
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.lsc_energy_monthly_seeded
+
   - alias: "Hemma - Auto clear restart done state 1"
     id: hemma_auto_clear_restart_done_1
     trigger:

@@ -75,10 +75,12 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   the plug turns off, and switches the machine off when the timer expires. If
   Home Assistant restarts while the machine is on without an active restored
   timer, it starts a fresh two-hour safety window.
-- **Living Room - Jellyfin cinema mode** — snapshots the Living Room Accent,
-  TV Overlight, and both shelf-light circuits when Jellyfin playback starts,
-  turns those lights off, and restores their previous states when playback is
-  paused, stopped, switched off, or becomes unavailable.
+- **Living Room - Jellyfin cinema mode** — snapshots all five physical living-room
+  circuits: Living Room Accent, TV Overlight, both shelf-light circuits, and the
+  Balcony light. It turns them off when playback starts, restores their exact
+  pre-cinema states when playback is paused or stopped, and avoids overwriting
+  that snapshot during a pause/resume cycle by using
+  `input_boolean.jellyfin_cinema_active` as the session guard.
 - **Bathroom - Forgotten lights protection** — independently switches off the
   Bathroom LED Strip or Bathroom Lamp after either has remained on for 45
   minutes.

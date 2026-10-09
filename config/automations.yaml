@@ -235,7 +235,12 @@
 
 - id: 'jellyfin_cinema_mode'
   alias: Living Room - Jellyfin cinema mode
-  description: Turns off selected living-room lights during Jellyfin playback and restores their prior states on pause or stop.
+  description: >-
+    Turns off all physical living-room lights during Jellyfin playback. The
+    first play in each session snapshots their states; pausing or stopping
+    restores that snapshot. Resuming after a pause takes a fresh snapshot of
+    the restored state, so repeated pause/resume cycles do not overwrite it
+    with the cinema-mode off state.
   triggers:
   - trigger: state
     entity_id: media_player.tv_w_salonie_4
@@ -264,7 +269,9 @@
   conditions: []
   actions:
   - choose:
-    - conditions: "{{ trigger.id == 'cinema_start' }}"
+    - conditions: >-
+        {{ trigger.id == 'cinema_start' and
+           is_state('input_boolean.jellyfin_cinema_active', 'off') }}
       sequence:
       - action: scene.create
         data:
@@ -274,6 +281,13 @@
           - light.living_room_2ch_wi_fi_switch_module_switch_2
           - light.living_room_2ch_wi_fi_switch_module_2_switch_1
           - light.living_room_2ch_wi_fi_switch_module_switch_1
+          - light.living_room_balcony
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.jellyfin_cinema_active
+  - choose:
+    - conditions: "{{ trigger.id == 'cinema_start' }}"
+      sequence:
       - action: light.turn_off
         target:
           entity_id:
@@ -281,14 +295,24 @@
           - light.living_room_2ch_wi_fi_switch_module_switch_2
           - light.living_room_2ch_wi_fi_switch_module_2_switch_1
           - light.living_room_2ch_wi_fi_switch_module_switch_1
+          - light.living_room_balcony
     - conditions: >-
         {{ trigger.id == 'cinema_restore' and
-           states('scene.living_room_before_cinema') not in ['unknown', 'unavailable'] }}
+           is_state('input_boolean.jellyfin_cinema_active', 'on') }}
       sequence:
-      - action: scene.turn_on
-        continue_on_error: true
+      - choose:
+        - conditions: >-
+            {{ states('scene.living_room_before_cinema') not in
+               ['unknown', 'unavailable'] }}
+          sequence:
+          - action: scene.turn_on
+            target:
+              entity_id: scene.living_room_before_cinema
+            continue_on_error: true
+        default: []
+      - action: input_boolean.turn_off
         target:
-          entity_id: scene.living_room_before_cinema
+          entity_id: input_boolean.jellyfin_cinema_active
   mode: restart
 
 - id: 'bathroom_lights_forgotten_on'
