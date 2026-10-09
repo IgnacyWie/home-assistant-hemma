@@ -290,6 +290,7 @@ views:
           preload_rooms: *room_images
           light_entity_1: light.bedroom_accent_bedroom
           light_entity_2: light.3_in_1_controller_wifi_2_4g
+          light_entity_3: light.bedroom_ikea_of_sweden_grillplats_plug
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled
           wake_alarm_time_entity: input_datetime.wake_up_time
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
@@ -306,6 +307,17 @@ views:
               service: light.toggle
               target:
                 entity_id: light.bedroom_accent_bedroom
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.bedroom_ikea_of_sweden_grillplats_plug
+            name: Bed Lamp
+            variables:
+              icon: bed-lamp-v1
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.bedroom_ikea_of_sweden_grillplats_plug
           - type: custom:button-card
             template: hemma_light
             entity: light.3_in_1_controller_wifi_2_4g
