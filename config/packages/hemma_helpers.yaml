@@ -6,7 +6,6 @@ input_boolean:
 
   jellyfin_cinema_active:
     name: Jellyfin cinema lighting active
-    initial: off
     icon: mdi:movie-open-outline
 
   hemma_dashboard_redirect:
