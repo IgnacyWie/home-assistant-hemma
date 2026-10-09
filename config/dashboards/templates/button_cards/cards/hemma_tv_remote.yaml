@@ -154,7 +154,7 @@ hemma_tv_hub_shortcut:
   template: hemma_tv_app_button
   styles:
     card:
-      - width: 72px
+      - width: 58px
       - height: 50px
       - padding: 4px
       - border-radius: 15px
@@ -183,7 +183,7 @@ hemma_tv_cinema_button:
     action: none
   styles:
     card:
-      - width: 72px
+      - width: 58px
       - height: 50px
       - padding: 4px
       - border-radius: 15px
@@ -193,6 +193,195 @@ hemma_tv_cinema_button:
       g:
         - font-size: 22px
         - color: '#ff6b63'
+
+hemma_tv_resume_button:
+  template: hemma_tv_remote_visual
+  entity: '[[[ return variables.playback_entity || "media_player.tv_w_salonie_4"; ]]]'
+  tap_action:
+    haptic: light
+    action: call-service
+    service: media_player.media_play
+    target:
+      entity_id: '[[[ return variables.playback_entity || "media_player.tv_w_salonie_4"; ]]]'
+  hold_action:
+    action: more-info
+  styles:
+    card:
+      - width: 116px
+      - height: 50px
+      - padding: 4px 10px
+      - border-radius: 15px
+      - background: rgba(147,51,234,0.18)
+      - color: rgba(255,255,255,0.98)
+    custom_fields:
+      g:
+        - font-size: 12px
+        - font-weight: 700
+        - letter-spacing: -0.01em
+        - white-space: nowrap
+  custom_fields:
+    g: '<span class="hemma-tv-resume"><ha-icon icon="mdi:play"></ha-icon>Resume</span>'
+  extra_styles: |
+    .hemma-tv-resume {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .hemma-tv-resume ha-icon {
+      width: 20px;
+      height: 20px;
+      --mdc-icon-size: 20px;
+    }
+
+hemma_tv_spotify_button:
+  template: hemma_tv_remote_visual
+  entity: media_player.spotify_ignacy
+  tap_action:
+    haptic: light
+    action: call-service
+    service: media_player.select_source
+    target:
+      entity_id: media_player.spotify_ignacy
+    data:
+      source: >-
+        [[[
+          const sources = states['media_player.spotify_ignacy']?.attributes?.source_list || [];
+          return sources.find(source => /\btv\b|bravia|sony/i.test(source)) || '';
+        ]]]
+  hold_action:
+    action: more-info
+  styles:
+    card:
+      - width: 58px
+      - height: 50px
+      - padding: 4px
+      - border-radius: 15px
+      - color: '#1ed760'
+
+hemma_tv_launcher_strip:
+  template: hemma_default
+  entity: media_player.living_room_tv
+  triggers_update:
+    - media_player.living_room_tv
+    - media_player.living_room_tv_2
+    - media_player.tv_w_salonie_4
+    - media_player.spotify_ignacy
+  show_icon: false
+  show_name: false
+  show_state: false
+  show_label: false
+  tap_action:
+    action: none
+  hold_action:
+    action: none
+  styles:
+    card:
+      - width: 318px
+      - height: 50px
+      - padding: 0
+      - border-radius: 0
+      - background: transparent !important
+      - border: none !important
+      - box-shadow: none !important
+      - overflow: visible
+      - display: >-
+          [[[
+            const state = states['media_player.living_room_tv_2']?.state;
+            return ['off', 'unknown', 'unavailable'].includes(state) ? 'none' : 'block';
+          ]]]
+    grid:
+      - display: flex
+      - align-items: center
+      - justify-content: flex-start
+      - gap: 7px
+      - width: 318px
+      - height: 50px
+    custom_fields:
+      resume:
+        - flex: 0 0 auto
+        - display: >-
+            [[[
+              const playback = states['media_player.tv_w_salonie_4'];
+              return playback?.state === 'paused' && playback.attributes?.media_title ? 'block' : 'none';
+            ]]]
+        - order: 0
+      jellyfin:
+        - flex: 0 0 auto
+        - display: >-
+            [[[
+              const playback = states['media_player.tv_w_salonie_4'];
+              return playback?.state === 'paused' && playback.attributes?.media_title ? 'none' : 'block';
+            ]]]
+        - order: >-
+            [[[
+              const player = states['media_player.living_room_tv'];
+              const app = `${player?.attributes?.app_name || ''} ${player?.attributes?.app_id || ''}`.toLowerCase();
+              return /wholphin|jellyfin/.test(app) ? 1 : 10;
+            ]]]
+      youtube:
+        - flex: 0 0 auto
+        - order: >-
+            [[[
+              const player = states['media_player.living_room_tv'];
+              const app = `${player?.attributes?.app_name || ''} ${player?.attributes?.app_id || ''}`.toLowerCase();
+              return app.includes('youtube') ? 1 : 11;
+            ]]]
+      spotify:
+        - flex: 0 0 auto
+        - display: >-
+            [[[
+              const spotify = states['media_player.spotify_ignacy'];
+              const sources = spotify?.attributes?.source_list || [];
+              return sources.some(source => /\btv\b|bravia|sony/i.test(source)) ? 'block' : 'none';
+            ]]]
+        - order: >-
+            [[[
+              const player = states['media_player.living_room_tv'];
+              const app = `${player?.attributes?.app_name || ''} ${player?.attributes?.app_id || ''}`.toLowerCase();
+              return app.includes('spotify') ? 1 : 12;
+            ]]]
+      cinema:
+        - flex: 0 0 auto
+        - order: 30
+  custom_fields:
+    resume:
+      card:
+        type: custom:button-card
+        template: hemma_tv_resume_button
+        variables:
+          playback_entity: media_player.tv_w_salonie_4
+    jellyfin:
+      card:
+        type: custom:button-card
+        template: hemma_tv_hub_shortcut
+        variables:
+          app_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
+          glyph: '<img src="/local/hemma/icons/jellyfin-purple.svg" alt="Jellyfin">'
+          label: Jellyfin
+          accent: 'var(--hemma-color-purple, #9333ea)'
+    youtube:
+      card:
+        type: custom:button-card
+        template: hemma_tv_hub_shortcut
+        variables:
+          app_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
+          glyph: '<ha-icon icon="mdi:youtube"></ha-icon>'
+          label: YouTube
+          accent: '#ff453a'
+    spotify:
+      card:
+        type: custom:button-card
+        template: hemma_tv_spotify_button
+        variables:
+          glyph: '<ha-icon icon="mdi:spotify"></ha-icon>'
+          label: Spotify
+    cinema:
+      card:
+        type: custom:button-card
+        template: hemma_tv_cinema_button
+        variables:
+          glyph: '<ha-icon icon="mdi:movie-open"></ha-icon>'
+          label: Cinema
 
 # Use native button-card actions for volume steps. Raw HTML onclick handlers
 # inside a custom field are not reliable in the iOS Home Assistant WebView.
@@ -486,6 +675,11 @@ hemma_tv_remote_panel:
     remote_entity: remote.living_room_tv
     volume_entity: media_player.living_room_tv_2
     playback_entity: media_player.tv_w_salonie_4
+  triggers_update:
+    - media_player.living_room_tv
+    - media_player.living_room_tv_2
+    - media_player.tv_w_salonie_4
+    - media_player.spotify_ignacy
 
   tap_action:
     action: none
@@ -496,7 +690,11 @@ hemma_tv_remote_panel:
     card:
       - width: calc(var(--popup-min-width, 360px) - 32px)
       - max-width: 100%
-      - min-height: 458px
+      - min-height: >-
+          [[[
+            const state = states['media_player.living_room_tv_2']?.state;
+            return ['off', 'unknown', 'unavailable'].includes(state) ? '408px' : '458px';
+          ]]]
       - padding: 0
       - box-sizing: border-box
       - border-radius: 0
@@ -504,9 +702,15 @@ hemma_tv_remote_panel:
       - box-shadow: none !important
       - border: none !important
     grid:
-      - grid-template-areas: '"media media media media" "volume jellyfin youtube cinema" "volume back home pause" "volume . up ." "volume left select right" "volume . down ."'
+      - grid-template-areas: '"media media media media" "launchers launchers launchers launchers" "volume back home pause" "volume . up ." "volume left select right" "volume . down ."'
       - grid-template-columns: repeat(4, 72px)
-      - grid-template-rows: 70px 50px repeat(4, 72px)
+      - grid-template-rows: >-
+          [[[
+            const state = states['media_player.living_room_tv_2']?.state;
+            return ['off', 'unknown', 'unavailable'].includes(state)
+              ? '70px 0px repeat(4, 72px)'
+              : '70px 50px repeat(4, 72px)';
+          ]]]
       - column-gap: 10px
       - row-gap: 10px
       - justify-content: center
@@ -515,6 +719,10 @@ hemma_tv_remote_panel:
         - grid-area: media
         - align-self: stretch
         - justify-self: stretch
+      launchers:
+        - grid-area: launchers
+        - align-self: center
+        - justify-self: center
       back:
         - grid-area: back
         - align-self: center
@@ -551,18 +759,6 @@ hemma_tv_remote_panel:
         - grid-area: volume
         - align-self: stretch
         - justify-self: center
-      jellyfin:
-        - grid-area: jellyfin
-        - align-self: center
-        - justify-self: center
-      youtube:
-        - grid-area: youtube
-        - align-self: center
-        - justify-self: center
-      cinema:
-        - grid-area: cinema
-        - align-self: center
-        - justify-self: center
 
   custom_fields:
     media: >-
@@ -587,6 +783,10 @@ hemma_tv_remote_panel:
           : `<span class="hemma-tv-now-fallback"><ha-icon icon="mdi:television-play"></ha-icon></span>`;
         return `<div class="hemma-tv-now${active ? ' is-active' : ''}">${image}<div class="hemma-tv-now-copy"><div class="hemma-tv-now-title">${esc(title)}</div><div class="hemma-tv-now-subtitle">${esc(subtitle)}</div></div></div>`;
       ]]]
+    launchers:
+      card:
+        type: custom:button-card
+        template: hemma_tv_launcher_strip
     back:
       card:
         type: custom:button-card
@@ -666,31 +866,6 @@ hemma_tv_remote_panel:
         template: hemma_tv_volume_control
         variables:
           volume_entity: '[[[ return variables.volume_entity; ]]]'
-    jellyfin:
-      card:
-        type: custom:button-card
-        template: hemma_tv_hub_shortcut
-        variables:
-          app_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
-          glyph: '<img src="/local/hemma/icons/jellyfin-purple.svg" alt="Jellyfin">'
-          label: Jellyfin
-          accent: 'var(--hemma-color-purple, #9333ea)'
-    youtube:
-      card:
-        type: custom:button-card
-        template: hemma_tv_hub_shortcut
-        variables:
-          app_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
-          glyph: '<ha-icon icon="mdi:youtube"></ha-icon>'
-          label: YouTube
-          accent: '#ff453a'
-    cinema:
-      card:
-        type: custom:button-card
-        template: hemma_tv_cinema_button
-        variables:
-          glyph: '<ha-icon icon="mdi:movie-open"></ha-icon>'
-          label: Cinema
 
   extra_styles: |
     :host {
