@@ -51,11 +51,6 @@ hemma_badge_cinema:
               : 'var(--secondary-text-color)';
           ]]]
     entity_picture:
-      - background: >
-          [[[
-            return entity?.state === 'on'
-              ? '#FF453A'
-              : 'var(--hemma-color-yellow, #FFCC00)';
-          ]]]
+      - background: '#FF453A'
       - padding: 5px
       - box-sizing: border-box
