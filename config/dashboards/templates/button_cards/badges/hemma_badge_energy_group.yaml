@@ -81,11 +81,9 @@ hemma_badge_energy_group:
       const eid = variables.power_entity;
       const power = eid ? parseFloat(states[eid]?.state) : NaN;
       let sub = '';
-      if (!isNaN(power)) {
-        sub = power >= Number(variables.extreme_threshold ?? 3000) ? T('energy.extreme_usage', 'Extreme Usage')
-            : power >= Number(variables.heavy_threshold   ?? 1000) ? T('energy.heavy_usage', 'Heavy Usage')
-            : power >= Number(variables.normal_threshold  ?? 200)  ? T('energy.normal', 'Normal')
-            : T('energy.idle', 'Idle');
+      if (Number.isFinite(power)) {
+        const decimals = Math.abs(power) >= 100 ? 0 : 1;
+        sub = `${power.toFixed(decimals)} W`;
       }
       return `
         <div class="badge-wrap">
