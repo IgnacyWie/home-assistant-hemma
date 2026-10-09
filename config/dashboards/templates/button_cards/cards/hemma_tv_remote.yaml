@@ -42,10 +42,9 @@ hemma_tv_remote_button:
       - box-shadow: none !important
       - transition: transform 0.12s ease, background 0.12s ease
     grid:
-      - grid-template-areas: '"g" "l"'
+      - grid-template-areas: '"g"'
       - grid-template-columns: 1fr
-      - grid-template-rows: 1fr min-content
-      - row-gap: 1px
+      - grid-template-rows: 1fr
     custom_fields:
       g:
         - grid-area: g
@@ -119,9 +118,9 @@ hemma_tv_remote_panel:
     grid:
       - grid-template-areas: '"back up pause" "left select right" ". down ."'
       - grid-template-columns: repeat(3, 1fr)
-      - grid-template-rows: repeat(3, 64px)
-      - column-gap: 8px
-      - row-gap: 7px
+      - grid-template-rows: repeat(3, 72px)
+      - column-gap: 10px
+      - row-gap: 10px
     custom_fields:
       back:
         - grid-area: back
