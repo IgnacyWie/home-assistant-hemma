@@ -181,6 +181,7 @@ views:
                       --hemma-popup-right: clamp(0px, calc(100vw - 768px), 18px);
                       --hemma-popup-bottom: clamp(0px, calc(100vw - 768px), 18px);
                       --hemma-popup-radius: 28px;
+                      --hemma-popup-header-gap: 2px;
                       --hemma-popup-tint: rgba(18,18,22,0.84);
                       --hemma-popup-grain: 0;
                       --hemma-popup-grain-dark: 0;

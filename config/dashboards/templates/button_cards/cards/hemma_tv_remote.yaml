@@ -86,9 +86,40 @@ hemma_tv_remote_button:
     ha-card:focus-within::before {
       opacity: 1;
     }
+    ha-icon {
+      --mdc-icon-size: 26px;
+      width: 26px;
+      height: 26px;
+    }
     ha-card:active {
       transform: scale(0.94) !important;
     }
+
+hemma_tv_volume_button:
+  template: hemma_tv_remote_button
+  tap_action:
+    haptic: light
+    action: call-service
+    service: remote.send_command
+    target:
+      entity_id: '[[[ return variables.remote_entity || "remote.living_room_tv"; ]]]'
+    data:
+      command: '[[[ return variables.command || "VOLUME_UP"; ]]]'
+  hold_action:
+    action: none
+
+hemma_tv_mute_button:
+  template: hemma_tv_remote_button
+  tap_action:
+    haptic: light
+    action: call-service
+    service: remote.send_command
+    target:
+      entity_id: '[[[ return variables.remote_entity || "remote.living_room_tv"; ]]]'
+    data:
+      command: '[[[ return variables.command || "MUTE"; ]]]'
+  hold_action:
+    action: none
 
 hemma_tv_remote_panel:
   template: hemma_default
@@ -108,22 +139,26 @@ hemma_tv_remote_panel:
     card:
       - width: calc(var(--popup-min-width, 360px) - 32px)
       - max-width: 100%
-      - min-height: 252px
-      - padding: 12px 0 0
+      - min-height: 420px
+      - padding: 0
       - box-sizing: border-box
       - border-radius: 0
       - background: transparent !important
       - box-shadow: none !important
       - border: none !important
     grid:
-      - grid-template-areas: '"back up pause" "left select right" ". down ."'
+      - grid-template-areas: '"back home pause" ". up ." "left select right" ". down ." "vol_down mute vol_up"'
       - grid-template-columns: repeat(3, 1fr)
-      - grid-template-rows: repeat(3, 72px)
+      - grid-template-rows: repeat(5, 72px)
       - column-gap: 10px
       - row-gap: 10px
     custom_fields:
       back:
         - grid-area: back
+        - align-self: center
+        - justify-self: center
+      home:
+        - grid-area: home
         - align-self: center
         - justify-self: center
       up:
@@ -150,6 +185,18 @@ hemma_tv_remote_panel:
         - grid-area: down
         - align-self: center
         - justify-self: center
+      vol_down:
+        - grid-area: vol_down
+        - align-self: center
+        - justify-self: center
+      mute:
+        - grid-area: mute
+        - align-self: center
+        - justify-self: center
+      vol_up:
+        - grid-area: vol_up
+        - align-self: center
+        - justify-self: center
 
   custom_fields:
     back:
@@ -159,8 +206,17 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: BACK
-          glyph: '‹'
+          glyph: '<ha-icon icon="mdi:arrow-left"></ha-icon>'
           label: Back
+    home:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: HOME
+          glyph: '<ha-icon icon="mdi:home-outline"></ha-icon>'
+          label: Home
     up:
       card:
         type: custom:button-card
@@ -168,7 +224,7 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: DPAD_UP
-          glyph: '↑'
+          glyph: '<ha-icon icon="mdi:chevron-up"></ha-icon>'
           label: Up
     pause:
       card:
@@ -177,7 +233,7 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: MEDIA_PLAY_PAUSE
-          glyph: 'Ⅱ'
+          glyph: '<ha-icon icon="mdi:pause"></ha-icon>'
           label: Pause
     left:
       card:
@@ -186,7 +242,7 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: DPAD_LEFT
-          glyph: '←'
+          glyph: '<ha-icon icon="mdi:chevron-left"></ha-icon>'
           label: Left
     select:
       card:
@@ -205,7 +261,7 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: DPAD_RIGHT
-          glyph: '→'
+          glyph: '<ha-icon icon="mdi:chevron-right"></ha-icon>'
           label: Right
     down:
       card:
@@ -214,8 +270,35 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: DPAD_DOWN
-          glyph: '↓'
+          glyph: '<ha-icon icon="mdi:chevron-down"></ha-icon>'
           label: Down
+    vol_down:
+      card:
+        type: custom:button-card
+        template: hemma_tv_volume_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: VOLUME_DOWN
+          glyph: '<ha-icon icon="mdi:volume-minus"></ha-icon>'
+          label: Volume down
+    mute:
+      card:
+        type: custom:button-card
+        template: hemma_tv_mute_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: MUTE
+          glyph: '<ha-icon icon="mdi:volume-off"></ha-icon>'
+          label: Mute
+    vol_up:
+      card:
+        type: custom:button-card
+        template: hemma_tv_volume_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: VOLUME_UP
+          glyph: '<ha-icon icon="mdi:volume-plus"></ha-icon>'
+          label: Volume up
 
   extra_styles: |
     :host {
