@@ -122,6 +122,8 @@ hemma_room:
     media_player_9:
     media_player_10:
 
+    cinema_mode_entity:
+
     plex_stream_1:
     plex_stream_2:
 
@@ -1630,6 +1632,12 @@ hemma_room:
               entity_8: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_8 : null ]]]'
               entity_9: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_9 : null ]]]'
               entity_10: '[[[ return (variables.show_lights!==false&&(!!variables.light_entity_1||!!variables.light_group_entity)) ? variables.light_entity_10 : null ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_cinema
+            entity: '[[[ return variables.cinema_mode_entity ]]]'
+            variables:
+              enabled: '[[[ return !!variables.cinema_mode_entity ]]]'
 
           - type: custom:button-card
             template: hemma_badge_presence_group

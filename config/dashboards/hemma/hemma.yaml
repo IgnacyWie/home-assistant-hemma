@@ -155,22 +155,10 @@ views:
           light_entity_4: light.living_room_balcony
           media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
+          cinema_mode_entity: input_boolean.jellyfin_cinema_mode_enabled
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
         cards:
-          - type: custom:button-card
-            template: hemma_entity
-            entity: input_boolean.jellyfin_cinema_mode_enabled
-            name: Cinema Mode
-            variables:
-              icon: popcorn-cinema-v1
-              show_toggle: true
-            styles:
-              img_cell:
-                - background: |
-                    [[[ return entity?.state === 'on'
-                      ? '#FF453A !important'
-                      : 'var(--hemma-icon-circle-bg, rgba(0,0,0,0.20)) !important'; ]]]
           - type: custom:button-card
             template: hemma_light
             entity: light.living_room_accent_1

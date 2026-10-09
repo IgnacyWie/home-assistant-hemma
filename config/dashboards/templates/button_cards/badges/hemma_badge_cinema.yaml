@@ -1,0 +1,61 @@
+hemma_badge_cinema:
+  template: [hemma_badge_base]
+
+  variables:
+    enabled: true
+
+  show_state: false
+  show_label: false
+  show_icon: false
+  show_entity_picture: true
+
+  entity_picture: |
+    [[[ return window.hemmaIconUrl('popcorn-cinema-v1'); ]]]
+
+  tap_action:
+    action: call-service
+    service: input_boolean.toggle
+    target:
+      entity_id: '[[[ return entity?.entity_id ]]]'
+
+  hold_action:
+    action: more-info
+
+  double_tap_action:
+    action: none
+
+  name: |
+    [[[
+      const on = entity?.state === 'on';
+      return `<div class="badge-wrap"><div class="badge-title">Cinema Mode</div><div class="badge-sub">${on ? 'On' : 'Off'}</div></div>`;
+    ]]]
+
+  styles:
+    card:
+      - background: >
+          [[[
+            return entity?.state === 'on'
+              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
+              : 'var(--badge-background, rgba(10,12,14,0.65))';
+          ]]]
+      - --badge-title-color: >
+          [[[
+            return entity?.state === 'on'
+              ? 'rgba(0,0,0,0.85)'
+              : 'var(--primary-text-color)';
+          ]]]
+      - --badge-sub-color: >
+          [[[
+            return entity?.state === 'on'
+              ? 'rgba(0,0,0,0.60)'
+              : 'var(--secondary-text-color)';
+          ]]]
+    entity_picture:
+      - background: >
+          [[[
+            return entity?.state === 'on'
+              ? '#FF453A'
+              : 'var(--hemma-color-yellow, #FFCC00)';
+          ]]]
+      - padding: 5px
+      - box-sizing: border-box
