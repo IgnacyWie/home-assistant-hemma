@@ -4,9 +4,11 @@ hemma_tv_remote_button:
   template: hemma_default
   show_icon: false
   show_name: false
-  show_label: true
+  show_label: false
   label: '[[[ return variables.label || ""; ]]]'
   tooltip: '[[[ return variables.label || ""; ]]]'
+  variables:
+    primary: false
 
   tap_action:
     haptic: light
@@ -24,12 +26,20 @@ hemma_tv_remote_button:
 
   styles:
     card:
-      - width: 68px
-      - height: 64px
+      - width: 72px
+      - height: 72px
       - padding: 6px
-      - border-radius: 22px
-      - background: rgba(255,255,255,0.10)
-      - box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 10px rgba(0,0,0,0.12)
+      - border-radius: 18px
+      - background: >-
+          [[[
+            return variables.primary ? '#f5f5f7' : 'rgba(255,255,255,0.09)';
+          ]]]
+      - color: >-
+          [[[
+            return variables.primary ? '#1d1d1f' : 'rgba(255,255,255,0.96)';
+          ]]]
+      - border: none !important
+      - box-shadow: none !important
       - transition: transform 0.12s ease, background 0.12s ease
     grid:
       - grid-template-areas: '"g" "l"'
@@ -44,7 +54,10 @@ hemma_tv_remote_button:
         - line-height: 1
         - font-size: 26px
         - font-weight: 500
-        - color: rgba(255,255,255,0.96)
+        - color: >-
+            [[[
+              return variables.primary ? '#1d1d1f' : 'rgba(255,255,255,0.96)';
+            ]]]
     label:
       - grid-area: l
       - align-self: end
@@ -57,7 +70,7 @@ hemma_tv_remote_button:
 
   custom_fields:
     g: >-
-      [[[ return `<span aria-hidden="true">${variables.glyph || ''}</span>`; ]]]
+      [[[ return `<span aria-label="${variables.label || ''}">${variables.glyph || ''}</span>`; ]]]
 
   extra_styles: |
     ha-card::before {
@@ -94,13 +107,15 @@ hemma_tv_remote_panel:
 
   styles:
     card:
-      - width: 100%
+      - width: calc(var(--popup-min-width, 360px) - 32px)
+      - max-width: 100%
       - min-height: 252px
-      - padding: 16px
+      - padding: 12px 0 0
       - box-sizing: border-box
-      - border-radius: var(--hemma-tile-radius, 28px)
-      - background: var(--hemma-glass-background, rgba(44,46,52,0.78))
-      - box-shadow: var(--hemma-tile-glass-rim, inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.10))
+      - border-radius: 0
+      - background: transparent !important
+      - box-shadow: none !important
+      - border: none !important
     grid:
       - grid-template-areas: '"back up pause" "left select right" ". down ."'
       - grid-template-columns: repeat(3, 1fr)
@@ -183,6 +198,7 @@ hemma_tv_remote_panel:
           command: DPAD_CENTER
           glyph: '●'
           label: Select
+          primary: true
     right:
       card:
         type: custom:button-card
@@ -205,7 +221,10 @@ hemma_tv_remote_panel:
   extra_styles: |
     :host {
       display: block !important;
-      width: 100% !important;
+      width: calc(var(--popup-min-width, 360px) - 32px) !important;
+      max-width: 100% !important;
+      margin-left: auto !important;
+      margin-right: 0 !important;
     }
     ha-card {
       overflow: visible !important;

@@ -175,12 +175,17 @@ views:
                 popup_styles:
                   - style: all
                     styles: |
-                      :host {
-                        --popup-min-width: 360px;
-                        --popup-max-width: 520px;
-                        --hemma-popup-gutter-wide: 18px;
-                        --hemma-popup-gutter-phone: 14px;
-                      }
+                      --hemma-popup-justify: flex-end;
+                      --hemma-popup-align: flex-end;
+                      --hemma-popup-top: 18px;
+                      --hemma-popup-right: clamp(0px, calc(100vw - 768px), 18px);
+                      --hemma-popup-bottom: clamp(0px, calc(100vw - 768px), 18px);
+                      --hemma-popup-radius: 28px;
+                      --hemma-popup-tint: rgba(18,18,22,0.84);
+                      --hemma-popup-grain: 0;
+                      --hemma-popup-grain-dark: 0;
+                      --popup-min-width: 360px;
+                      --popup-max-width: 360px;
                 content:
                   type: custom:button-card
                   template: hemma_tv_remote_panel

@@ -4025,8 +4025,8 @@ window.hemmaMenuGlass = {
       inset: 0;
       box-sizing: border-box;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      justify-content: var(--hemma-popup-justify, center);
+      align-items: var(--hemma-popup-align, flex-start);
       pointer-events: none;
     }
 
@@ -4039,7 +4039,10 @@ window.hemmaMenuGlass = {
       width: var(--popup-min-width, 580px);
       max-width: min(var(--popup-max-width, 600px), calc(100vw - 16px));
       margin-top: var(--hemma-popup-top, 112px);
-      max-height: calc(100svh - var(--hemma-popup-top, 112px) - 8px - var(--safe-area-inset-bottom, 0px));
+      margin-right: var(--hemma-popup-right, 0px);
+      margin-bottom: var(--hemma-popup-bottom, 0px);
+      margin-left: var(--hemma-popup-left, 0px);
+      max-height: calc(100svh - var(--hemma-popup-top, 112px) - var(--hemma-popup-bottom, 0px) - 8px - var(--safe-area-inset-bottom, 0px));
       border-radius: var(--hemma-popup-radius, 38px);
       background: transparent;
       overflow: hidden;
