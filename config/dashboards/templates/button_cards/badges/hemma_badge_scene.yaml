@@ -16,6 +16,16 @@ hemma_badge_scene:
   entity_picture: |
     [[[ return window.hemmaIconUrl(variables.icon || 'scenes'); ]]]
 
+  extra_styles: >
+    [[[
+      const v = variables?.enabled;
+      const enabled = (v === undefined || v === null) ? true :
+        (typeof v === 'boolean') ? v :
+        (typeof v === 'number') ? v !== 0 :
+        !['false', '0', 'no', 'off', 'disabled'].includes(String(v).trim().toLowerCase());
+      return `:host { display: ${enabled ? 'inline-block' : 'none'} !important; }`;
+    ]]]
+
   tap_action:
     action: call-service
     service: '[[[ return variables.service || "scene.turn_on"; ]]]'

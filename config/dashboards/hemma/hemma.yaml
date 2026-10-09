@@ -27,7 +27,7 @@ views:
           weather_entity: weather.forecast_home
           presence_entity_1: person.ignacy_wie
           presence_battery_entity_1: sensor.phi_battery_level
-          presence_icon_1: iphone
+          presence_icon_1: cellphone-mobile-v1
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled
           wake_alarm_time_entity: input_datetime.wake_up_time
           scene_entity_1: scene.welcome_home

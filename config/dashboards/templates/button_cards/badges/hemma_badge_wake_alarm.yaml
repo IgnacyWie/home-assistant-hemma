@@ -15,6 +15,12 @@ hemma_badge_wake_alarm:
   entity_picture: |
     [[[ return window.hemmaIconUrl(variables.icon || 'alarm'); ]]]
 
+  extra_styles: >
+    [[[
+      const enabled = !!variables.enabled_entity && !!variables.time_entity;
+      return `:host { display: ${enabled ? 'inline-block' : 'none'} !important; }`;
+    ]]]
+
   tap_action:
     haptic: light
     action: fire-dom-event

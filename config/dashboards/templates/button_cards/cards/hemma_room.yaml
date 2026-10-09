@@ -1562,11 +1562,26 @@ hemma_room:
           justify-items: start
           align-items: center
           grid-column-gap: 0px
+          column-gap: 0px
+          row-gap: 0px
+          gap: 0px
 
         card_mod:
           style: |
             ha-card {
               overflow: visible !important;
+              margin: 0 !important;
+            }
+            #root,
+            .layout {
+              gap: 0 !important;
+              grid-gap: 0 !important;
+              column-gap: 0 !important;
+              row-gap: 0 !important;
+            }
+            #root > *,
+            .layout > * {
+              margin: 0 !important;
             }
 
         cards:
@@ -1777,6 +1792,9 @@ hemma_room:
           justify-items: start
           align-items: center
           grid-column-gap: 0px
+          column-gap: 0px
+          row-gap: 0px
+          gap: 0px
 
         cards:
           - type: custom:button-card
@@ -1835,6 +1853,9 @@ hemma_room:
           justify-items: start
           align-items: center
           grid-column-gap: 0px
+          column-gap: 0px
+          row-gap: 0px
+          gap: 0px
 
         cards:
           - type: custom:button-card
@@ -2519,6 +2540,9 @@ hemma_room:
           justify-items: start
           align-items: center
           grid-column-gap: 0px
+          column-gap: 0px
+          row-gap: 0px
+          gap: 0px
 
         cards:
           - type: custom:button-card
@@ -2724,6 +2748,9 @@ hemma_room:
           justify-items: start
           align-items: center
           grid-column-gap: 0px
+          column-gap: 0px
+          row-gap: 0px
+          gap: 0px
 
         cards:
           - type: custom:button-card
@@ -2807,6 +2834,9 @@ hemma_room:
           justify-items: start
           align-items: center
           grid-column-gap: 0px
+          column-gap: 0px
+          row-gap: 0px
+          gap: 0px
 
         cards:
           - type: custom:button-card

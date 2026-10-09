@@ -29,7 +29,13 @@ hemma_badge_presence:
       const st      = stRaw.toLowerCase().replace(/_/g,' ');
       const hide    = !enabled || !hasEnt || !stRaw || ['unknown','unavailable','none'].includes(st);
 
-      return `:host{display:${hide ? 'none' : 'inline-block'} !important;order:var(--hemma-badge-order-people,3);}`;
+      return `:host{display:${hide ? 'none' : 'inline-block'} !important;order:var(--hemma-badge-order-people,3);}
+        #img-cell img, #img-cell ha-img, .img-cell img, .img-cell ha-img {
+          object-fit: contain !important;
+          padding: 5px !important;
+          box-sizing: border-box !important;
+        }
+        :host ha-card { --hemma-badge-icon-bg: rgba(255,255,255,0.10); }`;
     ]]]
 
   styles:
