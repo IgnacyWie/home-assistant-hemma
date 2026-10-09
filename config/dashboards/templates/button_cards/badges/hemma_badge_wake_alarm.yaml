@@ -1,0 +1,97 @@
+hemma_badge_wake_alarm:
+  template: [hemma_badge_base]
+
+  variables:
+    enabled: true
+    enabled_entity: input_boolean.wake_up_enabled
+    time_entity: input_datetime.wake_up_time
+    icon: alarm
+
+  show_state: false
+  show_label: false
+  show_icon: false
+  show_entity_picture: true
+
+  entity_picture: |
+    [[[ return window.hemmaIconUrl(variables.icon || 'alarm'); ]]]
+
+  tap_action:
+    haptic: light
+    action: fire-dom-event
+    hemma_popup:
+      title: Wake-up Alarm
+      eyebrow: Schedule
+      dismissable: true
+      dismiss_on_background: true
+      content:
+        type: vertical-stack
+        cards:
+          - type: entities
+            state_color: true
+            entities:
+              - entity: input_boolean.wake_up_enabled
+                name: Alarm
+              - entity: input_datetime.wake_up_time
+                name: Time (24-hour)
+          - type: custom:button-card
+            entity: input_datetime.wake_up_time
+            name: Current time
+            show_state: true
+            state_display: |
+              [[[
+                const raw = states['input_datetime.wake_up_time']?.state || '';
+                return raw.length >= 5 ? raw.slice(0, 5) : '--:--';
+              ]]]
+            tap_action:
+              action: more-info
+            styles:
+              card:
+                - background: rgba(255,255,255,0.08)
+                - border-radius: 18px
+                - padding: 14px
+              name:
+                - justify-self: start
+              state:
+                - justify-self: end
+                - font-size: 20px
+                - font-weight: 700
+
+  hold_action:
+    action: more-info
+    entity: input_datetime.wake_up_time
+
+  double_tap_action:
+    action: none
+
+  name: |
+    [[[
+      const enabled = entity?.state === 'on';
+      const raw = states[variables.time_entity]?.state || '';
+      const time = raw.length >= 5 ? raw.slice(0, 5) : '--:--';
+      return `<div class="badge-wrap"><div class="badge-title">Wake-up Alarm</div><div class="badge-sub">${enabled ? 'On' : 'Off'} · ${time}</div></div>`;
+    ]]]
+
+  styles:
+    card:
+      - background: >
+          [[[
+            return entity?.state === 'on'
+              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
+              : 'var(--badge-background, rgba(10,12,14,0.65))';
+          ]]]
+      - --badge-title-color: >
+          [[[
+            return entity?.state === 'on'
+              ? 'rgba(0,0,0,0.85)'
+              : 'var(--primary-text-color)';
+          ]]]
+      - --badge-sub-color: >
+          [[[
+            return entity?.state === 'on'
+              ? 'rgba(0,0,0,0.60)'
+              : 'var(--secondary-text-color)';
+          ]]]
+    entity_picture:
+      - background: '#FF9500'
+      - padding: 5px
+      - box-sizing: border-box

@@ -15,15 +15,12 @@ hemma_badge_energy_group:
   entity: input_select.hemma_expanded_row
 
   tap_action:
-    action: call-service
-    service: input_select.select_option
-    service_data:
-      entity_id: input_select.hemma_expanded_row
-      option: >
-        [[[
-          return states['input_select.hemma_expanded_row']?.state === 'energy'
-            ? 'none' : 'energy';
-        ]]]
+    haptic: light
+    action: |
+      [[[
+        return window.hemmaPopupAction ? window.hemmaPopupAction() : 'more-info';
+      ]]]
+    entity: '[[[ return variables.entity_power || entity?.entity_id; ]]]'
 
   # hold_action comes from hemma_popup_energy (this room's energy popup).
   double_tap_action:

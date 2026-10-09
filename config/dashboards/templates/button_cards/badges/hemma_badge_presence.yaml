@@ -3,13 +3,18 @@ hemma_badge_presence:
 
   variables:
     enabled: true
+    battery_entity: null
+    icon: null
 
   show_state: false
   show_label: false
   show_entity_picture: >
-    [[[ return !!entity?.attributes?.entity_picture; ]]]
+    [[[ return !!variables.icon || !!entity?.attributes?.entity_picture; ]]]
   show_icon: >
-    [[[ return !entity?.attributes?.entity_picture; ]]]
+    [[[ return !variables.icon && !entity?.attributes?.entity_picture; ]]]
+
+  entity_picture: >
+    [[[ return variables.icon ? window.hemmaIconUrl(variables.icon) : entity?.attributes?.entity_picture; ]]]
 
   extra_styles: >
     [[[
@@ -96,11 +101,14 @@ hemma_badge_presence:
                                   raw;
 
       const esc = (t) => String(t || '').replaceAll('"','&quot;');
+      const batteryId = variables.battery_entity;
+      const batteryValue = batteryId ? parseFloat(states[batteryId]?.state) : NaN;
+      const battery = Number.isFinite(batteryValue) ? ` · ${Math.round(batteryValue)}%` : '';
 
       return `
         <div class="badge-wrap">
           <div class="badge-title">${esc(friendly)}</div>
-          <div class="badge-sub">${esc(status)}</div>
+          <div class="badge-sub">${esc(status + battery)}</div>
         </div>
       `;
     ]]]

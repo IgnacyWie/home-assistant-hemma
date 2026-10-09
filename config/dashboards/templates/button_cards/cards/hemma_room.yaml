@@ -108,6 +108,12 @@ hemma_room:
     presence_entity_2:
     presence_entity_3:
     presence_entity_4:
+    presence_battery_entity_1:
+    presence_icon_1: null
+
+    wake_alarm_enabled_entity: null
+    wake_alarm_time_entity: null
+    wake_alarm_icon: alarm
 
     pause_timeout_minutes: 10
 
@@ -683,10 +689,7 @@ hemma_room:
         - align-self: start !important
         - place-self: start !important
         - text-align: left !important
-        - margin-left: >
-            calc(
-              var(--hero-room-name-margin-left-current, 0px) +
-              var(--hemma-header-badge-nudge, 0px))
+        - margin-left: var(--hero-room-name-margin-left-current, 0px)
         - margin-right: auto !important
         - width: max-content
         - max-width: 100%
@@ -710,10 +713,7 @@ hemma_room:
         - align-self: start !important
         - place-self: start !important
         - text-align: left !important
-        - margin-left: >
-            calc(
-              var(--hero-room-name-margin-left-current, 0px) +
-              var(--hemma-header-badge-nudge, 0px))
+        - margin-left: var(--hero-room-name-margin-left-current, 0px)
         - margin-right: auto !important
         - width: max-content
         - max-width: 100%
@@ -805,10 +805,7 @@ hemma_room:
         - align-self: start !important
         - place-self: start !important
         - text-align: left !important
-        - margin-left: >
-            calc(
-              var(--hero-room-name-margin-left-current, 0px) +
-              var(--hemma-header-badge-nudge, 0px))
+        - margin-left: var(--hero-room-name-margin-left-current, 0px)
         - margin-right: auto !important
         - width: max-content
         - max-width: 100%
@@ -1046,10 +1043,7 @@ hemma_room:
         - align-self: start !important
         - place-self: start !important
         - text-align: left !important
-        - margin-left: >
-            calc(
-              var(--hero-room-name-margin-left-current, 0px) +
-              var(--hemma-header-badge-nudge, 0px))
+        - margin-left: var(--hero-room-name-margin-left-current, 0px)
         - margin-right: auto !important
         - width: max-content
         - max-width: 100%
@@ -1141,10 +1135,7 @@ hemma_room:
         - align-self: start !important
         - place-self: start !important
         - text-align: left !important
-        - margin-left: >
-            calc(
-              var(--hero-room-name-margin-left-current, 0px) +
-              var(--hemma-header-badge-nudge, 0px))
+        - margin-left: var(--hero-room-name-margin-left-current, 0px)
         - margin-right: auto !important
         - width: max-content
         - max-width: 100%
@@ -1236,10 +1227,7 @@ hemma_room:
         - align-self: start !important
         - place-self: start !important
         - text-align: left !important
-        - margin-left: >
-            calc(
-              var(--hero-room-name-margin-left-current, 0px) +
-              var(--hemma-header-badge-nudge, 0px))
+        - margin-left: var(--hero-room-name-margin-left-current, 0px)
         - margin-right: auto !important
         - width: max-content
         - max-width: 100%
@@ -1573,7 +1561,7 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+          grid-column-gap: 0px
 
         card_mod:
           style: |
@@ -1621,6 +1609,15 @@ hemma_room:
               icon: '[[[ return variables.scene_icon_4 ]]]'
               active_entity: '[[[ return variables.scene_active_entity_4 ]]]'
               service: '[[[ return variables.scene_service_4 || "scene.turn_on" ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_wake_alarm
+            entity: '[[[ return variables.wake_alarm_enabled_entity ]]]'
+            variables:
+              enabled: '[[[ return !!variables.wake_alarm_enabled_entity && !!variables.wake_alarm_time_entity ]]]'
+              enabled_entity: '[[[ return variables.wake_alarm_enabled_entity ]]]'
+              time_entity: '[[[ return variables.wake_alarm_time_entity ]]]'
+              icon: '[[[ return variables.wake_alarm_icon || "alarm" ]]]'
 
           - type: custom:button-card
             template: hemma_badge_climate_group
@@ -1716,6 +1713,8 @@ hemma_room:
             entity: '[[[ return variables.presence_entity_1 ]]]'
             variables:
               enabled: '[[[ return variables.show_people!==false && !!(!!variables.presence_entity_1 && variables.presence_entity_1 && !variables.presence_entity_2) ]]]'
+              battery_entity: '[[[ return variables.presence_battery_entity_1 ]]]'
+              icon: '[[[ return variables.presence_icon_1 ]]]'
 
           - type: custom:button-card
             template: hemma_badge_media_group
@@ -1777,7 +1776,7 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+          grid-column-gap: 0px
 
         cards:
           - type: custom:button-card
@@ -1835,7 +1834,7 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+          grid-column-gap: 0px
 
         cards:
           - type: custom:button-card
@@ -2519,7 +2518,7 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+          grid-column-gap: 0px
 
         cards:
           - type: custom:button-card
@@ -2724,7 +2723,7 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+          grid-column-gap: 0px
 
         cards:
           - type: custom:button-card
@@ -2807,7 +2806,7 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: var(--badge-gap-current, var(--badge-gap, 10px))
+          grid-column-gap: 0px
 
         cards:
           - type: custom:button-card

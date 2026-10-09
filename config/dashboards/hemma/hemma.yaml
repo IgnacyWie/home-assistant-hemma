@@ -25,7 +25,11 @@ views:
             - livingroom-demo
             - bedroom-demo
           weather_entity: weather.forecast_home
-          presence_entity_1: person.example_user
+          presence_entity_1: person.ignacy_wie
+          presence_battery_entity_1: sensor.phi_battery_level
+          presence_icon_1: iphone
+          wake_alarm_enabled_entity: input_boolean.wake_up_enabled
+          wake_alarm_time_entity: input_datetime.wake_up_time
           scene_entity_1: scene.welcome_home
           scene_label_1: Welcome Home
           scene_icon_1: fireplace-home-v1
@@ -88,12 +92,55 @@ views:
             name: Zeppelin
             variables:
               icon: zeppelin-speaker-v2
-          - type: custom:button-card
-            template: hemma_entity
-            entity: person.example_user
-            name: Resident
-            variables:
-              icon: iphone
+
+          - type: conditional
+            conditions:
+              - entity: fan.bathroom_fan_bathroom
+                state: 'on'
+            card:
+              type: custom:button-card
+              template: hemma_fan
+              entity: fan.bathroom_fan_bathroom
+              name: Bathroom Fan
+              variables:
+                icon: fan
+
+          - type: conditional
+            conditions:
+              - entity: switch.bathroom_lamp
+                state: 'on'
+            card:
+              type: custom:button-card
+              template: hemma_entity
+              entity: switch.bathroom_lamp
+              name: Bathroom Lamp
+              variables:
+                icon: lightbulb-variant-outline
+                show_toggle: true
+
+          - type: conditional
+            conditions:
+              - entity: light.bedroom_accent_bedroom
+                state: 'on'
+            card:
+              type: custom:button-card
+              template: hemma_light
+              entity: light.bedroom_accent_bedroom
+              name: Bedroom Accent
+              variables:
+                icon: lightbulb-variant-outline
+
+          - type: conditional
+            conditions:
+              - entity: light.3_in_1_controller_wifi_2_4g
+                state: 'on'
+            card:
+              type: custom:button-card
+              template: hemma_light
+              entity: light.3_in_1_controller_wifi_2_4g
+              name: Bedroom LED Strip
+              variables:
+                icon: led-strip-variant
 
   - type: custom:grid-layout
     title: Living Room
@@ -243,6 +290,8 @@ views:
           preload_rooms: *room_images
           light_entity_1: light.bedroom_accent_bedroom
           light_entity_2: light.3_in_1_controller_wifi_2_4g
+          wake_alarm_enabled_entity: input_boolean.wake_up_enabled
+          wake_alarm_time_entity: input_datetime.wake_up_time
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
         cards:
@@ -266,23 +315,6 @@ views:
             tap_action:
               action: more-info
               entity: light.3_in_1_controller_wifi_2_4g
-          - type: custom:button-card
-            template: hemma_entity
-            entity: input_boolean.wake_up_enabled
-            name: Wake-up Alarm
-            variables:
-              icon: alarm
-              show_toggle: true
-            state_display: |
-              [[[
-                const enabled = states['input_boolean.wake_up_enabled']?.state === 'on';
-                const raw = states['input_datetime.wake_up_time']?.state || '';
-                const time = raw.length >= 5 ? raw.slice(0, 5) : '--:--';
-                return `${enabled ? 'On' : 'Off'} · ${time}`;
-              ]]]
-            hold_action:
-              action: more-info
-              entity: input_datetime.wake_up_time
           - type: custom:button-card
             template: hemma_entity
             entity: input_button.stop_wake_up_music
