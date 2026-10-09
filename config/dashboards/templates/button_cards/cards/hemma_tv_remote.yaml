@@ -96,6 +96,11 @@ hemma_tv_remote_button:
       width: 26px;
       height: 26px;
     }
+    img {
+      width: 30px;
+      height: 30px;
+      display: block;
+    }
     ha-card:active {
       transform: scale(0.94) !important;
     }
@@ -131,8 +136,8 @@ hemma_tv_app_button:
   entity: media_player.living_room_tv_2
   tap_action:
     haptic: light
-    action: call-service
-    service: media_player.play_media
+    action: perform-action
+    perform_action: media_player.play_media
     target:
       entity_id: media_player.living_room_tv_2
     data:
@@ -159,7 +164,7 @@ hemma_tv_remote_panel:
     card:
       - width: calc(var(--popup-min-width, 360px) - 32px)
       - max-width: 100%
-      - min-height: 502px
+      - min-height: 400px
       - padding: 0
       - box-sizing: border-box
       - border-radius: 0
@@ -167,9 +172,9 @@ hemma_tv_remote_panel:
       - box-shadow: none !important
       - border: none !important
     grid:
-      - grid-template-areas: '"back home pause" ". up ." "left select right" ". down ." "vol_down mute vol_up" "jellyfin youtube ."'
+      - grid-template-areas: '"back home pause" "jellyfin up youtube" "left select right" ". down ." "vol_down mute vol_up"'
       - grid-template-columns: repeat(3, 1fr)
-      - grid-template-rows: repeat(6, 72px)
+      - grid-template-rows: repeat(5, 72px)
       - column-gap: 10px
       - row-gap: 10px
     custom_fields:
@@ -333,9 +338,9 @@ hemma_tv_remote_panel:
         template: hemma_tv_app_button
         variables:
           app_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
-          glyph: '<ha-icon icon="mdi:play-box-outline"></ha-icon>'
+          glyph: '<img src="/local/hemma/icons/jellyfin-purple.svg" alt="Jellyfin">'
           label: Jellyfin
-          accent: '#ff8a3d'
+          accent: 'var(--hemma-color-purple, #9333ea)'
     youtube:
       card:
         type: custom:button-card
