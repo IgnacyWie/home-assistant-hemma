@@ -10,7 +10,7 @@ input_boolean:
 
   jellyfin_cinema_mode_enabled:
     name: Cinema Mode
-    initial: on
+    initial: off
     icon: mdi:popcorn
 
   hemma_dashboard_redirect:
