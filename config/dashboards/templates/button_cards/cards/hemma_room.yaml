@@ -1561,23 +1561,35 @@ hemma_room:
           justify-content: start
           justify-items: start
           align-items: center
-          grid-column-gap: 0px
-          column-gap: 0px
+          # Own the spacing in one place instead of inheriting layout-card's
+          # per-card margins, which doubled the gap around hidden badge types.
+          grid-column-gap: "var(--badge-gap-current, var(--badge-gap, 10px))"
+          column-gap: "var(--badge-gap-current, var(--badge-gap, 10px))"
           row-gap: 0px
-          gap: 0px
+          gap: "0 var(--badge-gap-current, var(--badge-gap, 10px))"
+          margin: 0
+          padding: 0
 
         card_mod:
           style: |
+            :host {
+              display: block !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
             ha-card {
               overflow: visible !important;
               margin: 0 !important;
+              padding: 0 !important;
             }
             #root,
             .layout {
-              gap: 0 !important;
-              grid-gap: 0 !important;
-              column-gap: 0 !important;
+              gap: 0 var(--badge-gap-current, var(--badge-gap, 10px)) !important;
+              grid-gap: 0 var(--badge-gap-current, var(--badge-gap, 10px)) !important;
+              column-gap: var(--badge-gap-current, var(--badge-gap, 10px)) !important;
               row-gap: 0 !important;
+              margin: 0 !important;
+              padding: 0 !important;
             }
             #root > *,
             .layout > * {
