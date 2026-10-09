@@ -1054,7 +1054,10 @@ Hemma:
 
 
         hui-view-container {
-          overflow-y: visible !important;
+          height: 100vh !important;
+          max-height: 100vh !important;
+          overflow-y: hidden !important;
+          scrollbar-width: none !important;
         }
 
         #view,
@@ -1078,7 +1081,15 @@ Hemma:
 
       hui-view-container {
         overflow-x: hidden !important;
+        overflow-y: hidden !important;
         max-width: 100vw !important;
+        scrollbar-width: none !important;
+      }
+
+      #view::-webkit-scrollbar,
+      hui-view::-webkit-scrollbar,
+      hui-view-container::-webkit-scrollbar {
+        display: none !important;
       }
 
       :host {
@@ -1532,7 +1543,9 @@ Hemma:
     ha-app-layout: |
       @media (max-width: 767px) and (orientation: portrait) {
         #view {
-          overflow-y: visible !important;
+          height: 100vh !important;
+          max-height: 100vh !important;
+          overflow-y: hidden !important;
           overscroll-behavior: none !important;
           scrollbar-width: none !important;
         }

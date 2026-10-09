@@ -6,6 +6,9 @@ hemma_badge_wake_alarm:
     enabled_entity: input_boolean.wake_up_enabled
     time_entity: input_datetime.wake_up_time
     icon: alarm
+    evening_only: true
+    evening_start: 18
+    evening_end: 3
 
   show_state: false
   show_label: false
@@ -17,8 +20,21 @@ hemma_badge_wake_alarm:
 
   extra_styles: >
     [[[
-      const enabled = !!variables.enabled_entity && !!variables.time_entity;
-      return `:host { display: ${enabled ? 'inline-block' : 'none'} !important; }`;
+      const value = variables?.enabled;
+      const enabled = (value === undefined || value === null) ? true :
+        (typeof value === 'boolean') ? value :
+        (typeof value === 'number') ? value !== 0 :
+        !['false','0','no','off','disabled'].includes(String(value).trim().toLowerCase());
+      states['sensor.time'];
+      const hour = new Date().getHours();
+      const start = Number(variables.evening_start ?? 18);
+      const end = Number(variables.evening_end ?? 3);
+      const evening = start === end ? true
+        : start < end ? hour >= start && hour < end
+        : hour >= start || hour < end;
+      const visible = enabled && !!variables.enabled_entity && !!variables.time_entity
+        && (variables.evening_only === false || evening);
+      return `:host { display: ${visible ? 'inline-block' : 'none'} !important; order:-15; }`;
     ]]]
 
   tap_action:
@@ -79,25 +95,15 @@ hemma_badge_wake_alarm:
 
   styles:
     card:
+      - background: var(--badge-background, rgba(10,12,14,0.65))
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
+    entity_picture:
       - background: >
           [[[
             return entity?.state === 'on'
-              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
-              : 'var(--badge-background, rgba(10,12,14,0.65))';
+              ? 'var(--hemma-badge-scheduled-color, #0A84FF)'
+              : 'rgba(255,255,255,0.10)';
           ]]]
-      - --badge-title-color: >
-          [[[
-            return entity?.state === 'on'
-              ? 'rgba(0,0,0,0.85)'
-              : 'var(--primary-text-color)';
-          ]]]
-      - --badge-sub-color: >
-          [[[
-            return entity?.state === 'on'
-              ? 'rgba(0,0,0,0.60)'
-              : 'var(--secondary-text-color)';
-          ]]]
-    entity_picture:
-      - background: '#FF9500'
       - padding: 5px
       - box-sizing: border-box

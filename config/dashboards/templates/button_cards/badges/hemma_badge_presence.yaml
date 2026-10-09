@@ -34,8 +34,7 @@ hemma_badge_presence:
           object-fit: contain !important;
           padding: 5px !important;
           box-sizing: border-box !important;
-        }
-        :host ha-card { --hemma-badge-icon-bg: rgba(255,255,255,0.10); }`;
+        }`;
     ]]]
 
   styles:
@@ -79,6 +78,13 @@ hemma_badge_presence:
             return (s === 'home' || s === 'just arrived')
               ? 'var(--secondary-text-color)'
               : 'color-mix(in oklab, var(--secondary-text-color) 70%, transparent)';
+          ]]]
+      - --hemma-badge-icon-bg: >
+          [[[
+            const s = String(entity?.state || '').toLowerCase().replace(/_/g, ' ');
+            return (s === 'home' || s === 'just arrived')
+              ? 'var(--hemma-badge-healthy-color, #30D158)'
+              : 'rgba(255,255,255,0.10)';
           ]]]
     icon:
       - filter: var(--presence-filter)

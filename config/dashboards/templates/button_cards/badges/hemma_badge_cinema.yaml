@@ -32,25 +32,10 @@ hemma_badge_cinema:
 
   styles:
     card:
-      - background: >
-          [[[
-            return entity?.state === 'on'
-              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
-              : 'var(--badge-background, rgba(10,12,14,0.65))';
-          ]]]
-      - --badge-title-color: >
-          [[[
-            return entity?.state === 'on'
-              ? 'rgba(0,0,0,0.85)'
-              : 'var(--primary-text-color)';
-          ]]]
-      - --badge-sub-color: >
-          [[[
-            return entity?.state === 'on'
-              ? 'rgba(0,0,0,0.60)'
-              : 'var(--secondary-text-color)';
-          ]]]
+      - background: var(--badge-background, rgba(10,12,14,0.65))
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
     entity_picture:
-      - background: '#FF453A'
+      - background: '#FF9500'
       - padding: 5px
       - box-sizing: border-box

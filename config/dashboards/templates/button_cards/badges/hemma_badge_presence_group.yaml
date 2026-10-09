@@ -76,12 +76,7 @@ hemma_badge_presence_group:
 
   styles:
     card:
-      - background: >
-          [[[
-            return entity?.state === 'presence'
-              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
-              : 'var(--badge-background, rgba(10,12,14,0.65))';
-          ]]]
+      - background: var(--badge-background, rgba(10,12,14,0.65))
       - display: >
           [[[
             const v = variables?.enabled;
@@ -93,38 +88,19 @@ hemma_badge_presence_group:
             const hasAny = !!(variables?.entity_1 || variables?.entity_2 || variables?.entity_3 || variables?.entity_4);
             return (enabled && hasAny) ? 'inline-grid' : 'none';
           ]]]
-      - --badge-title-color: >
-          [[[
-            return entity?.state === 'presence' ? 'rgba(0,0,0,0.85)' : 'var(--primary-text-color)';
-          ]]]
-      - --badge-sub-color: >
-          [[[
-            return entity?.state === 'presence' ? 'rgba(0,0,0,0.6)' : 'var(--secondary-text-color)';
-          ]]]
-      - --hemma-badge-presence-away-color: >
-          [[[
-            return entity?.state === 'presence'
-              ? 'var(--hemma-color-yellow-dark, #F4C403)'
-              : 'var(--hemma-color-yellow, #FFCC00)';
-          ]]]
-      - --hemma-badge-icon-inactive: >
-          [[[
-            return entity?.state === 'presence'
-              ? 'var(--badge-title-inactive-selected, rgba(0,0,0,0.7))'
-              : 'var(--badge-title-inactive)';
-          ]]]
-      - --hemma-badge-icon-color: >
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
+      - --hemma-badge-icon-color: white
+      - --hemma-badge-icon-bg: >
           [[[
             const isHome = (eid) => {
-              if (!eid) return false;
               const s = String(hass.states[eid]?.state || '').toLowerCase().replace(/_/g, ' ');
               return s === 'home' || s === 'just arrived';
             };
             const entities = [variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4].filter(Boolean);
-            const homeCount = entities.filter(isHome).length;
-            if (homeCount === entities.length) return 'var(--hemma-badge-presence-home-color)';
-            if (homeCount === 0)               return 'var(--hemma-badge-icon-inactive, var(--badge-title-inactive))';
-            return 'var(--hemma-badge-presence-away-color)';
+            return entities.some(isHome)
+              ? 'var(--hemma-badge-healthy-color, #30D158)'
+              : 'rgba(255,255,255,0.10)';
           ]]]
       - --icon-primary-color: var(--hemma-badge-icon-color)
       - --paper-item-icon-color: var(--hemma-badge-icon-color)

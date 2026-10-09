@@ -5,9 +5,14 @@ margin: 0
 padding: 0
 position: relative
 # Header floats over the view; subtracting its height strands the tile row.
-min-height: 100svh
+height: 100vh
+min-height: 100vh
+max-height: 100vh
+overflow: hidden
 
 mediaquery:
   "(max-width: 767px) and (orientation: portrait), (max-height: 500px) and (orientation: portrait)":
-    min-height: 100dvh
-    overflow: visible
+    height: 100vh
+    min-height: 100vh
+    max-height: 100vh
+    overflow: hidden

@@ -1,0 +1,77 @@
+hemma_badge_low_battery:
+  template: [hemma_badge_base, hemma_popup_battery]
+
+  variables:
+    enabled: true
+    threshold: 20
+    batteries: null
+
+  show_state: false
+  show_label: false
+  show_icon: true
+  icon: mdi:battery-alert-variant-outline
+
+  hold_action:
+    action: more-info
+  double_tap_action:
+    action: none
+
+  styles:
+    card:
+      - display: >
+          [[[
+            const v = variables?.enabled;
+            const enabled = (v === undefined || v === null) ? true :
+              (typeof v === 'boolean') ? v :
+              (typeof v === 'number') ? v !== 0 :
+              !['false','0','no','off','disabled'].includes(String(v).trim().toLowerCase());
+            if (!enabled) return 'none';
+            const ids = Array.isArray(variables.batteries) ? variables.batteries.filter(Boolean) : [];
+            const threshold = Number(variables.threshold ?? 20);
+            const low = ids.map(id => states[id]).filter(Boolean).some(e => {
+              const n = parseFloat(e.state);
+              return Number.isFinite(n) && n < threshold;
+            });
+            return low ? 'inline-grid' : 'none';
+          ]]]
+      - background: var(--badge-background, rgba(10,12,14,0.65))
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
+      - --hemma-badge-icon-bg: var(--hemma-badge-attention-color, #FF453A)
+      - --icon-primary-color: white
+      - --paper-item-icon-color: white
+      - --state-icon-color: white
+    icon:
+      - color: white
+
+  name: >
+    [[[
+      const ids = Array.isArray(variables.batteries) ? variables.batteries.filter(Boolean) : [];
+      const threshold = Number(variables.threshold ?? 20);
+      const low = ids.map(id => states[id]).filter(Boolean).map(e => ({
+        entity: e,
+        level: parseFloat(e.state)
+      })).filter(x => Number.isFinite(x.level) && x.level < threshold)
+        .sort((a, b) => a.level - b.level);
+      const count = low.length;
+      const lowest = count ? Math.round(low[0].level) : null;
+      const title = count === 1 ? 'Low Battery' : `${count} Low Batteries`;
+      const sub = lowest === null ? '' : `Lowest ${lowest}%`;
+      return `<div class="badge-wrap"><div class="badge-title">${title}</div>${sub ? `<div class="badge-sub">${sub}</div>` : ''}</div>`;
+    ]]]
+
+  extra_styles: >
+    [[[
+      const v = variables?.enabled;
+      const enabled = (v === undefined || v === null) ? true :
+        (typeof v === 'boolean') ? v :
+        (typeof v === 'number') ? v !== 0 :
+        !['false','0','no','off','disabled'].includes(String(v).trim().toLowerCase());
+      const ids = Array.isArray(variables.batteries) ? variables.batteries.filter(Boolean) : [];
+      const threshold = Number(variables.threshold ?? 20);
+      const low = enabled && ids.map(id => states[id]).filter(Boolean).some(e => {
+        const n = parseFloat(e.state);
+        return Number.isFinite(n) && n < threshold;
+      });
+      return `:host{display:${low ? 'inline-block' : 'none'} !important;order:-30;}`;
+    ]]]

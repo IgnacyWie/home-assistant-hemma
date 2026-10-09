@@ -35,11 +35,22 @@ views:
           scene_icon_1: fireplace-home-v1
           scene_active_entity_1: binary_sensor.welcome_home_scene_active
           scene_service_1: scene.turn_on
-          scene_entity_2: script.leave_home
-          scene_label_2: Leave Home
-          scene_icon_2: door-open
-          scene_active_entity_2: binary_sensor.leave_home_scene_active
-          scene_service_2: script.turn_on
+          active_devices_enabled: true
+          active_devices_leaving_entity: person.ignacy_wie
+          active_devices_all_off_entity: script.leave_home
+          active_device_entity_1: light.bedroom_accent_bedroom
+          active_device_entity_2: light.living_room_accent_1
+          active_device_entity_3: light.living_room_2ch_wi_fi_switch_module_switch_2
+          active_device_entity_4: light.living_room_2ch_wi_fi_switch_module_2_switch_1
+          active_device_entity_5: light.living_room_2ch_wi_fi_switch_module_2_switch_2
+          active_device_entity_6: light.living_room_2ch_wi_fi_switch_module_switch_1
+          active_device_entity_7: light.living_room_balcony
+          active_device_entity_8: light.3_in_1_controller_wifi_2_4g
+          active_device_entity_9: light.bedroom_ikea_of_sweden_grillplats_plug
+          active_device_entity_10: switch.ikea_of_sweden_grillplats_plug_2
+          active_device_entity_11: fan.bathroom_fan_bathroom
+          active_device_entity_12: media_player.zeppelin
+          active_device_entity_13: media_player.living_room_tv_2
           media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
           light_entity_1: light.living_room_accent_1
@@ -47,6 +58,7 @@ views:
           light_entity_3: light.sonoff_zbminil2
           light_entity_4: light.living_room_2ch_wi_fi_switch_module_2_switch_2
           energy_power_entity: sensor.lsc_smart_power_plug_power
+          energy_prominence_threshold: 1000
           energy_usage_month: sensor.lsc_smart_power_plug_monthly_energy
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
@@ -92,55 +104,6 @@ views:
             name: Zeppelin
             variables:
               icon: zeppelin-speaker-v2
-
-          - type: conditional
-            conditions:
-              - entity: fan.bathroom_fan_bathroom
-                state: 'on'
-            card:
-              type: custom:button-card
-              template: hemma_fan
-              entity: fan.bathroom_fan_bathroom
-              name: Bathroom Fan
-              variables:
-                icon: fan
-
-          - type: conditional
-            conditions:
-              - entity: switch.bathroom_lamp
-                state: 'on'
-            card:
-              type: custom:button-card
-              template: hemma_entity
-              entity: switch.bathroom_lamp
-              name: Bathroom Lamp
-              variables:
-                icon: lightbulb-variant-outline
-                show_toggle: true
-
-          - type: conditional
-            conditions:
-              - entity: light.bedroom_accent_bedroom
-                state: 'on'
-            card:
-              type: custom:button-card
-              template: hemma_light
-              entity: light.bedroom_accent_bedroom
-              name: Bedroom Accent
-              variables:
-                icon: lightbulb-variant-outline
-
-          - type: conditional
-            conditions:
-              - entity: light.3_in_1_controller_wifi_2_4g
-                state: 'on'
-            card:
-              type: custom:button-card
-              template: hemma_light
-              entity: light.3_in_1_controller_wifi_2_4g
-              name: Bedroom LED Strip
-              variables:
-                icon: led-strip-variant
 
   - type: custom:grid-layout
     title: Living Room

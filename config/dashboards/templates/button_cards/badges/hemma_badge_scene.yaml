@@ -47,23 +47,10 @@ hemma_badge_scene:
 
   styles:
     card:
-      - background: >
-          [[[
-            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
-            return active
-              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
-              : 'var(--badge-background, rgba(10,12,14,0.65))';
-          ]]]
-      - --badge-title-color: >
-          [[[
-            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
-            return active ? 'rgba(0,0,0,0.85)' : 'var(--primary-text-color)';
-          ]]]
-      - --badge-sub-color: >
-          [[[
-            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
-            return active ? 'rgba(0,0,0,0.60)' : 'var(--secondary-text-color)';
-          ]]]
+      # Actions and scenes keep the pill quiet; orange belongs to the icon.
+      - background: var(--badge-background, rgba(10,12,14,0.65))
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
     entity_picture:
       - background: '#FF9500'
       - padding: 5px

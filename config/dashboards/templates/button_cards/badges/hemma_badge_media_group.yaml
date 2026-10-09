@@ -21,8 +21,6 @@ hemma_badge_media_group:
     entity_12: null
     entity_13: null
     entity_14: null
-    # Count of live PC sources (Discord / Steam), computed by hemma_room.
-    pc_count: 0
 
   show_state: false
   show_label: false
@@ -63,19 +61,7 @@ hemma_badge_media_group:
           if (!s) return false;
           const st = String(s.state || '').toLowerCase();
           if (['unavailable','unknown','off','standby'].includes(st)) return false;
-          if (['playing','buffering','on'].includes(st)) return true;
-          const a = s.attributes || {};
-          const hasContent = !!(
-            String(a.media_title || '').trim() ||
-            String(a.media_artist || a.artist || a.media_album_artist || '').trim()
-          );
-          if (!hasContent) return false;
-          if (st === 'paused') {
-            const timeout = Number(variables?.pause_timeout_minutes ?? 10);
-            if (timeout <= 0) return true;
-            return ((new Date() - new Date(s.last_changed)) / 60000) <= timeout;
-          }
-          return st === 'idle';
+          return ['playing','buffering'].includes(st);
         };
 
 
@@ -86,7 +72,7 @@ hemma_badge_media_group:
           variables?.entity_13, variables?.entity_14
         ].filter(Boolean);
 
-        const activeCount = eids.filter(e => isActive(e)).length + Number(variables?.pc_count || 0);
+        const activeCount = eids.filter(e => isActive(e)).length;
         return activeCount > 0 ? 'inline-grid' : 'none';
       })();
       const _hide = String(_d).trim() === 'none';
@@ -154,19 +140,7 @@ hemma_badge_media_group:
               if (!s) return false;
               const st = String(s.state || '').toLowerCase();
               if (['unavailable','unknown','off','standby'].includes(st)) return false;
-              if (['playing','buffering','on'].includes(st)) return true;
-              const a = s.attributes || {};
-              const hasContent = !!(
-                String(a.media_title || '').trim() ||
-                String(a.media_artist || a.artist || a.media_album_artist || '').trim()
-              );
-              if (!hasContent) return false;
-              if (st === 'paused') {
-                const timeout = Number(variables?.pause_timeout_minutes ?? 10);
-                if (timeout <= 0) return true;
-                return ((new Date() - new Date(s.last_changed)) / 60000) <= timeout;
-              }
-              return st === 'idle';
+              return ['playing','buffering'].includes(st);
             };
 
 
@@ -177,7 +151,7 @@ hemma_badge_media_group:
               variables?.entity_13, variables?.entity_14
             ].filter(Boolean);
 
-            const activeCount = eids.filter(e => isActive(e)).length + Number(variables?.pc_count || 0);
+            const activeCount = eids.filter(e => isActive(e)).length;
             return activeCount > 0 ? 'inline-grid' : 'none';
           ]]]
       - --badge-title-color: >
@@ -207,19 +181,7 @@ hemma_badge_media_group:
         if (!s) return false;
         const st = String(s.state || '').toLowerCase();
         if (['unavailable','unknown','off','standby'].includes(st)) return false;
-        if (['playing','buffering','on'].includes(st)) return true;
-        const a = s.attributes || {};
-        const hasContent = !!(
-          String(a.media_title || '').trim() ||
-          String(a.media_artist || a.artist || a.media_album_artist || '').trim()
-        );
-        if (!hasContent) return false;
-        if (st === 'paused') {
-          const timeout = Number(variables?.pause_timeout_minutes ?? 10);
-          if (timeout <= 0) return true;
-          return ((new Date() - new Date(s.last_changed)) / 60000) <= timeout;
-        }
-        return st === 'idle';
+        return ['playing','buffering'].includes(st);
       };
 
 
@@ -230,7 +192,7 @@ hemma_badge_media_group:
         variables?.entity_13, variables?.entity_14
       ].filter(Boolean);
 
-      const activeCount = eids.filter(e => isActive(e)).length + Number(variables?.pc_count || 0);
+      const activeCount = eids.filter(e => isActive(e)).length;
       const T = window._hemmaT || ((k, en, v) => String(en).replace(/\{(\w+)\}/g,
         (m, p) => (v && Object.prototype.hasOwnProperty.call(v, p) ? String(v[p]) : m)));
       const sub = activeCount === 0 ? T('media.none_playing', 'None Playing')

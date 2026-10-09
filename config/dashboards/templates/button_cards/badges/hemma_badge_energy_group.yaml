@@ -9,6 +9,7 @@ hemma_badge_energy_group:
   variables:
     enabled: true
     power_entity: null
+    prominence_threshold: 1000
     # Which input_select drives the active state (mobile swaps in its filter).
     row_entity: input_select.hemma_expanded_row
 
@@ -28,12 +29,7 @@ hemma_badge_energy_group:
 
   styles:
     card:
-      - background: >
-          [[[
-            return states[variables.row_entity]?.state === 'energy'
-              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
-              : 'var(--badge-background, rgba(10,12,14,0.65))';
-          ]]]
+      - background: var(--badge-background, rgba(10,12,14,0.65))
       - display: >
           [[[
             const ev = variables?.enabled;
@@ -43,31 +39,11 @@ hemma_badge_energy_group:
               !['false','0','no','off','disabled'].includes(String(ev).trim().toLowerCase());
             return enabled ? 'inline-grid' : 'none';
           ]]]
-      - --badge-title-color: >
-          [[[
-            return states[variables.row_entity]?.state === 'energy' ? 'rgba(0,0,0,0.85)' : 'var(--primary-text-color)';
-          ]]]
-      - --badge-sub-color: >
-          [[[
-            return states[variables.row_entity]?.state === 'energy' ? 'rgba(0,0,0,0.6)' : 'var(--secondary-text-color)';
-          ]]]
-      # A bare yellow glyph washes out on the white selected pill; deepen it there.
-      - --hemma-badge-energy-medium-color: >
-          [[[
-            return states[variables.row_entity]?.state === 'energy'
-              ? 'var(--hemma-color-yellow-dark, #F4C403)'
-              : 'var(--hemma-color-yellow, #FFCC00)';
-          ]]]
-      - --hemma-badge-icon-color: >
-          [[[
-            const pid = variables.power_entity || variables.entity_power;
-            const w = pid ? parseFloat(states[pid]?.state) : NaN;
-            if (!Number.isFinite(w)) return 'var(--hemma-badge-energy-color, #30D158)';
-            if (w >= Number(variables.extreme_threshold ?? 3000)) return 'var(--hemma-badge-energy-very-high-color, #FF4245)';
-            if (w >= Number(variables.heavy_threshold   ?? 1000)) return 'var(--hemma-badge-energy-high-color, #FF9230)';
-            if (w >= Number(variables.normal_threshold  ?? 200))  return 'var(--hemma-badge-energy-medium-color, #FFD600)';
-            return 'var(--hemma-badge-energy-low-color, #30D158)';
-          ]]]
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
+      # Energy is an informational status and therefore stays neutral.
+      - --hemma-badge-icon-color: var(--hemma-badge-info-color, rgba(255,255,255,0.72))
+      - --hemma-badge-icon-bg: rgba(255,255,255,0.10)
       - --icon-primary-color: var(--hemma-badge-icon-color)
       - --paper-item-icon-color: var(--hemma-badge-icon-color)
       - --state-icon-color: var(--hemma-badge-icon-color)
@@ -101,8 +77,12 @@ hemma_badge_energy_group:
         (typeof ev === 'number') ? ev !== 0 :
         !['false','0','no','off','disabled'].includes(String(ev).trim().toLowerCase());
       const URL = window.hemmaIconUrl('energy');
+      const pid = variables.power_entity || variables.entity_power;
+      const watts = pid ? parseFloat(states[pid]?.state) : NaN;
+      const prominent = Number.isFinite(watts)
+        && watts > Number(variables.prominence_threshold ?? 1000);
 
-      return `:host{display:${enabled ? 'inline-block' : 'none'} !important;order:var(--hemma-badge-order-energy,6);}
+      return `:host{display:${enabled ? 'inline-block' : 'none'} !important;order:${prominent ? '-10' : 'var(--hemma-badge-order-energy,6)'};}
         #img-cell, .img-cell{ position: relative; }
 
         #img-cell #icon, .img-cell #icon{

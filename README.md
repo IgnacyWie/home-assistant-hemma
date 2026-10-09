@@ -20,7 +20,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Energy monitoring with a monotonic utility meter and a Home header chip that shows the current power draw in watts
 - Wake-up alarm controls and a dedicated stop action
 - A **Welcome Home** scene that restores the captured on-lights and keeps all other lighting off
-- A centralized **Leave Home** scene for the bedside double-OFF shutdown and Hemma dashboard
+- A live **What's still on?** Home chip with per-device shutdown controls and one-tap **All Off**
 - Two-hour Lelit espresso-machine safety shutoff with a restart-restorable timer
 - Jellyfin cinema mode with living-room light state restoration
 - Bathroom forgotten-on protection for both bathroom lights
@@ -39,10 +39,22 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
   and native device information on long press.
   Light tiles call `homeassistant.toggle` directly against the card entity;
   their icon control keeps Hemma's snapshot-aware smart toggle.
-- Scene controls use compact Hemma header chips rather than large action tiles. New
+- Header chips use a restrained, neutral pill; the circular icon carries the
+  category or state color. This keeps the row visually quiet while making each
+  chip's purpose predictable.
+- Chip icon colors are assigned by type:
+  - **Orange:** actions and scenes, including **Welcome Home**.
+  - **Neutral:** informational status, including **Energy**.
+  - **Green:** healthy, home, or active status, including **Presence** when
+    someone is home.
+  - **Blue:** scheduled automation, including an enabled or upcoming **Alarm**.
+  - **Red:** attention required, such as a fault, warning, low battery, or an
+    alarm that needs intervention.
+- Scene and whole-home status controls use compact Hemma header chips rather than large action tiles. New
   scenes should follow the `hemma_badge_scene` template, use a circular orange
   HomeKit-style icon, and expose an active-state sensor when one is available.
-- Cinema Mode is also presented as a compact header chip with the popcorn icon.
+- Cinema Mode is also presented as a compact action chip with an orange circular
+  popcorn icon.
 
 ## Screenshots
 
@@ -190,12 +202,12 @@ is temporarily excluded from both Leave Home and its active-state sensor, so it
 cannot block execution or status feedback. Hidden, disabled, diagnostic, and
 infrastructure entities remain excluded.
 
-The bedside double-OFF branch and Hemma **Leave Home** tile both call
+The bedside double-OFF branch and the Home chip's **All Off** action both call
 `script.leave_home`. The script applies `scene.leave_home`, then turns off the
-selected Hemma TV only when needed. `binary_sensor.leave_home_scene_active`
-compares all 13 target states—including only `media_player.living_room_tv_2` for
-the TV—and drives the tile's **Active**/**Inactive** label and active highlight.
-Unknown or unavailable targets do not count as matching.
+selected Hemma TV only when needed. The chip summarizes the same 13-target
+allowlist, opens a compact sheet containing only active devices, and gives each
+device its own turn-off control. It replaces the old one-way **Leave Home** chip
+and the temporary active-device cards on the Home view.
 
 When changing the Leave Home allowlist, update these places together:
 

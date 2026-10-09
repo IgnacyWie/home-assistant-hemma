@@ -31,16 +31,8 @@ hemma_badge_energy:
             const dead = !entity?.entity_id || !st || ['unknown','unavailable'].includes(st);
             return (!enabled || dead) ? 'none' : 'inline-grid';
           ]]]
-      - --hemma-badge-icon-color: >
-          [[[
-            const pid = variables?.entity_power || entity?.entity_id;
-            const w = parseFloat(states[pid]?.state);
-            if (!Number.isFinite(w)) return 'var(--hemma-badge-energy-color, #30D158)';
-            if (w >= Number(variables?.extreme_threshold ?? 3000)) return 'var(--hemma-badge-energy-very-high-color, #FF4245)';
-            if (w >= Number(variables?.heavy_threshold   ?? 1000)) return 'var(--hemma-badge-energy-high-color, #FF9230)';
-            if (w >= Number(variables?.normal_threshold  ?? 200))  return 'var(--hemma-badge-energy-medium-color, #FFD600)';
-            return 'var(--hemma-badge-energy-low-color, #30D158)';
-          ]]]
+      # Energy is informational; the live value carries meaning, not hue.
+      - --hemma-badge-icon-color: var(--hemma-badge-info-color, rgba(255,255,255,0.72))
       - --icon-primary-color: var(--hemma-badge-icon-color)
       - --paper-item-icon-color: var(--hemma-badge-icon-color)
       - --state-icon-color: var(--hemma-badge-icon-color)
