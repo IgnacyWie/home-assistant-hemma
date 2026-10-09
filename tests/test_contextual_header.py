@@ -30,11 +30,12 @@ class ContextualHeaderTests(unittest.TestCase):
         self.assertIn("x.level < threshold", battery)
         self.assertIn("presence_battery_entity_1: sensor.phi_battery_level", dashboard)
 
-    def test_devices_on_requires_an_active_device_without_presence_gating(self):
+    def test_devices_on_is_always_visible_without_presence_gating(self):
         active = (BADGES / "hemma_badge_active_devices.yaml").read_text()
         room = ROOM.read_text()
         dashboard = DASHBOARD.read_text()
-        self.assertIn("enabled && configured.length && active", active)
+        self.assertIn("enabled && configured.length", active)
+        self.assertNotIn("enabled && configured.length && active", active)
         self.assertNotIn("leaving_entity", active)
         self.assertNotIn("active_devices_leaving_entity", room)
         self.assertNotIn("active_devices_leaving_entity", dashboard)

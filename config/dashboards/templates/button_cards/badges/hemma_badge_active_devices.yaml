@@ -39,12 +39,7 @@ hemma_badge_active_devices:
       ].filter(Boolean);
       const v = variables.enabled;
       const enabled = v === true || v === 1 || String(v).toLowerCase() === 'true';
-      const inactiveMedia = ['off', 'idle', 'paused', 'standby', 'unknown', 'unavailable'];
-      const active = configured.some(id => {
-        const state = String(states[id]?.state || '').toLowerCase();
-        return id.startsWith('media_player.') ? !inactiveMedia.includes(state) : state === 'on';
-      });
-      const visible = enabled && configured.length && active;
+      const visible = enabled && configured.length;
       return `:host{display:${visible ? 'inline-block' : 'none'} !important;order:-20;}`;
     ]]]
 
@@ -233,7 +228,7 @@ hemma_badge_active_devices:
               haptic: medium,
               action: 'call-service',
               service: 'script.turn_on',
-              target: { entity_id: 'script.leave_home' }, // entity_id: script.leave_home
+              target: { entity_id: allOffEntity },
             },
             styles: {
               card: [
@@ -298,7 +293,7 @@ hemma_badge_active_devices:
         summary = `${friendly(active[0])} and ${friendly(active[1])} on`;
       } else summary = `${active.length} devices on`;
       const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return `<div class="badge-wrap"><div class="badge-title">Devices On</div><div class="badge-sub">${esc(summary)}</div></div>`;
+      return `<div class="badge-wrap"><div class="badge-title">What's still on?</div><div class="badge-sub">${esc(summary)}</div></div>`;
     ]]]
 
   styles:
@@ -306,6 +301,22 @@ hemma_badge_active_devices:
       - background: var(--badge-background, rgba(10,12,14,0.65))
       - --badge-title-color: var(--primary-text-color)
       - --badge-sub-color: var(--secondary-text-color)
-      - --hemma-badge-icon-bg: var(--hemma-badge-attention-color, #FF453A)
+      - --hemma-badge-icon-bg: >
+          [[[
+            const ids = [
+              variables.entity_1, variables.entity_2, variables.entity_3, variables.entity_4,
+              variables.entity_5, variables.entity_6, variables.entity_7, variables.entity_8,
+              variables.entity_9, variables.entity_10, variables.entity_11, variables.entity_12,
+              variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16
+            ].filter(Boolean);
+            const inactiveMedia = ['off', 'idle', 'paused', 'standby', 'unknown', 'unavailable'];
+            const active = ids.some(id => {
+              const state = String(states[id]?.state || '').toLowerCase();
+              return id.startsWith('media_player.') ? !inactiveMedia.includes(state) : state === 'on';
+            });
+            return active
+              ? 'var(--hemma-badge-attention-color, #FF453A)'
+              : 'var(--hemma-badge-healthy-color, #30D158)';
+          ]]]
     icon:
       - color: white
