@@ -39,8 +39,17 @@ hemma_light:
       };
 
       const seen = new Set();
+      const directMembers = memsOf(entity?.entity_id);
+      const isGroup = directMembers.length > 0
+        || (Array.isArray(variables.lights) && variables.lights.length > 0);
       const all = [...new Set(units(entity?.entity_id, seen))];
       const onCount = all.filter(eid => states[eid]?.state === "on").length;
+
+      if (!isGroup) {
+        const raw = String(states[entity?.entity_id]?.state || entity?.state || '').toLowerCase();
+        if (raw === 'unavailable' || raw === 'unknown') return T('lights.unavailable', 'Unavailable');
+        return raw === 'on' ? T('lights.on', 'On') : T('lights.off', 'Off');
+      }
 
       return onCount === 0 ? T('lights.all_off', 'All Off')
            : onCount === all.length ? T('lights.all_on', 'All On')

@@ -164,6 +164,11 @@ views:
             name: Accent
             variables:
               icon: lightbulb-variant-outline
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.living_room_accent_1
           - type: custom:button-card
             template: hemma_light
             entity: light.living_room_shelves
@@ -179,12 +184,22 @@ views:
             name: TV Overlight
             variables:
               icon: track-light
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.living_room_2ch_wi_fi_switch_module_switch_2
           - type: custom:button-card
             template: hemma_light
             entity: light.living_room_balcony
             name: Balcony
             variables:
               icon: square-ceiling-light
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.living_room_balcony
           - type: custom:button-card
             template: hemma_media
             entity: media_player.living_room_tv_2
@@ -249,6 +264,11 @@ views:
             variables:
               icon: coffee-maker-mdi-v1
               show_toggle: true
+            tap_action:
+              action: call-service
+              service: switch.toggle
+              target:
+                entity_id: switch.ikea_of_sweden_grillplats_plug_2
 
   - type: custom:grid-layout
     title: Bedroom
@@ -273,12 +293,20 @@ views:
             name: Accent
             variables:
               icon: lightbulb-variant-outline
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.bedroom_accent_bedroom
           - type: custom:button-card
             template: hemma_light
             entity: light.3_in_1_controller_wifi_2_4g
             name: LED Strip
             variables:
               icon: led-strip-variant
+            tap_action:
+              action: more-info
+              entity: light.3_in_1_controller_wifi_2_4g
           - type: custom:button-card
             template: hemma_entity
             entity: input_boolean.wake_up_enabled
@@ -330,6 +358,11 @@ views:
             name: LED Strip
             variables:
               icon: led-strip-variant
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.sonoff_zbminil2
           - type: custom:button-card
             template: hemma_entity
             entity: switch.bathroom_lamp
@@ -337,6 +370,11 @@ views:
             variables:
               icon: lightbulb-variant-outline
               show_toggle: true
+            tap_action:
+              action: call-service
+              service: switch.toggle
+              target:
+                entity_id: switch.bathroom_lamp
           - type: custom:button-card
             template: hemma_fan
             entity: fan.bathroom_fan_bathroom
@@ -369,6 +407,11 @@ views:
             name: Wardrobe LED
             variables:
               icon: led-strip-variant
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.living_room_2ch_wi_fi_switch_module_2_switch_2
             styles:
               card:
                 - --hemma-icon-circle-bg: |
