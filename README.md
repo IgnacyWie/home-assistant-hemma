@@ -14,7 +14,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Responsive desktop, tablet, and phone layouts
 - Jellyfin playback metadata, artwork, progress, and transport controls
 - Separate physical TV power controls and Android TV app launchers
-- Touch-friendly living-room TV remote popup with Apple-like D-pad, Home, back, play/pause, mute, volume controls, and compact Jellyfin/YouTube app shortcuts
+- Touch-friendly living-room TV remote popup with an Apple-like D-pad, Home, back, play/pause, compact Jellyfin/YouTube shortcuts, and a live liquid-glass volume slider with integrated mute control
 - Custom HomeKit TV wrapper with iPhone Remote key forwarding
 - Smart light-group toggles that restore the previous member state
 - Energy monitoring with a monotonic utility meter and a Home header chip that shows the current power draw in watts
