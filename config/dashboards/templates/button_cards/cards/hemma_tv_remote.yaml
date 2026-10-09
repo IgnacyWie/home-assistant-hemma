@@ -149,6 +149,287 @@ hemma_tv_app_button:
   hold_action:
     action: more-info
 
+# Use native button-card actions for volume steps. Raw HTML onclick handlers
+# inside a custom field are not reliable in the iOS Home Assistant WebView.
+hemma_tv_volume_step_button:
+  template: hemma_default
+  entity: '[[[ return variables.volume_entity || "media_player.living_room_tv_2"; ]]]'
+  show_icon: false
+  show_name: false
+  show_label: false
+  variables:
+    volume_entity: media_player.living_room_tv_2
+    delta: 0.01
+    glyph: mdi:plus
+    label: Adjust TV volume
+  tap_action:
+    haptic: light
+    action: call-service
+    service: media_player.volume_set
+    target:
+      entity_id: '[[[ return variables.volume_entity; ]]]'
+    data:
+      volume_level: >-
+        [[[
+          const player = states[variables.volume_entity];
+          const current = Number(player?.attributes?.volume_level ?? 0);
+          const delta = Number(variables.delta ?? 0);
+          return Math.max(0, Math.min(0.6, Math.round((current + delta) * 100) / 100));
+        ]]]
+  hold_action:
+    action: none
+  double_tap_action:
+    action: none
+  styles:
+    card:
+      - width: 72px
+      - height: 44px
+      - padding: 0
+      - border-radius: 14px
+      - background: rgba(255,255,255,0.09)
+      - color: rgba(255,255,255,0.94)
+      - border: none !important
+      - box-shadow: none !important
+      - transition: transform 0.12s ease, background 0.12s ease
+    grid:
+      - grid-template-areas: '"g"'
+      - grid-template-columns: 1fr
+      - grid-template-rows: 1fr
+    custom_fields:
+      g:
+        - grid-area: g
+        - align-self: center
+        - justify-self: center
+        - line-height: 1
+  custom_fields:
+    g: >-
+      [[[ return `<ha-icon icon="${variables.glyph}" aria-label="${variables.label}"></ha-icon>`; ]]]
+  extra_styles: |
+    ha-icon {
+      width: 24px;
+      height: 24px;
+      --mdc-icon-size: 24px;
+    }
+    ha-card:active {
+      transform: scale(0.94) !important;
+      background: rgba(255,255,255,0.16) !important;
+    }
+
+hemma_tv_volume_mute_button:
+  template: hemma_tv_volume_step_button
+  variables:
+    volume_entity: media_player.living_room_tv_2
+    label: Mute TV
+  tap_action:
+    haptic: light
+    action: call-service
+    service: media_player.volume_mute
+    target:
+      entity_id: '[[[ return variables.volume_entity; ]]]'
+    data:
+      is_volume_muted: >-
+        [[[
+          return !Boolean(states[variables.volume_entity]?.attributes?.is_volume_muted);
+        ]]]
+  custom_fields:
+    g: >-
+      [[[
+        const muted = Boolean(states[variables.volume_entity]?.attributes?.is_volume_muted);
+        return `<ha-icon icon="mdi:${muted ? 'volume-off' : 'volume-high'}" aria-label="${muted ? 'Unmute TV' : 'Mute TV'}"></ha-icon>`;
+      ]]]
+  styles:
+    card:
+      - color: >-
+          [[[
+            return states[variables.volume_entity]?.attributes?.is_volume_muted
+              ? '#ff453a'
+              : 'rgba(255,255,255,0.94)';
+          ]]]
+      - background: >-
+          [[[
+            return states[variables.volume_entity]?.attributes?.is_volume_muted
+              ? 'rgba(255,69,58,0.15)'
+              : 'rgba(255,255,255,0.09)';
+          ]]]
+
+hemma_tv_volume_control:
+  template: hemma_default
+  entity: '[[[ return variables.volume_entity || "media_player.living_room_tv_2"; ]]]'
+  show_icon: false
+  show_name: false
+  show_label: false
+  show_state: false
+  variables:
+    volume_entity: media_player.living_room_tv_2
+  tap_action:
+    action: none
+  hold_action:
+    action: none
+  styles:
+    card:
+      - width: 72px
+      - height: 318px
+      - padding: 0
+      - border-radius: 18px
+      - background: transparent !important
+      - border: none !important
+      - box-shadow: none !important
+      - overflow: visible
+    grid:
+      - grid-template-areas: '"up" "slider" "down" "mute"'
+      - grid-template-columns: 72px
+      - grid-template-rows: 44px minmax(0, 1fr) 44px 44px
+      - row-gap: 6px
+    custom_fields:
+      up:
+        - grid-area: up
+      slider:
+        - grid-area: slider
+        - min-height: 0
+      down:
+        - grid-area: down
+      mute:
+        - grid-area: mute
+  custom_fields:
+    up:
+      card:
+        type: custom:button-card
+        template: hemma_tv_volume_step_button
+        variables:
+          volume_entity: '[[[ return variables.volume_entity; ]]]'
+          delta: 0.01
+          glyph: mdi:plus
+          label: Increase TV volume by 1 percent
+    slider: >-
+      [[[
+        const entityId = variables.volume_entity || 'media_player.living_room_tv_2';
+        const player = states[entityId];
+        const maxVolume = 60;
+        const level = Math.round(Math.max(0, Math.min(maxVolume, Number(player?.attributes?.volume_level ?? 0) * 100)));
+        const fill = Math.round((level / maxVolume) * 100);
+
+        window.hemmaTvVolume = window.hemmaTvVolume || {};
+        window.hemmaTvVolume.hass = hass;
+        window.hemmaTvVolume.input = (slider, id) => {
+          const maximum = Number(slider.max) || 60;
+          const value = Math.max(0, Math.min(maximum, Number(slider.value)));
+          const control = slider.closest('.hemma-tv-volume-glass');
+          if (control) {
+            control.style.setProperty('--volume-level', `${(value / maximum) * 100}%`);
+            const readout = control.querySelector('.hemma-tv-volume-value');
+            if (readout) readout.textContent = `${Math.round(value)}%`;
+            control.classList.add('is-adjusting');
+          }
+          clearTimeout(slider._hemmaVolumeTimer);
+          slider._hemmaVolumeTimer = setTimeout(() => {
+            window.hemmaTvVolume.hass.callService('media_player', 'volume_set', {
+              entity_id: id,
+              volume_level: value / 100,
+            });
+          }, 140);
+        };
+        window.hemmaTvVolume.commit = (slider) => {
+          clearTimeout(slider._hemmaVolumeTimer);
+          const maximum = Number(slider.max) || 60;
+          const value = Math.max(0, Math.min(maximum, Number(slider.value)));
+          window.hemmaTvVolume.hass.callService('media_player', 'volume_set', {
+            entity_id: slider.dataset.entity,
+            volume_level: value / 100,
+          });
+          slider.closest('.hemma-tv-volume-glass')?.classList.remove('is-adjusting');
+        };
+
+        return `
+          <div class="hemma-tv-volume-glass" style="--volume-level:${fill}%">
+            <div class="hemma-tv-volume-fill"></div>
+            <div class="hemma-tv-volume-value" aria-hidden="true">${level}%</div>
+            <input
+              class="hemma-tv-volume-range"
+              type="range"
+              min="0"
+              max="60"
+              step="1"
+              value="${level}"
+              data-entity="${entityId}"
+              aria-label="TV volume"
+              aria-valuetext="${level} percent"
+              oninput="window.hemmaTvVolume.input(this, this.dataset.entity)"
+              onchange="window.hemmaTvVolume.commit(this)"
+              onpointerup="this.closest('.hemma-tv-volume-glass')?.classList.remove('is-adjusting')"
+            >
+          </div>`;
+      ]]]
+    down:
+      card:
+        type: custom:button-card
+        template: hemma_tv_volume_step_button
+        variables:
+          volume_entity: '[[[ return variables.volume_entity; ]]]'
+          delta: -0.01
+          glyph: mdi:minus
+          label: Decrease TV volume by 1 percent
+    mute:
+      card:
+        type: custom:button-card
+        template: hemma_tv_volume_mute_button
+        variables:
+          volume_entity: '[[[ return variables.volume_entity; ]]]'
+  extra_styles: |
+    .hemma-tv-volume-glass {
+      --volume-level: 0%;
+      position: relative;
+      width: 72px;
+      height: 100%;
+      min-height: 0;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.09);
+      box-shadow: none;
+    }
+    .hemma-tv-volume-fill {
+      position: absolute;
+      inset: auto 0 0;
+      height: var(--volume-level);
+      border-radius: 18px;
+      background: rgba(245,245,247,0.96);
+      box-shadow: none;
+      transition: height 100ms ease-out;
+      pointer-events: none;
+    }
+    .hemma-tv-volume-range {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: ns-resize;
+      writing-mode: vertical-lr;
+      direction: rtl;
+      touch-action: none;
+      z-index: 5;
+    }
+    .hemma-tv-volume-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 5px 7px;
+      border-radius: 9px;
+      color: rgba(255,255,255,0.96);
+      background: rgba(0,0,0,0.34);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .hemma-tv-volume-glass.is-adjusting .hemma-tv-volume-value {
+      opacity: 1;
+    }
+
 hemma_tv_remote_panel:
   template: hemma_default
   entity: '[[[ return variables.volume_entity || "media_player.living_room_tv_2"; ]]]'
@@ -303,118 +584,12 @@ hemma_tv_remote_panel:
           command: DPAD_DOWN
           glyph: '<ha-icon icon="mdi:chevron-down"></ha-icon>'
           label: Down
-    volume: >-
-      [[[
-        const entityId = variables.volume_entity || 'media_player.living_room_tv_2';
-        const player = states[entityId];
-        const maxVolume = 60;
-        const level = Math.round(Math.max(0, Math.min(maxVolume, Number(player?.attributes?.volume_level ?? 0) * 100)));
-        const fill = Math.round((level / maxVolume) * 100);
-        const muted = Boolean(player?.attributes?.is_volume_muted);
-
-        window.hemmaTvVolume = window.hemmaTvVolume || {};
-        window.hemmaTvVolume.hass = hass;
-        window.hemmaTvVolume.input = (slider, id) => {
-          const maximum = Number(slider.max) || 60;
-          const value = Math.max(0, Math.min(maximum, Number(slider.value)));
-          const control = slider.closest('.hemma-tv-volume');
-          if (control) {
-            control.style.setProperty('--volume-level', `${(value / maximum) * 100}%`);
-            const readout = control.querySelector('.hemma-tv-volume-value');
-            if (readout) readout.textContent = `${Math.round(value)}%`;
-            control.classList.add('is-adjusting');
-          }
-          clearTimeout(slider._hemmaVolumeTimer);
-          slider._hemmaVolumeTimer = setTimeout(() => {
-            window.hemmaTvVolume.hass.callService('media_player', 'volume_set', {
-              entity_id: id,
-              volume_level: value / 100,
-            });
-          }, 140);
-        };
-        window.hemmaTvVolume.commit = (slider) => {
-          clearTimeout(slider._hemmaVolumeTimer);
-          const maximum = Number(slider.max) || 60;
-          const value = Math.max(0, Math.min(maximum, Number(slider.value)));
-          window.hemmaTvVolume.hass.callService('media_player', 'volume_set', {
-            entity_id: slider.dataset.entity,
-            volume_level: value / 100,
-          });
-          slider.closest('.hemma-tv-volume')?.classList.remove('is-adjusting');
-        };
-        window.hemmaTvVolume.step = (button, id, delta) => {
-          const control = button.closest('.hemma-tv-volume');
-          const slider = control?.querySelector('.hemma-tv-volume-range');
-          if (!slider) return;
-          const maximum = Number(slider.max) || 60;
-          const value = Math.max(0, Math.min(maximum, Number(slider.value) + delta));
-          slider.value = String(value);
-          control.style.setProperty('--volume-level', `${(value / maximum) * 100}%`);
-          const readout = control.querySelector('.hemma-tv-volume-value');
-          if (readout) readout.textContent = `${Math.round(value)}%`;
-          control.classList.add('is-adjusting');
-          clearTimeout(control._hemmaReadoutTimer);
-          control._hemmaReadoutTimer = setTimeout(() => control.classList.remove('is-adjusting'), 650);
-          window.hemmaTvVolume.hass.callService('media_player', 'volume_set', {
-            entity_id: id,
-            volume_level: value / 100,
-          });
-        };
-        window.hemmaTvVolume.mute = (button, id) => {
-          const nextMuted = button.getAttribute('aria-pressed') !== 'true';
-          window.hemmaTvVolume.hass.callService('media_player', 'volume_mute', {
-            entity_id: id,
-            is_volume_muted: nextMuted,
-          });
-        };
-
-        return `
-          <div class="hemma-tv-volume${muted ? ' is-muted' : ''}" style="--volume-level:${fill}%">
-            <button
-              class="hemma-tv-volume-button hemma-tv-volume-up"
-              type="button"
-              aria-label="Increase TV volume by 1 percent"
-              onclick="event.stopPropagation(); window.hemmaTvVolume.step(this, '${entityId}', 1)"
-            >
-              <ha-icon icon="mdi:plus"></ha-icon>
-            </button>
-            <div class="hemma-tv-volume-glass">
-              <div class="hemma-tv-volume-fill"></div>
-              <div class="hemma-tv-volume-value" aria-hidden="true">${level}%</div>
-              <input
-                class="hemma-tv-volume-range"
-                type="range"
-                min="0"
-                max="60"
-                step="1"
-                value="${level}"
-                data-entity="${entityId}"
-                aria-label="TV volume"
-                aria-valuetext="${level} percent"
-                oninput="window.hemmaTvVolume.input(this, this.dataset.entity)"
-                onchange="window.hemmaTvVolume.commit(this)"
-                onpointerup="this.closest('.hemma-tv-volume')?.classList.remove('is-adjusting')"
-              >
-            </div>
-            <button
-              class="hemma-tv-volume-button hemma-tv-volume-down"
-              type="button"
-              aria-label="Decrease TV volume by 1 percent"
-              onclick="event.stopPropagation(); window.hemmaTvVolume.step(this, '${entityId}', -1)"
-            >
-              <ha-icon icon="mdi:minus"></ha-icon>
-            </button>
-            <button
-              class="hemma-tv-volume-button hemma-tv-volume-mute"
-              type="button"
-              aria-label="${muted ? 'Unmute TV' : 'Mute TV'}"
-              aria-pressed="${muted}"
-              onclick="event.stopPropagation(); window.hemmaTvVolume.mute(this, '${entityId}')"
-            >
-              <ha-icon icon="mdi:${muted ? 'volume-off' : level < 34 ? 'volume-low' : level < 67 ? 'volume-medium' : 'volume-high'}"></ha-icon>
-            </button>
-          </div>`;
-      ]]]
+    volume:
+      card:
+        type: custom:button-card
+        template: hemma_tv_volume_control
+        variables:
+          volume_entity: '[[[ return variables.volume_entity; ]]]'
     jellyfin:
       card:
         type: custom:button-card
@@ -444,106 +619,4 @@ hemma_tv_remote_panel:
     }
     ha-card {
       overflow: visible !important;
-    }
-    .hemma-tv-volume {
-      --volume-level: 0%;
-      width: 72px;
-      height: 318px;
-      padding: 0;
-      box-sizing: border-box;
-      border-radius: 18px;
-      display: grid;
-      grid-template-rows: 44px minmax(0, 1fr) 44px 44px;
-      gap: 6px;
-      background: transparent;
-      border: 0;
-      box-shadow: none;
-      overflow: visible;
-      position: relative;
-    }
-    .hemma-tv-volume-glass {
-      position: relative;
-      min-height: 0;
-      width: 72px;
-      border-radius: 18px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.09);
-      box-shadow: none;
-    }
-    .hemma-tv-volume-fill {
-      position: absolute;
-      inset: auto 0 0;
-      height: var(--volume-level);
-      border-radius: 18px;
-      background: rgba(245,245,247,0.96);
-      box-shadow: none;
-      transition: height 100ms ease-out;
-      pointer-events: none;
-    }
-    .hemma-tv-volume-range {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      opacity: 0;
-      cursor: ns-resize;
-      writing-mode: vertical-lr;
-      direction: rtl;
-      touch-action: none;
-      z-index: 5;
-    }
-    .hemma-tv-volume-value {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 5px 7px;
-      border-radius: 9px;
-      color: rgba(255,255,255,0.96);
-      background: rgba(0,0,0,0.34);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      opacity: 0;
-      transition: opacity 120ms ease;
-      pointer-events: none;
-      z-index: 4;
-    }
-    .hemma-tv-volume.is-adjusting .hemma-tv-volume-value {
-      opacity: 1;
-    }
-    .hemma-tv-volume.is-muted .hemma-tv-volume-fill {
-      opacity: 0.28;
-    }
-    .hemma-tv-volume-button {
-      width: 72px;
-      height: 44px;
-      justify-self: center;
-      align-self: center;
-      display: grid;
-      place-items: center;
-      padding: 0;
-      border: 0;
-      border-radius: 14px;
-      color: rgba(255,255,255,0.94);
-      background: rgba(255,255,255,0.09);
-      box-shadow: none;
-      cursor: pointer;
-      position: relative;
-      z-index: 5;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .hemma-tv-volume-button:active {
-      transform: scale(0.94);
-      background: rgba(255,255,255,0.16);
-    }
-    .hemma-tv-volume-button ha-icon {
-      width: 24px;
-      height: 24px;
-      --mdc-icon-size: 24px;
-    }
-    .hemma-tv-volume.is-muted .hemma-tv-volume-mute {
-      color: #ff453a;
-      background: rgba(255,69,58,0.15);
     }
