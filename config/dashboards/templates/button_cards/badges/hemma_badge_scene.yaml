@@ -1,0 +1,61 @@
+hemma_badge_scene:
+  template: [hemma_badge_base]
+
+  variables:
+    enabled: true
+    label: Scene
+    icon: mdi:creation
+    active_entity: null
+    service: scene.turn_on
+
+  show_state: false
+  show_label: false
+  show_icon: true
+  show_entity_picture: false
+
+  icon: '[[[ return variables.icon || "mdi:creation"; ]]]'
+
+  tap_action:
+    action: call-service
+    service: '[[[ return variables.service || "scene.turn_on"; ]]]'
+    target:
+      entity_id: '[[[ return entity?.entity_id ]]]'
+
+  hold_action:
+    action: more-info
+
+  double_tap_action:
+    action: none
+
+  name: |
+    [[[
+      const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
+      const label = variables.label || entity?.attributes?.friendly_name || 'Scene';
+      return `<div class="badge-wrap"><div class="badge-title">${label}</div><div class="badge-sub">${active ? 'Active' : 'Inactive'}</div></div>`;
+    ]]]
+
+  styles:
+    card:
+      - background: >
+          [[[
+            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
+            return active
+              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
+              : 'var(--badge-background, rgba(10,12,14,0.65))';
+          ]]]
+      - --badge-title-color: >
+          [[[
+            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
+            return active ? 'rgba(0,0,0,0.85)' : 'var(--primary-text-color)';
+          ]]]
+      - --badge-sub-color: >
+          [[[
+            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
+            return active ? 'rgba(0,0,0,0.60)' : 'var(--secondary-text-color)';
+          ]]]
+    icon:
+      - color: >
+          [[[
+            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
+            return active ? 'rgba(0,0,0,0.70)' : 'var(--hemma-color-yellow, #FFCC00)';
+          ]]]

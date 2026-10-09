@@ -26,6 +26,16 @@ views:
             - bedroom-demo
           weather_entity: weather.forecast_home
           presence_entity_1: person.example_user
+          scene_entity_1: scene.welcome_home
+          scene_label_1: Welcome Home
+          scene_icon_1: mdi:home
+          scene_active_entity_1: binary_sensor.welcome_home_scene_active
+          scene_service_1: scene.turn_on
+          scene_entity_2: script.leave_home
+          scene_label_2: Leave Home
+          scene_icon_2: mdi:door-open
+          scene_active_entity_2: binary_sensor.leave_home_scene_active
+          scene_service_2: script.turn_on
           media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
           light_entity_1: light.living_room_accent_1
@@ -37,50 +47,6 @@ views:
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
         cards:
-          # Keep this stateless action first so Hemma's active-card sorting cannot
-          # push it beyond the initially visible part of the horizontal rail.
-          - type: custom:button-card
-            template: hemma_entity
-            entity: scene.welcome_home
-            name: Welcome Home
-            state_display: |
-              [[[
-                return states['binary_sensor.welcome_home_scene_active']?.state === 'on'
-                  ? 'Active'
-                  : 'Inactive';
-              ]]]
-            variables:
-              icon: home
-              active_override: |
-                [[[
-                  return states['binary_sensor.welcome_home_scene_active']?.state === 'on';
-                ]]]
-            tap_action:
-              action: call-service
-              service: scene.turn_on
-              target:
-                entity_id: scene.welcome_home
-          - type: custom:button-card
-            template: hemma_entity
-            entity: scene.leave_home
-            name: Leave Home
-            state_display: |
-              [[[
-                return states['binary_sensor.leave_home_scene_active']?.state === 'on'
-                  ? 'Active'
-                  : 'Inactive';
-              ]]]
-            variables:
-              icon: door-open
-              active_override: |
-                [[[
-                  return states['binary_sensor.leave_home_scene_active']?.state === 'on';
-                ]]]
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              target:
-                entity_id: script.leave_home
           - type: custom:button-card
             template: hemma_media
             entity: media_player.living_room_tv_2

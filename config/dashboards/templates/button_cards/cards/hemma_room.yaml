@@ -124,6 +124,29 @@ hemma_room:
 
     cinema_mode_entity:
 
+    # Optional scene chips shown in the room header. Scene controls belong in
+    # this compact badge row rather than in the large action rail.
+    scene_entity_1: null
+    scene_label_1: null
+    scene_icon_1: mdi:creation
+    scene_active_entity_1: null
+    scene_service_1: scene.turn_on
+    scene_entity_2: null
+    scene_label_2: null
+    scene_icon_2: mdi:creation
+    scene_active_entity_2: null
+    scene_service_2: scene.turn_on
+    scene_entity_3: null
+    scene_label_3: null
+    scene_icon_3: mdi:creation
+    scene_active_entity_3: null
+    scene_service_3: scene.turn_on
+    scene_entity_4: null
+    scene_label_4: null
+    scene_icon_4: mdi:creation
+    scene_active_entity_4: null
+    scene_service_4: scene.turn_on
+
     plex_stream_1:
     plex_stream_2:
 
@@ -1559,6 +1582,46 @@ hemma_room:
             }
 
         cards:
+          - type: custom:button-card
+            template: hemma_badge_scene
+            entity: '[[[ return variables.scene_entity_1 ]]]'
+            variables:
+              enabled: '[[[ return !!variables.scene_entity_1 ]]]'
+              label: '[[[ return variables.scene_label_1 ]]]'
+              icon: '[[[ return variables.scene_icon_1 ]]]'
+              active_entity: '[[[ return variables.scene_active_entity_1 ]]]'
+              service: '[[[ return variables.scene_service_1 || "scene.turn_on" ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_scene
+            entity: '[[[ return variables.scene_entity_2 ]]]'
+            variables:
+              enabled: '[[[ return !!variables.scene_entity_2 ]]]'
+              label: '[[[ return variables.scene_label_2 ]]]'
+              icon: '[[[ return variables.scene_icon_2 ]]]'
+              active_entity: '[[[ return variables.scene_active_entity_2 ]]]'
+              service: '[[[ return variables.scene_service_2 || "scene.turn_on" ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_scene
+            entity: '[[[ return variables.scene_entity_3 ]]]'
+            variables:
+              enabled: '[[[ return !!variables.scene_entity_3 ]]]'
+              label: '[[[ return variables.scene_label_3 ]]]'
+              icon: '[[[ return variables.scene_icon_3 ]]]'
+              active_entity: '[[[ return variables.scene_active_entity_3 ]]]'
+              service: '[[[ return variables.scene_service_3 || "scene.turn_on" ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_scene
+            entity: '[[[ return variables.scene_entity_4 ]]]'
+            variables:
+              enabled: '[[[ return !!variables.scene_entity_4 ]]]'
+              label: '[[[ return variables.scene_label_4 ]]]'
+              icon: '[[[ return variables.scene_icon_4 ]]]'
+              active_entity: '[[[ return variables.scene_active_entity_4 ]]]'
+              service: '[[[ return variables.scene_service_4 || "scene.turn_on" ]]]'
+
           - type: custom:button-card
             template: hemma_badge_climate_group
             variables:

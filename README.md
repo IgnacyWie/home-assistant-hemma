@@ -29,6 +29,13 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Apple-first typography using the native San Francisco system font where available
 - Custom SVG icon set and room artwork
 
+## Dashboard conventions
+
+- Scene controls use compact Hemma header chips rather than large action tiles. New
+  scenes should follow the `hemma_badge_scene` template and expose an active-state
+  sensor when one is available.
+- Cinema Mode is also presented as a compact header chip with the popcorn icon.
+
 ## Screenshots
 
 ### Desktop
@@ -81,7 +88,7 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   pre-cinema states when playback is paused or stopped, and avoids overwriting
   that snapshot during a pause/resume cycle by using
   `input_boolean.jellyfin_cinema_active` as the session guard. The Living Room
-  **Cinema Mode** tile toggles the behavior; turning it off during playback
+  **Cinema Mode** chip toggles the behavior; turning it off during playback
   restores the captured lights immediately.
 - **Bathroom - Forgotten lights protection** — independently switches off the
   Bathroom LED Strip or Bathroom Lamp after either has remained on for 45
