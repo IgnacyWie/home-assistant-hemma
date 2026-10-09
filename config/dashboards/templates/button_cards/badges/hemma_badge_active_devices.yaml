@@ -94,7 +94,7 @@ hemma_badge_active_devices:
               'mdi:power-socket-eu'
             ); ]]]`,
             tap_action: {
-              haptic: medium,
+              haptic: 'medium',
               action: 'call-service',
               service: 'homeassistant.turn_off',
               service_data: { entity_id: id },
@@ -225,7 +225,7 @@ hemma_badge_active_devices:
             icon: 'mdi:power',
             name: 'All Off',
             tap_action: {
-              haptic: medium,
+              haptic: 'medium',
               action: 'call-service',
               service: 'script.turn_on',
               target: { entity_id: allOffEntity },

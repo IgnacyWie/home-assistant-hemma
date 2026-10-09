@@ -77,14 +77,43 @@ class ActiveDevicesChipTests(unittest.TestCase):
             self.assertTrue(body.startswith("[[[") and body.endswith("]]]"))
             return body[3:-3]
 
-        for marker in ("content: |", "name: |"):
+        popup_body = yaml_block("content: |")
+        for body in (popup_body, yaml_block("name: |")):
             result = subprocess.run(
                 ["node", "--check", "-"],
-                input=f"function validate() {{\n{yaml_block(marker)}\n}}\n",
+                input=f"function validate() {{\n{body}\n}}\n",
                 text=True,
                 capture_output=True,
             )
             self.assertEqual(0, result.returncode, result.stderr)
+
+        runtime = subprocess.run(
+            ["node", "-"],
+            input=f"""
+              const variables = {{
+                entity_1: 'light.test_lamp',
+                all_off_entity: 'script.leave_home',
+              }};
+              const states = {{
+                'light.test_lamp': {{
+                  state: 'on',
+                  attributes: {{ friendly_name: 'Test Lamp' }},
+                }},
+              }};
+              const popup = (function() {{
+                {popup_body}
+              }})();
+              if (popup?.type !== 'vertical-stack') throw new Error('popup stack missing');
+              if (popup.cards?.length !== 3) throw new Error('popup controls missing');
+              if (popup.cards[1]?.tap_action?.service !== 'homeassistant.turn_off')
+                throw new Error('individual off action missing');
+              if (popup.cards[2]?.tap_action?.target?.entity_id !== 'script.leave_home')
+                throw new Error('All Off action missing');
+            """,
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(0, runtime.returncode, runtime.stderr)
 
 
 if __name__ == "__main__":
