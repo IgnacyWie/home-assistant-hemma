@@ -36,7 +36,6 @@ views:
           scene_active_entity_1: binary_sensor.welcome_home_scene_active
           scene_service_1: scene.turn_on
           active_devices_enabled: true
-          active_devices_leaving_entity: person.ignacy_wie
           active_devices_all_off_entity: script.leave_home
           active_device_entity_1: light.bedroom_accent_bedroom
           active_device_entity_2: light.living_room_accent_1

@@ -6,8 +6,6 @@ hemma_badge_active_devices:
 
   variables:
     enabled: false
-    leaving_entity: null
-    leaving_states: [not_home, away, just_left, leaving, 'on']
     entity_1: null
     entity_2: null
     entity_3: null
@@ -41,17 +39,12 @@ hemma_badge_active_devices:
       ].filter(Boolean);
       const v = variables.enabled;
       const enabled = v === true || v === 1 || String(v).toLowerCase() === 'true';
-      const leavingState = String(states[variables.leaving_entity]?.state || '')
-        .trim().toLowerCase().replace(/\s+/g, '_');
-      const leavingStates = Array.isArray(variables.leaving_states)
-        ? variables.leaving_states.map(value => String(value).trim().toLowerCase().replace(/\s+/g, '_'))
-        : ['not_home', 'away', 'just_left', 'leaving', 'on'];
       const inactiveMedia = ['off', 'idle', 'paused', 'standby', 'unknown', 'unavailable'];
       const active = configured.some(id => {
         const state = String(states[id]?.state || '').toLowerCase();
         return id.startsWith('media_player.') ? !inactiveMedia.includes(state) : state === 'on';
       });
-      const visible = enabled && configured.length && leavingStates.includes(leavingState) && active;
+      const visible = enabled && configured.length && active;
       return `:host{display:${visible ? 'inline-block' : 'none'} !important;order:-20;}`;
     ]]]
 

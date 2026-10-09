@@ -168,7 +168,6 @@ hemma_room:
     # Optional whole-home status chip. It replaces a one-way shutdown scene in
     # the header with a live summary and a compact per-device control sheet.
     active_devices_enabled: false
-    active_devices_leaving_entity: null
     active_devices_all_off_entity: script.leave_home
     active_device_entity_1: null
     active_device_entity_2: null
@@ -1660,10 +1659,8 @@ hemma_room:
 
           - type: custom:button-card
             template: hemma_badge_active_devices
-            entity: '[[[ return variables.active_devices_leaving_entity || variables.presence_entity_1 ]]]'
             variables:
               enabled: '[[[ return variables.active_devices_enabled === true ]]]'
-              leaving_entity: '[[[ return variables.active_devices_leaving_entity || variables.presence_entity_1 ]]]'
               all_off_entity: '[[[ return variables.active_devices_all_off_entity || "script.leave_home" ]]]'
               entity_1: '[[[ return variables.active_device_entity_1 ]]]'
               entity_2: '[[[ return variables.active_device_entity_2 ]]]'

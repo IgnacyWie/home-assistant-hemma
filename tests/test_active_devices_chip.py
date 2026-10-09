@@ -33,9 +33,7 @@ class ActiveDevicesChipTests(unittest.TestCase):
         home_view = dashboard.split("  - type: custom:grid-layout\n    title: Living Room", 1)[0]
 
         self.assertIn("active_devices_enabled: true", home_view)
-        self.assertIn("active_devices_leaving_entity: person.ignacy_wie", home_view)
         self.assertIn("template: hemma_badge_active_devices", room_template)
-        self.assertIn("leaving_entity: '[[[ return variables.active_devices_leaving_entity", room_template)
         self.assertNotIn("scene_label_2: Leave Home", home_view)
         self.assertNotIn("type: conditional", home_view)
 
@@ -48,8 +46,8 @@ class ActiveDevicesChipTests(unittest.TestCase):
         template = TEMPLATE.read_text()
 
         self.assertIn("Everything off", template)
-        self.assertIn("leaving_entity: null", template)
-        self.assertIn("leavingStates.includes(leavingState)", template)
+        self.assertNotIn("leaving_entity", template)
+        self.assertIn("enabled && configured.length && active", template)
         self.assertIn("devices on", template)
         self.assertIn("lights on", template)
         self.assertIn("What's still on?", template)
