@@ -1,6 +1,6 @@
 # Touch-friendly TV remote popup for tablet and desktop dashboards.
 # Commands are sent to the existing Android TV remote entity.
-hemma_tv_remote_button:
+hemma_tv_remote_visual:
   template: hemma_default
   show_icon: false
   show_name: false
@@ -10,20 +10,6 @@ hemma_tv_remote_button:
   variables:
     primary: false
     accent: ''
-
-  tap_action:
-    haptic: light
-    action: call-service
-    service: remote.send_command
-    target:
-      entity_id: '[[[ return variables.remote_entity || "remote.living_room_tv"; ]]]'
-    data:
-      command: '[[[ return variables.command || ""; ]]]'
-
-  hold_action:
-    action: none
-  double_tap_action:
-    action: none
 
   styles:
     card:
@@ -105,6 +91,21 @@ hemma_tv_remote_button:
       transform: scale(0.94) !important;
     }
 
+hemma_tv_remote_button:
+  template: hemma_tv_remote_visual
+  tap_action:
+    haptic: light
+    action: call-service
+    service: remote.send_command
+    target:
+      entity_id: '[[[ return variables.remote_entity || "remote.living_room_tv"; ]]]'
+    data:
+      command: '[[[ return variables.command || ""; ]]]'
+  hold_action:
+    action: none
+  double_tap_action:
+    action: none
+
 hemma_tv_volume_button:
   template: hemma_tv_remote_button
   tap_action:
@@ -131,8 +132,10 @@ hemma_tv_mute_button:
   hold_action:
     action: none
 
+# Keep app shortcuts on the visual-only base: inheriting the remote button
+# would merge data.command into media_player.play_media.
 hemma_tv_app_button:
-  template: hemma_tv_remote_button
+  template: hemma_tv_remote_visual
   entity: media_player.living_room_tv_2
   tap_action:
     haptic: light
