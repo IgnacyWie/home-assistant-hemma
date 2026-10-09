@@ -10,10 +10,11 @@ hemma_badge_scene:
 
   show_state: false
   show_label: false
-  show_icon: true
-  show_entity_picture: false
+  show_icon: false
+  show_entity_picture: true
 
-  icon: '[[[ return variables.icon || "mdi:creation"; ]]]'
+  entity_picture: |
+    [[[ return window.hemmaIconUrl(variables.icon || 'scenes'); ]]]
 
   tap_action:
     action: call-service
@@ -53,9 +54,7 @@ hemma_badge_scene:
             const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
             return active ? 'rgba(0,0,0,0.60)' : 'var(--secondary-text-color)';
           ]]]
-    icon:
-      - color: >
-          [[[
-            const active = variables.active_entity && states[variables.active_entity]?.state === 'on';
-            return active ? 'rgba(0,0,0,0.70)' : 'var(--hemma-color-yellow, #FFCC00)';
-          ]]]
+    entity_picture:
+      - background: '#FF9500'
+      - padding: 5px
+      - box-sizing: border-box

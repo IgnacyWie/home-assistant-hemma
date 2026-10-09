@@ -128,22 +128,22 @@ hemma_room:
     # this compact badge row rather than in the large action rail.
     scene_entity_1: null
     scene_label_1: null
-    scene_icon_1: mdi:creation
+    scene_icon_1: scenes
     scene_active_entity_1: null
     scene_service_1: scene.turn_on
     scene_entity_2: null
     scene_label_2: null
-    scene_icon_2: mdi:creation
+    scene_icon_2: scenes
     scene_active_entity_2: null
     scene_service_2: scene.turn_on
     scene_entity_3: null
     scene_label_3: null
-    scene_icon_3: mdi:creation
+    scene_icon_3: scenes
     scene_active_entity_3: null
     scene_service_3: scene.turn_on
     scene_entity_4: null
     scene_label_4: null
-    scene_icon_4: mdi:creation
+    scene_icon_4: scenes
     scene_active_entity_4: null
     scene_service_4: scene.turn_on
 

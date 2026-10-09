@@ -32,8 +32,8 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 ## Dashboard conventions
 
 - Scene controls use compact Hemma header chips rather than large action tiles. New
-  scenes should follow the `hemma_badge_scene` template and expose an active-state
-  sensor when one is available.
+  scenes should follow the `hemma_badge_scene` template, use a circular orange
+  HomeKit-style icon, and expose an active-state sensor when one is available.
 - Cinema Mode is also presented as a compact header chip with the popcorn icon.
 
 ## Screenshots

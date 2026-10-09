@@ -28,12 +28,12 @@ views:
           presence_entity_1: person.example_user
           scene_entity_1: scene.welcome_home
           scene_label_1: Welcome Home
-          scene_icon_1: mdi:home
+          scene_icon_1: fireplace-home-v1
           scene_active_entity_1: binary_sensor.welcome_home_scene_active
           scene_service_1: scene.turn_on
           scene_entity_2: script.leave_home
           scene_label_2: Leave Home
-          scene_icon_2: mdi:door-open
+          scene_icon_2: door-open
           scene_active_entity_2: binary_sensor.leave_home_scene_active
           scene_service_2: script.turn_on
           media_player_1: media_player.tv_w_salonie
@@ -94,14 +94,6 @@ views:
             name: Resident
             variables:
               icon: iphone
-          - type: custom:button-card
-            template: hemma_energy
-            entity: sensor.lsc_smart_power_plug_power
-            name: Power
-            variables:
-              room_name: Home
-              entity_power: sensor.lsc_smart_power_plug_power
-              entity_usage_month: sensor.lsc_smart_power_plug_monthly_energy
 
   - type: custom:grid-layout
     title: Living Room
