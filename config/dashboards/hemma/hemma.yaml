@@ -88,6 +88,34 @@ views:
             variables:
               icon: tv
               show_toggle: true
+            tap_action:
+              haptic: light
+              action: fire-dom-event
+              hemma_popup:
+                title: TV Remote
+                eyebrow: Living Room TV
+                dismissable: true
+                dismiss_on_background: true
+                popup_styles:
+                  - style: all
+                    styles: |
+                      --hemma-popup-justify: flex-end;
+                      --hemma-popup-align: flex-end;
+                      --hemma-popup-top: 18px;
+                      --hemma-popup-right: clamp(0px, calc(100vw - 768px), 18px);
+                      --hemma-popup-bottom: clamp(0px, calc(100vw - 768px), 18px);
+                      --hemma-popup-radius: 28px;
+                      --hemma-popup-header-gap: 2px;
+                      --hemma-popup-tint: rgba(18,18,22,0.84);
+                      --hemma-popup-grain: 0;
+                      --hemma-popup-grain-dark: 0;
+                      --popup-min-width: 360px;
+                      --popup-max-width: 360px;
+                content:
+                  type: custom:button-card
+                  template: hemma_tv_remote_panel
+                  variables:
+                    remote_entity: remote.living_room_tv
           - type: custom:button-card
             template: hemma_media
             entity: media_player.zeppelin
