@@ -234,29 +234,10 @@ hemma_tv_resume_button:
     }
 
 hemma_tv_spotify_button:
-  template: hemma_tv_remote_visual
-  entity: media_player.spotify_ignacy
-  tap_action:
-    haptic: light
-    action: call-service
-    service: media_player.select_source
-    target:
-      entity_id: media_player.spotify_ignacy
-    data:
-      source: >-
-        [[[
-          const sources = states['media_player.spotify_ignacy']?.attributes?.source_list || [];
-          return sources.find(source => /\btv\b|bravia|sony/i.test(source)) || '';
-        ]]]
-  hold_action:
-    action: more-info
-  styles:
-    card:
-      - width: 58px
-      - height: 50px
-      - padding: 4px
-      - border-radius: 15px
-      - color: '#1ed760'
+  template: hemma_tv_hub_shortcut
+  variables:
+    app_id: com.sony.dtv.com.spotify.tv.android.com.spotify.tv.android.SpotifyTVActivity
+    accent: '#1ed760'
 
 hemma_tv_launcher_strip:
   template: hemma_default
@@ -265,7 +246,6 @@ hemma_tv_launcher_strip:
     - media_player.living_room_tv
     - media_player.living_room_tv_2
     - media_player.tv_w_salonie_4
-    - media_player.spotify_ignacy
   show_icon: false
   show_name: false
   show_state: false
@@ -328,12 +308,6 @@ hemma_tv_launcher_strip:
             ]]]
       spotify:
         - flex: 0 0 auto
-        - display: >-
-            [[[
-              const spotify = states['media_player.spotify_ignacy'];
-              const sources = spotify?.attributes?.source_list || [];
-              return sources.some(source => /\btv\b|bravia|sony/i.test(source)) ? 'block' : 'none';
-            ]]]
         - order: >-
             [[[
               const player = states['media_player.living_room_tv'];
