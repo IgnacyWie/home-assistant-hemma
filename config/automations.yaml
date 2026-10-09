@@ -244,26 +244,26 @@
     state.
   triggers:
   - trigger: state
-    entity_id: media_player.tv_w_salonie_4
+    entity_id: media_player.tv_w_salonie
     to: playing
     id: cinema_start
   - trigger: state
-    entity_id: media_player.tv_w_salonie_4
+    entity_id: media_player.tv_w_salonie
     from: playing
     to: paused
     id: cinema_restore
   - trigger: state
-    entity_id: media_player.tv_w_salonie_4
+    entity_id: media_player.tv_w_salonie
     from: playing
     to: idle
     id: cinema_restore
   - trigger: state
-    entity_id: media_player.tv_w_salonie_4
+    entity_id: media_player.tv_w_salonie
     from: playing
     to: 'off'
     id: cinema_restore
   - trigger: state
-    entity_id: media_player.tv_w_salonie_4
+    entity_id: media_player.tv_w_salonie
     from: playing
     to: unavailable
     id: cinema_restore

@@ -26,7 +26,7 @@ views:
             - bedroom-demo
           weather_entity: weather.forecast_home
           presence_entity_1: person.example_user
-          media_player_1: media_player.tv_w_salonie_4
+          media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
           light_entity_1: light.living_room_accent_1
           light_entity_2: light.bedroom_accent_bedroom
@@ -153,7 +153,7 @@ views:
           light_entity_2: light.living_room_shelves
           light_entity_3: light.living_room_2ch_wi_fi_switch_module_switch_2
           light_entity_4: light.living_room_balcony
-          media_player_1: media_player.tv_w_salonie_4
+          media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
@@ -165,6 +165,14 @@ views:
             variables:
               icon: popcorn-cinema-v1
               show_toggle: true
+            styles:
+              card:
+                - --hemma-entity-active-tint: '#FF453A'
+              img_cell:
+                - background: |
+                    [[[ return entity?.state === 'on'
+                      ? '#FF453A !important'
+                      : 'rgba(0,0,0,0.20) !important'; ]]]
           - type: custom:button-card
             template: hemma_light
             entity: light.living_room_accent_1

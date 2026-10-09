@@ -313,7 +313,7 @@ After Home Assistant returns, select the **Hemma** theme from your profile and o
 The setup intentionally separates two responsibilities:
 
 - `media_player.living_room_tv_2` controls physical television power and app launching.
-- `media_player.tv_w_salonie_4` is the Jellyfin session used by Now Playing for reliable title, progress, episode metadata, and transport state.
+- `media_player.tv_w_salonie` is the responsive Jellyfin playback entity used by the cinema automation and Hemma Now Playing state for title, progress, episode metadata, and transport state.
 
 The HomeKit wrapper exposes a stable TV source list and forwards Apple's standard remote keys to the Android TV remote entity.
 
