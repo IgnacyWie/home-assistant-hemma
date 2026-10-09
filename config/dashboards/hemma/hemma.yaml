@@ -165,6 +165,10 @@ views:
               icon: tv
               show_toggle: true
           - type: custom:button-card
+            template: hemma_tv_remote
+            variables:
+              remote_entity: remote.living_room_tv
+          - type: custom:button-card
             template: hemma_entity
             entity: media_player.living_room_tv_2
             name: Jellyfin

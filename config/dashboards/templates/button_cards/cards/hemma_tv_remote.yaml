@@ -1,0 +1,222 @@
+# Touch-friendly TV remote tile for tablet and desktop dashboards.
+# Commands are sent to the existing Android TV remote entity.
+hemma_tv_remote_button:
+  template: hemma_default
+  show_icon: false
+  show_name: false
+  show_label: true
+  label: '[[[ return variables.label || ""; ]]]'
+  tooltip: '[[[ return variables.label || ""; ]]]'
+
+  tap_action:
+    haptic: light
+    action: call-service
+    service: remote.send_command
+    target:
+      entity_id: '[[[ return variables.remote_entity || "remote.living_room_tv"; ]]]'
+    data:
+      command: '[[[ return variables.command || ""; ]]]'
+
+  hold_action:
+    action: none
+  double_tap_action:
+    action: none
+
+  styles:
+    card:
+      - width: 68px
+      - height: 64px
+      - padding: 6px
+      - border-radius: 22px
+      - background: rgba(255,255,255,0.10)
+      - box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 3px 10px rgba(0,0,0,0.12)
+      - transition: transform 0.12s ease, background 0.12s ease
+    grid:
+      - grid-template-areas: '"g" "l"'
+      - grid-template-columns: 1fr
+      - grid-template-rows: 1fr min-content
+      - row-gap: 1px
+    custom_fields:
+      g:
+        - grid-area: g
+        - align-self: center
+        - justify-self: center
+        - line-height: 1
+        - font-size: 26px
+        - font-weight: 500
+        - color: rgba(255,255,255,0.96)
+    label:
+      - grid-area: l
+      - align-self: end
+      - justify-self: center
+      - color: rgba(255,255,255,0.72)
+      - font-size: 10px
+      - font-weight: 600
+      - letter-spacing: 0.01em
+      - line-height: 1.1
+
+  custom_fields:
+    g: >-
+      [[[ return `<span aria-hidden="true">${variables.glyph || ''}</span>`; ]]]
+
+  extra_styles: |
+    ha-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: rgba(255,255,255,0.10);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.12s ease;
+    }
+    ha-card:hover::before,
+    ha-card:focus-within::before {
+      opacity: 1;
+    }
+    ha-card:active {
+      transform: scale(0.94) !important;
+    }
+
+hemma_tv_remote:
+  template: hemma_default
+  show_icon: false
+  show_state: false
+  show_label: false
+  show_name: true
+  name: TV Remote
+  variables:
+    remote_entity: remote.living_room_tv
+
+  tap_action:
+    action: none
+  hold_action:
+    action: none
+
+  styles:
+    card:
+      - width: 100%
+      - min-height: 252px
+      - padding: 16px
+      - box-sizing: border-box
+      - border-radius: var(--hemma-tile-radius, 28px)
+      - background: var(--hemma-glass-background, rgba(44,46,52,0.78))
+      - box-shadow: var(--hemma-tile-glass-rim, inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.10))
+    grid:
+      - grid-template-areas: '"title title title" "back up pause" "left select right" ". down ."'
+      - grid-template-columns: repeat(3, 1fr)
+      - grid-template-rows: min-content repeat(3, 64px)
+      - column-gap: 8px
+      - row-gap: 7px
+    name:
+      - grid-area: title
+      - align-self: center
+      - justify-self: start
+      - padding: 0 4px 3px
+      - color: rgba(255,255,255,0.95)
+      - font-size: 17px
+      - font-weight: 650
+      - letter-spacing: -0.01em
+    custom_fields:
+      back:
+        - grid-area: back
+        - align-self: center
+        - justify-self: center
+      up:
+        - grid-area: up
+        - align-self: center
+        - justify-self: center
+      pause:
+        - grid-area: pause
+        - align-self: center
+        - justify-self: center
+      left:
+        - grid-area: left
+        - align-self: center
+        - justify-self: center
+      select:
+        - grid-area: select
+        - align-self: center
+        - justify-self: center
+      right:
+        - grid-area: right
+        - align-self: center
+        - justify-self: center
+      down:
+        - grid-area: down
+        - align-self: center
+        - justify-self: center
+
+  custom_fields:
+    back:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: BACK
+          glyph: '‹'
+          label: Back
+    up:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: DPAD_UP
+          glyph: '↑'
+          label: Up
+    pause:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: MEDIA_PLAY_PAUSE
+          glyph: 'Ⅱ'
+          label: Pause
+    left:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: DPAD_LEFT
+          glyph: '←'
+          label: Left
+    select:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: DPAD_CENTER
+          glyph: '●'
+          label: Select
+    right:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: DPAD_RIGHT
+          glyph: '→'
+          label: Right
+    down:
+      card:
+        type: custom:button-card
+        template: hemma_tv_remote_button
+        variables:
+          remote_entity: '[[[ return variables.remote_entity; ]]]'
+          command: DPAD_DOWN
+          glyph: '↓'
+          label: Down
+
+  extra_styles: |
+    :host {
+      display: block !important;
+      width: 100% !important;
+    }
+    ha-card {
+      overflow: visible !important;
+    }
