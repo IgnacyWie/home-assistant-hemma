@@ -164,10 +164,28 @@ views:
             variables:
               icon: tv
               show_toggle: true
-          - type: custom:button-card
-            template: hemma_tv_remote
-            variables:
-              remote_entity: remote.living_room_tv
+            tap_action:
+              haptic: light
+              action: fire-dom-event
+              hemma_popup:
+                title: TV Remote
+                eyebrow: Living Room TV
+                dismissable: true
+                dismiss_on_background: true
+                popup_styles:
+                  - style: all
+                    styles: |
+                      :host {
+                        --popup-min-width: 360px;
+                        --popup-max-width: 520px;
+                        --hemma-popup-gutter-wide: 18px;
+                        --hemma-popup-gutter-phone: 14px;
+                      }
+                content:
+                  type: custom:button-card
+                  template: hemma_tv_remote_panel
+                  variables:
+                    remote_entity: remote.living_room_tv
           - type: custom:button-card
             template: hemma_entity
             entity: media_player.living_room_tv_2

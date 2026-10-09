@@ -1,4 +1,4 @@
-# Touch-friendly TV remote tile for tablet and desktop dashboards.
+# Touch-friendly TV remote popup for tablet and desktop dashboards.
 # Commands are sent to the existing Android TV remote entity.
 hemma_tv_remote_button:
   template: hemma_default
@@ -78,13 +78,12 @@ hemma_tv_remote_button:
       transform: scale(0.94) !important;
     }
 
-hemma_tv_remote:
+hemma_tv_remote_panel:
   template: hemma_default
   show_icon: false
   show_state: false
   show_label: false
-  show_name: true
-  name: TV Remote
+  show_name: false
   variables:
     remote_entity: remote.living_room_tv
 
@@ -103,20 +102,11 @@ hemma_tv_remote:
       - background: var(--hemma-glass-background, rgba(44,46,52,0.78))
       - box-shadow: var(--hemma-tile-glass-rim, inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.10))
     grid:
-      - grid-template-areas: '"title title title" "back up pause" "left select right" ". down ."'
+      - grid-template-areas: '"back up pause" "left select right" ". down ."'
       - grid-template-columns: repeat(3, 1fr)
-      - grid-template-rows: min-content repeat(3, 64px)
+      - grid-template-rows: repeat(3, 64px)
       - column-gap: 8px
       - row-gap: 7px
-    name:
-      - grid-area: title
-      - align-self: center
-      - justify-self: start
-      - padding: 0 4px 3px
-      - color: rgba(255,255,255,0.95)
-      - font-size: 17px
-      - font-weight: 650
-      - letter-spacing: -0.01em
     custom_fields:
       back:
         - grid-area: back
