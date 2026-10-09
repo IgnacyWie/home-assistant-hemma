@@ -58,12 +58,8 @@ hemma_entity:
       [[[
         const domain = String(entity?.entity_id || '').split('.')[0];
         if (['light', 'switch', 'fan', 'input_boolean', 'automation'].includes(domain)) return 'toggle';
-        if (domain === 'input_button') return 'call-service';
         return 'more-info';
       ]]]
-    service: input_button.press
-    service_data:
-      entity_id: '[[[ return entity?.entity_id ]]]'
   hold_action:
     haptic: medium
     action: more-info

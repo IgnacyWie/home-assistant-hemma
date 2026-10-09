@@ -9,11 +9,9 @@ hemma_light:
   tap_action:
     haptic: light
     action: call-service
-    service: script.turn_on
-    service_data:
-      entity_id: script.hemma_light_smart_toggle
-      variables:
-        light_entity: '[[[ return entity?.entity_id ]]]'
+    service: homeassistant.toggle
+    target:
+      entity_id: '[[[ return entity?.entity_id ]]]'
 
   hold_action:
     haptic: medium

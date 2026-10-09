@@ -37,6 +37,8 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
   tap is disabled unless a card has a deliberate secondary action. Lights,
   switches, and fans toggle on tap. The Living Room TV opens its remote on tap
   and native device information on long press.
+  Light tiles call `homeassistant.toggle` directly against the card entity;
+  their icon control keeps Hemma's snapshot-aware smart toggle.
 - Scene controls use compact Hemma header chips rather than large action tiles. New
   scenes should follow the `hemma_badge_scene` template, use a circular orange
   HomeKit-style icon, and expose an active-state sensor when one is available.
