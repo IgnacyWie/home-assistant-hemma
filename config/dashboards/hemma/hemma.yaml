@@ -166,13 +166,11 @@ views:
               icon: popcorn-cinema-v1
               show_toggle: true
             styles:
-              card:
-                - --hemma-entity-active-tint: '#FF453A'
               img_cell:
                 - background: |
                     [[[ return entity?.state === 'on'
                       ? '#FF453A !important'
-                      : 'rgba(0,0,0,0.20) !important'; ]]]
+                      : 'var(--hemma-icon-circle-bg, rgba(0,0,0,0.20)) !important'; ]]]
           - type: custom:button-card
             template: hemma_light
             entity: light.living_room_accent_1
