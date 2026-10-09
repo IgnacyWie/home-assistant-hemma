@@ -193,52 +193,6 @@ views:
                   variables:
                     remote_entity: remote.living_room_tv
           - type: custom:button-card
-            template: hemma_entity
-            entity: media_player.living_room_tv_2
-            name: Jellyfin
-            state_display: Open app
-            variables:
-              icon: jellyfin
-              mobile_filter_category: media
-              active_override: |
-                [[[
-                  return states['remote.living_room_tv']?.attributes?.current_activity ===
-                    'com.github.damontecres.wholphin';
-                ]]]
-            tap_action:
-              action: call-service
-              service: media_player.play_media
-              target:
-                entity_id: media_player.living_room_tv_2
-              data:
-                media_content_type: app
-                media_content_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
-            hold_action:
-              action: more-info
-          - type: custom:button-card
-            template: hemma_entity
-            entity: media_player.living_room_tv_2
-            name: YouTube
-            state_display: Open app
-            variables:
-              icon: youtube
-              mobile_filter_category: media
-              active_override: |
-                [[[
-                  return states['remote.living_room_tv']?.attributes?.current_activity ===
-                    'com.google.android.youtube.tv';
-                ]]]
-            tap_action:
-              action: call-service
-              service: media_player.play_media
-              target:
-                entity_id: media_player.living_room_tv_2
-              data:
-                media_content_type: app
-                media_content_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
-            hold_action:
-              action: more-info
-          - type: custom:button-card
             template: hemma_media
             entity: media_player.zeppelin
             name: Zeppelin

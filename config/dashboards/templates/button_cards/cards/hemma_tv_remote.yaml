@@ -9,6 +9,7 @@ hemma_tv_remote_button:
   tooltip: '[[[ return variables.label || ""; ]]]'
   variables:
     primary: false
+    accent: ''
 
   tap_action:
     haptic: light
@@ -36,7 +37,9 @@ hemma_tv_remote_button:
           ]]]
       - color: >-
           [[[
-            return variables.primary ? '#1d1d1f' : 'rgba(255,255,255,0.96)';
+            return variables.primary
+              ? '#1d1d1f'
+              : (variables.accent || 'rgba(255,255,255,0.96)');
           ]]]
       - border: none !important
       - box-shadow: none !important
@@ -55,7 +58,9 @@ hemma_tv_remote_button:
         - font-weight: 500
         - color: >-
             [[[
-              return variables.primary ? '#1d1d1f' : 'rgba(255,255,255,0.96)';
+              return variables.primary
+                ? '#1d1d1f'
+                : (variables.accent || 'rgba(255,255,255,0.96)');
             ]]]
     label:
       - grid-area: l
@@ -121,6 +126,21 @@ hemma_tv_mute_button:
   hold_action:
     action: none
 
+hemma_tv_app_button:
+  template: hemma_tv_remote_button
+  entity: media_player.living_room_tv_2
+  tap_action:
+    haptic: light
+    action: call-service
+    service: media_player.play_media
+    target:
+      entity_id: media_player.living_room_tv_2
+    data:
+      media_content_type: app
+      media_content_id: '[[[ return variables.app_id || ""; ]]]'
+  hold_action:
+    action: more-info
+
 hemma_tv_remote_panel:
   template: hemma_default
   show_icon: false
@@ -139,7 +159,7 @@ hemma_tv_remote_panel:
     card:
       - width: calc(var(--popup-min-width, 360px) - 32px)
       - max-width: 100%
-      - min-height: 420px
+      - min-height: 502px
       - padding: 0
       - box-sizing: border-box
       - border-radius: 0
@@ -147,9 +167,9 @@ hemma_tv_remote_panel:
       - box-shadow: none !important
       - border: none !important
     grid:
-      - grid-template-areas: '"back home pause" ". up ." "left select right" ". down ." "vol_down mute vol_up"'
+      - grid-template-areas: '"back home pause" ". up ." "left select right" ". down ." "vol_down mute vol_up" "jellyfin youtube ."'
       - grid-template-columns: repeat(3, 1fr)
-      - grid-template-rows: repeat(5, 72px)
+      - grid-template-rows: repeat(6, 72px)
       - column-gap: 10px
       - row-gap: 10px
     custom_fields:
@@ -197,6 +217,14 @@ hemma_tv_remote_panel:
         - grid-area: vol_up
         - align-self: center
         - justify-self: center
+      jellyfin:
+        - grid-area: jellyfin
+        - align-self: center
+        - justify-self: center
+      youtube:
+        - grid-area: youtube
+        - align-self: center
+        - justify-self: center
 
   custom_fields:
     back:
@@ -233,8 +261,8 @@ hemma_tv_remote_panel:
         variables:
           remote_entity: '[[[ return variables.remote_entity; ]]]'
           command: MEDIA_PLAY_PAUSE
-          glyph: '<ha-icon icon="mdi:pause"></ha-icon>'
-          label: Pause
+          glyph: '<ha-icon icon="mdi:play-pause"></ha-icon>'
+          label: Play/Pause
     left:
       card:
         type: custom:button-card
@@ -299,6 +327,24 @@ hemma_tv_remote_panel:
           command: VOLUME_UP
           glyph: '<ha-icon icon="mdi:volume-plus"></ha-icon>'
           label: Volume up
+    jellyfin:
+      card:
+        type: custom:button-card
+        template: hemma_tv_app_button
+        variables:
+          app_id: com.sony.dtv.com.github.damontecres.wholphin.com.github.damontecres.wholphin.MainActivity
+          glyph: '<ha-icon icon="mdi:play-box-outline"></ha-icon>'
+          label: Jellyfin
+          accent: '#ff8a3d'
+    youtube:
+      card:
+        type: custom:button-card
+        template: hemma_tv_app_button
+        variables:
+          app_id: com.sony.dtv.com.google.android.youtube.tv.com.google.android.apps.youtube.tv.activity.ShellActivity
+          glyph: '<ha-icon icon="mdi:youtube"></ha-icon>'
+          label: YouTube
+          accent: '#ff453a'
 
   extra_styles: |
     :host {
