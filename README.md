@@ -30,7 +30,8 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bedroom Closet light tile with a GU10-style track-light icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Embedded Music Assistant web interface that stays inside Hemma and kiosk mode,
-  opens the last-used player, and reserves safe navigation space on tablet and phone
+  opens the last-used player, reserves safe navigation space on tablet and phone,
+  and runs full-bleed to the viewport edge so horizontal media rails are not clipped early
 - Apple-first typography using the native San Francisco system font where available
 - Custom SVG icon set and room artwork
 
