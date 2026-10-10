@@ -4,10 +4,6 @@ grid-column-gap: 0px
 margin: 0
 padding: 0
 position: relative
-# The HA view box can stop short of the physical viewport on tablets. Keep every
-# room background and its smart-row clipping boundary at the display edge.
-width: 100vw
-max-width: 100vw
 # Header floats over the view; subtracting its height strands the tile row.
 min-height: 100svh
 

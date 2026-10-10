@@ -11,7 +11,6 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 ## Highlights
 
 - Six room views plus a dedicated Music Assistant view with shared navigation
-- Full-viewport room canvases so horizontally scrolling accessory tiles leave at the physical screen edge rather than an inset Home Assistant view boundary
 - Responsive desktop, tablet, and phone layouts
 - Jellyfin playback metadata, artwork, progress, and transport controls
 - Separate physical TV power controls and Android TV app launchers

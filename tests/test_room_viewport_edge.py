@@ -8,10 +8,10 @@ SCREEN_LAYOUT = ROOT / "config/dashboards/templates/includes/hemma_screen_layout
 
 
 class RoomViewportEdgeTests(unittest.TestCase):
-    def test_shared_room_layout_reaches_the_viewport_edge(self):
+    def test_shared_room_layout_does_not_force_viewport_width(self):
         layout = SCREEN_LAYOUT.read_text()
-        self.assertIn("width: 100vw\n", layout)
-        self.assertIn("max-width: 100vw\n", layout)
+        self.assertNotIn("width: 100vw\n", layout)
+        self.assertNotIn("max-width: 100vw\n", layout)
         self.assertIn("margin: 0\n", layout)
         self.assertIn("padding: 0\n", layout)
 
