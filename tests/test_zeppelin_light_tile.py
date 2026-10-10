@@ -16,6 +16,7 @@ class ZeppelinLightTileTests(unittest.TestCase):
         self.assertIn("light_entity_5: light.zeppelin_light", living_room)
         self.assertIn("entity: light.zeppelin_light", living_room)
         self.assertIn("name: Zeppelin Light", living_room)
+        self.assertIn("icon: zeppelin-pendant-v1", living_room)
         self.assertIn("template: hemma_light", living_room)
 
 

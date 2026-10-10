@@ -174,7 +174,7 @@ views:
             entity: light.zeppelin_light
             name: Zeppelin Light
             variables:
-              icon: lightbulb-variant-outline
+              icon: zeppelin-pendant-v1
           - type: custom:button-card
             template: hemma_media
             entity: media_player.living_room_tv_2
