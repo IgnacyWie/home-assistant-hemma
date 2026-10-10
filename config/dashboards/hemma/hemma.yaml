@@ -261,6 +261,7 @@ views:
           light_entity_1: light.bedroom_accent_bedroom
           light_entity_2: light.3_in_1_controller_wifi_2_4g
           light_entity_3: light.bedroom_ikea_of_sweden_grillplats_plug
+          light_entity_4: light.bedroom_closet
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled
           wake_alarm_time_entity: input_datetime.wake_up_time
           wake_alarm_evening_only: false
@@ -295,6 +296,12 @@ views:
             name: LED Strip
             variables:
               icon: led-strip-variant
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.bedroom_closet
+            name: Closet
+            variables:
+              icon: track-light
           - type: custom:button-card
             template: hemma_entity
             entity: input_button.stop_wake_up_music
