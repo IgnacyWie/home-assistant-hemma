@@ -20,6 +20,7 @@ class MusicAssistantViewTests(unittest.TestCase):
             self.dashboard,
         )
         self.assertIn("        hide_background: true\n", self.dashboard)
+        self.assertNotIn("        title: Music Assistant\n", self.dashboard)
 
     def test_shared_navigation_has_one_music_route(self):
         route = "        - url: /dashboard-hemma/music\n"
