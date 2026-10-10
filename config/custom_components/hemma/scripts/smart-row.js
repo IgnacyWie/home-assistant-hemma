@@ -988,10 +988,12 @@ class HemmaSmartRow extends HTMLElement {
         display: block;
         position: absolute;
         z-index: 3;
-        /* Rail lives in the container's padding, so cards leave at the display
-           edge instead of clipping on a line mid-screen. */
+        /* Keep the intentional left rail in #container padding, but let the
+           scrolling host itself end at the viewport edge. Falling back to the
+           left rail here clips the row early whenever scoped theme variables
+           do not cross the custom-element boundary. */
         inset: auto
-          var(--hemma-entity-right-inset-current, var(--hemma-entity-right-inset-desktop, var(--hemma-rail-left, var(--page-gutter, 8vw))))
+          var(--hemma-entity-right-inset-current, var(--hemma-entity-right-inset-desktop, 0px))
           var(--hemma-entity-bottom-current, var(--hemma-entity-bottom-desktop, 0px))
           0;
         scroll-padding-left: var(--hsr-rail);
