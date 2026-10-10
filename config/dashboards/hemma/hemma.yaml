@@ -54,7 +54,7 @@ views:
           media_player_2: media_player.zeppelin
           light_entity_1: light.living_room_accent_1
           light_entity_2: light.bedroom_accent_bedroom
-          light_entity_3: light.sonoff_zbminil2
+          light_entity_3: light.bathroom_led_bathroom
           light_entity_4: light.living_room_2ch_wi_fi_switch_module_2_switch_2
           energy_power_entity: sensor.lsc_smart_power_plug_power
           energy_prominence_threshold: 1000
@@ -120,6 +120,7 @@ views:
           light_entity_2: light.living_room_shelves
           light_entity_3: light.living_room_2ch_wi_fi_switch_module_switch_2
           light_entity_4: light.living_room_balcony
+          light_entity_5: light.zeppelin_light
           media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
           cinema_mode_entity: input_boolean.jellyfin_cinema_mode_enabled
@@ -168,6 +169,12 @@ views:
               service: light.toggle
               target:
                 entity_id: light.living_room_balcony
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.zeppelin_light
+            name: Zeppelin Light
+            variables:
+              icon: lightbulb-variant-outline
           - type: custom:button-card
             template: hemma_media
             entity: media_player.living_room_tv_2
@@ -310,13 +317,13 @@ views:
         variables:
           image: home-demo
           preload_rooms: *room_images
-          light_entity_1: light.sonoff_zbminil2
+          light_entity_1: light.bathroom_led_bathroom
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
         cards:
           - type: custom:button-card
             template: hemma_light
-            entity: light.sonoff_zbminil2
+            entity: light.bathroom_led_bathroom
             name: LED Strip
             variables:
               icon: led-strip-variant
@@ -324,7 +331,7 @@ views:
               action: call-service
               service: light.toggle
               target:
-                entity_id: light.sonoff_zbminil2
+                entity_id: light.bathroom_led_bathroom
           - type: custom:button-card
             template: hemma_entity
             entity: switch.bathroom_lamp

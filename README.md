@@ -27,6 +27,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
+- Living Room Zeppelin Light tile, included in the room lighting summary
 - Apple-first typography using the native San Francisco system font where available
 - Custom SVG icon set and room artwork
 
