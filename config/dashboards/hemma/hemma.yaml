@@ -167,7 +167,7 @@ views:
             entity: light.living_room_balcony
             name: Balcony
             variables:
-              icon: square-ceiling-light
+              icon: balcony-v1
             tap_action:
               action: call-service
               service: light.toggle

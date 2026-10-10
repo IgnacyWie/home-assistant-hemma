@@ -29,6 +29,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
 - Bedroom Closet light tile with an outlined shirt icon
+- Living Room Balcony light tile with a dedicated balcony-and-railing icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Embedded Music Assistant web interface that stays inside Hemma and kiosk mode,
   opens the last-used player, and reserves safe navigation space on tablet and phone
