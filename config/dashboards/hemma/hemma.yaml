@@ -30,6 +30,7 @@ views:
           presence_icon_1: cellphone-mobile-v1
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled
           wake_alarm_time_entity: input_datetime.wake_up_time
+          wake_alarm_evening_only: false
           scene_entity_1: scene.welcome_home
           scene_label_1: Welcome Home
           scene_icon_1: fireplace-home-v1
@@ -262,6 +263,7 @@ views:
           light_entity_3: light.bedroom_ikea_of_sweden_grillplats_plug
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled
           wake_alarm_time_entity: input_datetime.wake_up_time
+          wake_alarm_evening_only: false
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
         cards:

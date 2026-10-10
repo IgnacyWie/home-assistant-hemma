@@ -18,7 +18,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Custom HomeKit TV wrapper with iPhone Remote key forwarding
 - Smart light-group toggles that restore the previous member state
 - Energy monitoring with a monotonic utility meter and a Home header chip that shows the current power draw in watts
-- Wake-up alarm controls and a dedicated stop action
+- Persistent wake-up alarm chips on Home and Bedroom, with schedule controls and a dedicated stop action
 - A **Welcome Home** scene that restores the captured on-lights and keeps all other lighting off
 - A live **What's still on?** Home chip with per-device shutdown controls and one-tap **All Off**
 - Two-hour Lelit espresso-machine safety shutoff with a restart-restorable timer

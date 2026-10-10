@@ -17,11 +17,13 @@ class ContextualHeaderTests(unittest.TestCase):
         self.assertIn("energy_prominence_threshold: 1000", room)
         self.assertIn("energy_prominence_threshold: 1000", dashboard)
 
-    def test_alarm_is_contextual_to_evening_window(self):
+    def test_alarm_supports_evening_context_but_is_persistent_in_home_and_bedroom(self):
         alarm = (BADGES / "hemma_badge_wake_alarm.yaml").read_text()
+        dashboard = DASHBOARD.read_text()
         self.assertIn("evening_start: 18", alarm)
         self.assertIn("evening_end: 3", alarm)
         self.assertIn("variables.evening_only === false || evening", alarm)
+        self.assertEqual(dashboard.count("wake_alarm_evening_only: false"), 2)
 
     def test_low_battery_only_appears_below_twenty_percent(self):
         battery = (BADGES / "hemma_badge_low_battery.yaml").read_text()
