@@ -21,11 +21,6 @@ class MusicAssistantViewTests(unittest.TestCase):
         )
         self.assertIn("        hide_background: true\n", self.dashboard)
 
-    def test_music_view_reaches_the_viewport_edge(self):
-        self.assertIn("      width: 100vw\n", self.dashboard)
-        self.assertIn("      max-width: 100vw\n", self.dashboard)
-        self.assertIn("          border-radius: 0 !important;\n", self.dashboard)
-
     def test_shared_navigation_has_one_music_route(self):
         route = "        - url: /dashboard-hemma/music\n"
         self.assertEqual(self.navigation.count(route), 1)

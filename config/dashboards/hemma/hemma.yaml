@@ -419,8 +419,6 @@ views:
       margin: 0
       padding: 105px 0 0
       box-sizing: border-box
-      width: 100vw
-      max-width: 100vw
       height: 100vh
       min-height: 100vh
       max-height: 100vh
@@ -433,11 +431,6 @@ views:
         title: Music Assistant
         url: "https://music.home.wie.dev/#/home?player=true&showFullscreenPlayer=true"
         hide_background: true
-        card_mod:
-          style: |
-            ha-card {
-              border-radius: 0 !important;
-            }
         view_layout:
           grid-column: 1
           grid-row: 1
