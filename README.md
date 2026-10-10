@@ -27,7 +27,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
-- Bedroom Closet light tile with a GU10-style track-light icon
+- Bedroom Closet light tile with an outlined shirt icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Embedded Music Assistant web interface that stays inside Hemma and kiosk mode,
   opens the last-used player, reserves safe navigation space on tablet and phone,

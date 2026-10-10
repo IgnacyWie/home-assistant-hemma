@@ -4,6 +4,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 DASHBOARD = ROOT / "config/dashboards/hemma/hemma.yaml"
+ICON = ROOT / "config/www/hemma/icons/tshirt-crew-outline-v1.svg"
 
 
 class BedroomClosetTileTests(unittest.TestCase):
@@ -17,8 +18,13 @@ class BedroomClosetTileTests(unittest.TestCase):
         self.assertIn("light_entity_4: light.bedroom_closet", bedroom)
         self.assertIn("entity: light.bedroom_closet", bedroom)
         self.assertIn("name: Closet", bedroom)
-        self.assertIn("icon: track-light", bedroom)
+        self.assertIn("icon: tshirt-crew-outline-v1", bedroom)
+        self.assertNotIn("icon: track-light", bedroom)
         self.assertIn("template: hemma_light", bedroom)
+
+        icon = ICON.read_text()
+        self.assertIn('viewBox="0 0 24 24"', icon)
+        self.assertIn('fill="#fff"', icon)
 
 
 if __name__ == "__main__":

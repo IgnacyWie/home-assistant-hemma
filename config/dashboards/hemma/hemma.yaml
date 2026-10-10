@@ -304,7 +304,7 @@ views:
             entity: light.bedroom_closet
             name: Closet
             variables:
-              icon: track-light
+              icon: tshirt-crew-outline-v1
           - type: custom:button-card
             template: hemma_entity
             entity: input_button.stop_wake_up_music
