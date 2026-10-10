@@ -15,6 +15,17 @@ class RoomViewportEdgeTests(unittest.TestCase):
         self.assertIn("margin: 0\n", layout)
         self.assertIn("padding: 0\n", layout)
 
+    def test_shared_room_layout_has_a_fixed_one_viewport_height(self):
+        layout = SCREEN_LAYOUT.read_text()
+        lines = [line.strip() for line in layout.splitlines()]
+        self.assertEqual(2, lines.count("height: 100vh"))
+        self.assertEqual(2, lines.count("min-height: 100vh"))
+        self.assertEqual(2, lines.count("max-height: 100vh"))
+        self.assertEqual(2, lines.count("overflow: hidden"))
+        self.assertNotIn("min-height: 100svh\n", layout)
+        self.assertNotIn("min-height: 100dvh\n", layout)
+        self.assertNotIn("overflow: visible\n", layout)
+
     def test_all_six_room_views_use_the_shared_layout(self):
         dashboard = DASHBOARD.read_text()
         include = (
