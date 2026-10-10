@@ -408,3 +408,30 @@ views:
                         ? '#42b9ff !important'
                         : 'rgba(0,0,0,0.20) !important';
                     ]]]
+
+  - type: custom:grid-layout
+    title: Music
+    path: music
+    theme: Hemma
+    layout:
+      grid-template-columns: minmax(0, 1fr)
+      grid-template-rows: minmax(0, 1fr)
+      margin: 0
+      padding: 105px 0 0
+      box-sizing: border-box
+      height: 100vh
+      min-height: 100vh
+      max-height: 100vh
+      overflow: hidden
+      mediaquery:
+        "(max-width: 767px)":
+          padding: 0 0 calc(80px + env(safe-area-inset-bottom, 0px))
+    cards:
+      - type: iframe
+        title: Music Assistant
+        url: "https://music.home.wie.dev/#/home?player=true&showFullscreenPlayer=true"
+        hide_background: true
+        view_layout:
+          grid-column: 1
+          grid-row: 1
+      - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml

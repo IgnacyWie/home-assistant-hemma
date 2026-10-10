@@ -30,6 +30,9 @@ cards:
         - url: /dashboard-hemma/corridor
           label: Corridor
           icon: mdi:door-open
+        - url: /dashboard-hemma/music
+          label: Music
+          icon: mdi:music-circle
 
   # Phones: a fixed bottom room bar with all destinations visible.
   - type: conditional

@@ -4,13 +4,13 @@
 [![Hemma](https://img.shields.io/badge/dashboard-Hemma-111111)](https://github.com/willsanderson/Hemma)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-My responsive Home Assistant setup built on [Hemma](https://github.com/willsanderson/Hemma), with an Apple Home-inspired room layout, physical TV controls, Jellyfin Now Playing, custom lighting tiles, energy monitoring, and phone/desktop layouts from one YAML dashboard.
+My responsive Home Assistant setup built on [Hemma](https://github.com/willsanderson/Hemma), with an Apple Home-inspired room layout, an embedded Music Assistant view, physical TV controls, Jellyfin Now Playing, custom lighting tiles, energy monitoring, and phone/desktop layouts from one YAML dashboard.
 
 ![Desktop and mobile dashboard](docs/screenshots/hero.jpg)
 
 ## Highlights
 
-- Five room views with shared text-and-underline navigation
+- Six room views plus a dedicated Music Assistant view with shared navigation
 - Responsive desktop, tablet, and phone layouts
 - Jellyfin playback metadata, artwork, progress, and transport controls
 - Separate physical TV power controls and Android TV app launchers
@@ -29,6 +29,8 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
 - Bedroom Closet light tile with a GU10-style track-light icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
+- Embedded Music Assistant web interface that stays inside Hemma and kiosk mode,
+  opens the last-used player, and reserves safe navigation space on tablet and phone
 - Apple-first typography using the native San Francisco system font where available
 - Custom SVG icon set and room artwork
 
