@@ -23,6 +23,9 @@ ACTIVE_DEVICE_IDS = {
     "fan.bathroom_fan_bathroom",
     "media_player.zeppelin",
     "media_player.living_room_tv_2",
+    "light.zeppelin_light",
+    "light.bedroom_closet",
+    "light.bathroom_led_bathroom",
 }
 
 

@@ -127,9 +127,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - Single OFF turns off all three bedroom lights and the Bathroom Lamp.
   - Double ON turns on all three bedroom lights.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
-    12-entity Leave Home scene, then conditionally turns off the one TV entity also
-    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 13 enabled,
-    visible household entities are managed: nine lights, the Lelit espresso
+    15-target Leave Home scene, then conditionally turns off the one TV entity also
+    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 16 enabled,
+    visible household entities are managed: twelve lights, the Lelit espresso
     machine, bathroom fan, Zeppelin, and the living-room TV. Hidden, disabled,
     diagnostic, unavailable, duplicate-TV, and infrastructure entities are
     intentionally excluded.
@@ -189,7 +189,7 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 [`config/scenes.yaml`](config/scenes.yaml) defines **Leave Home** from the exact
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
-registry. The scene sets nine responsive physical lights, the Lelit
+registry. The scene sets twelve responsive physical lights, the Lelit
 espresso-machine switch, the bathroom fan, and Zeppelin to `off`. The physical
 living-room TV is handled separately by `script.leave_home`, using only
 `media_player.living_room_tv_2`—the same entity displayed by Hemma. The script
@@ -206,7 +206,7 @@ infrastructure entities remain excluded.
 
 The bedside double-OFF branch and the Home chip's **All Off** action both call
 `script.leave_home`. The script applies `scene.leave_home`, then turns off the
-selected Hemma TV only when needed. The chip summarizes the same 13-target
+selected Hemma TV only when needed. The chip summarizes the same 16-target
 allowlist, opens a compact sheet containing only active devices, and gives each
 device its own turn-off control. It replaces the old one-way **Leave Home** chip
 and the temporary active-device cards on the Home view.
@@ -217,9 +217,11 @@ When changing the Leave Home allowlist, update these places together:
 2. The conditional TV target in `script.leave_home` in `config/scripts.yaml`.
 3. `binary_sensor.leave_home_scene_active` in
    `config/packages/hemma_helpers.yaml`.
-4. The Hemma TV card if the selected TV entity changes.
-5. The allowlist description in this README.
-6. The live files under `/config`, followed by `ha core check` and a Core restart
+4. The Home view's active-device allowlist in
+   `config/dashboards/hemma/hemma.yaml`.
+5. The Hemma TV card if the selected TV entity changes.
+6. The allowlist description in this README.
+7. The live files under `/config`, followed by `ha core check` and a Core restart
    or the appropriate scene/script/template/automation reloads.
 
 Before adding any entity, confirm in `core.entity_registry` that `disabled_by`,

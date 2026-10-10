@@ -2,7 +2,7 @@
   name: Welcome Home
   icon: mdi:home-import-outline
   entities:
-    # Lighting that should be on after arriving home.
+    # Lighting that was on when this scene was captured.
     light.bedroom_accent_bedroom:
       state: "on"
     light.living_room_accent_1:
@@ -44,6 +44,12 @@
     light.living_room_2ch_wi_fi_switch_module_switch_1:
       state: "off"
     light.living_room_balcony:
+      state: "off"
+    light.zeppelin_light:
+      state: "off"
+    light.bedroom_closet:
+      state: "off"
+    light.bathroom_led_bathroom:
       state: "off"
     light.3_in_1_controller_wifi_2_4g:
       state: "off"

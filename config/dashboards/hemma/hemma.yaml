@@ -51,6 +51,9 @@ views:
           active_device_entity_11: fan.bathroom_fan_bathroom
           active_device_entity_12: media_player.zeppelin
           active_device_entity_13: media_player.living_room_tv_2
+          active_device_entity_14: light.zeppelin_light
+          active_device_entity_15: light.bedroom_closet
+          active_device_entity_16: light.bathroom_led_bathroom
           media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
           light_entity_1: light.living_room_accent_1
