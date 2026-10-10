@@ -22,6 +22,21 @@ class MusicAssistantViewTests(unittest.TestCase):
         self.assertIn("        hide_background: true\n", self.dashboard)
         self.assertNotIn("        title: Music Assistant\n", self.dashboard)
 
+    def test_music_iframe_fills_viewport_behind_fixed_navigation(self):
+        music = self.dashboard.split(
+            "  - type: custom:grid-layout\n    title: Music\n", 1
+        )[1]
+        self.assertIn("      padding: 0\n", music)
+        self.assertIn("      height: 100vh\n", music)
+        self.assertIn("      max-height: 100vh\n", music)
+        self.assertIn("      overflow: hidden\n", music)
+        self.assertNotIn("padding: 105px", music)
+        self.assertNotIn("padding: 0 0 calc(80px", music)
+        self.assertIn("          margin: 0 !important;\n", music)
+        self.assertIn("          height: 100% !important;\n", music)
+        self.assertIn("          border-radius: 0 !important;\n", music)
+        self.assertIn("          overflow: hidden !important;\n", music)
+
     def test_shared_navigation_has_one_music_route(self):
         route = "        - url: /dashboard-hemma/music\n"
         self.assertEqual(self.navigation.count(route), 1)

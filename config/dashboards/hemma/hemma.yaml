@@ -416,16 +416,14 @@ views:
     layout:
       grid-template-columns: minmax(0, 1fr)
       grid-template-rows: minmax(0, 1fr)
+      grid-gap: 0
       margin: 0
-      padding: 105px 0 0
+      padding: 0
       box-sizing: border-box
       height: 100vh
       min-height: 100vh
       max-height: 100vh
       overflow: hidden
-      mediaquery:
-        "(max-width: 767px)":
-          padding: 0 0 calc(80px + env(safe-area-inset-bottom, 0px))
     cards:
       - type: iframe
         url: "https://music.home.wie.dev/#/home?player=true&showFullscreenPlayer=true"
@@ -433,4 +431,20 @@ views:
         view_layout:
           grid-column: 1
           grid-row: 1
+        card_mod:
+          style: |
+            :host {
+              margin: 0 !important;
+              min-width: 0 !important;
+              min-height: 0 !important;
+              height: 100% !important;
+              overflow: hidden !important;
+              z-index: 0 !important;
+            }
+            ha-card {
+              height: 100% !important;
+              min-height: 0 !important;
+              border-radius: 0 !important;
+              overflow: hidden !important;
+            }
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
