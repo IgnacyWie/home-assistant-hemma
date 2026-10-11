@@ -248,6 +248,12 @@ views:
               service: switch.toggle
               target:
                 entity_id: switch.ikea_of_sweden_grillplats_plug_2
+          - type: custom:button-card
+            template: hemma_fan
+            entity: fan.kitchen_fan_kitchen
+            name: Extractor Fan
+            variables:
+              icon: kitchen-extractor-v1
 
   - type: custom:grid-layout
     title: Bedroom
