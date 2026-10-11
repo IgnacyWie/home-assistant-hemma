@@ -31,6 +31,8 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Living Room Balcony light tile with a dedicated balcony-and-railing icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Kitchen extractor-fan tile with a dedicated range-hood icon
+- Kitchen 1 light tile with a dedicated lightbulb-spot icon
+- Kitchen LED light tile using the standard LED-strip icon
 - Embedded Music Assistant web interface that stays inside Hemma and kiosk mode,
   opens the last-used player, and reserves safe navigation space on tablet and phone
 - Apple-first typography using the native San Francisco system font where available
@@ -237,9 +239,12 @@ scene only when a whole-home shutdown is safe.
 ## Kitchen dashboard
 
 The Kitchen view is included in the shared room navigation on desktop, tablet,
-and phone. It contains a dedicated **Lelit Espresso Machine** switch tile using
-an espresso-maker silhouette. The tile controls the IKEA GRILLPLATS plug and
-reports its current on/off state.
+and phone. It contains two light tiles: **Kitchen 1** uses the served
+lightbulb-spot icon, while **Kitchen LED** uses Hemma's standard LED-strip icon.
+Both tiles call `light.toggle` on tap and keep the inherited detailed controls
+for a long press. The view also contains a dedicated **Lelit Espresso Machine**
+switch tile using an espresso-maker silhouette. The tile controls the IKEA
+GRILLPLATS plug and reports its current on/off state.
 
 ## Potential improvements
 
