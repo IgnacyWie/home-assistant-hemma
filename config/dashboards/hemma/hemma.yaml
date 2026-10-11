@@ -254,6 +254,9 @@ views:
             name: Extractor Fan
             variables:
               icon: kitchen-extractor-v1
+            styles:
+              card:
+                - --hemma-fan-animation: none
 
   - type: custom:grid-layout
     title: Bedroom

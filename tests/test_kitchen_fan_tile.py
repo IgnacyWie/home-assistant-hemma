@@ -18,6 +18,7 @@ class KitchenFanTileTests(unittest.TestCase):
         self.assertIn("template: hemma_fan", kitchen)
         self.assertIn("name: Extractor Fan", kitchen)
         self.assertIn("icon: kitchen-extractor-v1", kitchen)
+        self.assertIn("--hemma-fan-animation: none", kitchen)
         self.assertNotIn("icon: bathroom-extractor-v1", kitchen)
 
         icon = ICON.read_text()
