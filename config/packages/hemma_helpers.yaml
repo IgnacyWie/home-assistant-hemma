@@ -240,6 +240,7 @@ template:
              and is_state('light.kitchen_1', 'off')
              and is_state('light.2ch_wi_fi_switch_module_3_switch_1', 'off')
              and is_state('light.2ch_wi_fi_switch_module_3_switch_2', 'off')
+             and is_state('light.kitchen_shelly2pmg4_d885ace4f060_output_1', 'off')
              and is_state('switch.bathroom_lamp', 'off') }}
 
       - name: Leave Home Scene Active
@@ -261,6 +262,7 @@ template:
              and is_state('light.kitchen_1', 'off')
              and is_state('light.2ch_wi_fi_switch_module_3_switch_1', 'off')
              and is_state('light.2ch_wi_fi_switch_module_3_switch_2', 'off')
+             and is_state('light.kitchen_shelly2pmg4_d885ace4f060_output_1', 'off')
              and is_state('switch.ikea_of_sweden_grillplats_plug_2', 'off')
              and is_state('fan.kitchen_extractor_fan', 'off')
              and states('media_player.zeppelin') in ['off', 'idle', 'paused', 'standby']

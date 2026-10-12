@@ -20,7 +20,9 @@ class KitchenLightTileTests(unittest.TestCase):
         self.assertEqual(1, home.count("light.kitchen_1"))
         self.assertEqual(1, home.count("light.2ch_wi_fi_switch_module_3_switch_1"))
         self.assertEqual(1, home.count("light.2ch_wi_fi_switch_module_3_switch_2"))
-        self.assertNotIn("light.kitchen_shelly2pmg4_d885ace4f060_output_1", home)
+        self.assertEqual(
+            1, home.count("light.kitchen_shelly2pmg4_d885ace4f060_output_1")
+        )
         self.assertEqual(5, kitchen.count("light.kitchen_1"))
         self.assertEqual(4, kitchen.count("light.2ch_wi_fi_switch_module_3_switch_1"))
         self.assertEqual(4, kitchen.count("light.2ch_wi_fi_switch_module_3_switch_2"))

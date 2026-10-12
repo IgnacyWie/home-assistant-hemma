@@ -31,6 +31,8 @@
       state: "off"
     light.2ch_wi_fi_switch_module_3_switch_2:
       state: "off"
+    light.kitchen_shelly2pmg4_d885ace4f060_output_1:
+      state: "off"
     switch.bathroom_lamp:
       state: "off"
 
@@ -68,6 +70,8 @@
     light.2ch_wi_fi_switch_module_3_switch_1:
       state: "off"
     light.2ch_wi_fi_switch_module_3_switch_2:
+      state: "off"
+    light.kitchen_shelly2pmg4_d885ace4f060_output_1:
       state: "off"
     switch.ikea_of_sweden_grillplats_plug_2:
       state: "off"

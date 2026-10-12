@@ -23,6 +23,7 @@ LEAVE_HOME_TARGETS = {
     "light.kitchen_1",
     "light.2ch_wi_fi_switch_module_3_switch_1",
     "light.2ch_wi_fi_switch_module_3_switch_2",
+    "light.kitchen_shelly2pmg4_d885ace4f060_output_1",
     "switch.ikea_of_sweden_grillplats_plug_2",
     "fan.kitchen_extractor_fan",
     "media_player.zeppelin",

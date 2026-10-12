@@ -22,6 +22,7 @@ WELCOME_HOME_STATES = {
     "light.kitchen_1": "off",
     "light.2ch_wi_fi_switch_module_3_switch_1": "off",
     "light.2ch_wi_fi_switch_module_3_switch_2": "off",
+    "light.kitchen_shelly2pmg4_d885ace4f060_output_1": "off",
 }
 
 

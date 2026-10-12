@@ -140,9 +140,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - Single OFF turns off all three bedroom lights and the Bathroom LED.
   - Double ON turns on all three bedroom lights.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
-    18-target Leave Home scene, then conditionally turns off the one TV entity also
-    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 19 enabled,
-    visible household entities are managed: fifteen lights, the Lelit espresso
+    19-target Leave Home scene, then conditionally turns off the one TV entity also
+    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 20 enabled,
+    visible household entities are managed: sixteen lights, the Lelit espresso
     machine, kitchen extractor fan, Zeppelin, and the living-room TV. The bathroom
     fan stays outside the routine so its humidity schedule remains authoritative.
     Hidden, disabled, diagnostic, unavailable, duplicate-TV, and infrastructure
@@ -156,8 +156,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 [`config/scenes.yaml`](config/scenes.yaml) defines **Welcome Home** as a complete
 physical-lighting snapshot. It turns on six cozy lights, including **Zeppelin
 Light**, and explicitly keeps the remaining responsive lighting entities off.
-Kitchen 1, Kitchen 2, and Kitchen 3 are included with `state: "off"` so the
-overhead spots stay dark. The Bathroom Lamp switch also remains off. The
+Kitchen 1, Kitchen 2, Kitchen 3, and Kitchen LED are included with
+`state: "off"` so the overhead and cabinet lighting stay dark. The Bathroom Lamp
+switch also remains off. The
 unavailable Bathroom Sonoff LED is temporarily excluded from this scene and its
 active-state sensor, so it cannot block activation or the Hemma status
 indication. Derived light groups and disabled infrastructure entities are
@@ -166,7 +167,7 @@ excluded to avoid duplicate or conflicting commands.
 The Home view exposes the scene as a **Welcome Home** action tile. It is kept
 first in the configured Home rail so Hemma's active-card sorting cannot push the
 stateless scene beyond the initially visible controls. A template binary sensor,
-`binary_sensor.welcome_home_scene_active`, compares the 14 currently included
+`binary_sensor.welcome_home_scene_active`, compares the 15 currently included
 physical lighting controls with the scene and drives both the tile highlight and
 its **Active** or **Inactive** label. Unknown or unavailable included accessories
 do not count as matching; the unavailable Bathroom Sonoff LED is not currently
@@ -204,7 +205,7 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 [`config/scenes.yaml`](config/scenes.yaml) defines **Leave Home** from the exact
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
-registry. The scene sets fifteen responsive physical lights, the Lelit
+registry. The scene sets sixteen responsive physical lights, the Lelit
 espresso-machine switch, the kitchen extractor fan, and Zeppelin to `off`. The physical
 living-room TV is handled separately by `script.leave_home`, using only
 `media_player.living_room_tv_2`—the same entity displayed by Hemma. The script
@@ -223,7 +224,7 @@ excluded.
 
 The bedside double-OFF branch and the Home chip's **All Off** action both call
 `script.leave_home`. The script applies `scene.leave_home`, then turns off the
-selected Hemma TV only when needed. The chip summarizes the same 19-target
+selected Hemma TV only when needed. The chip summarizes the same 20-target
 allowlist, opens a compact sheet containing only active devices, and gives each
 device its own turn-off control. It replaces the old one-way **Leave Home** chip
 and the temporary active-device cards on the Home view.

@@ -57,6 +57,7 @@ views:
           active_device_entity_17: light.kitchen_1
           active_device_entity_18: light.2ch_wi_fi_switch_module_3_switch_1
           active_device_entity_19: light.2ch_wi_fi_switch_module_3_switch_2
+          active_device_entity_20: light.kitchen_shelly2pmg4_d885ace4f060_output_1
           media_player_1: media_player.tv_w_salonie
           media_player_2: media_player.zeppelin
           light_entity_1: light.living_room_accent_1
