@@ -46,9 +46,12 @@ hemma_light:
 
       const seen = new Set();
       const directMembers = memsOf(entity?.entity_id);
+      const configured = Array.isArray(variables.lights)
+        ? variables.lights.filter(eid => typeof eid === "string" && eid.startsWith("light."))
+        : [];
       const isGroup = directMembers.length > 0
-        || (Array.isArray(variables.lights) && variables.lights.length > 0);
-      const all = [...new Set(units(entity?.entity_id, seen))];
+        || configured.length > 0;
+      const all = [...new Set(configured.length ? configured : units(entity?.entity_id, seen))];
       const onCount = all.filter(eid => states[eid]?.state === "on").length;
 
       if (!isGroup) {

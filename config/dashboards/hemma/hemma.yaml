@@ -243,36 +243,32 @@ views:
           - type: custom:button-card
             template: hemma_light
             entity: light.kitchen_1
-            name: Kitchen 1
+            name: Spots
             variables:
               icon: lightbulb-spot-v1
+              room_name: Spots
+              group_rooms: false
+              lights:
+                - light.kitchen_1
+                - light.2ch_wi_fi_switch_module_3_switch_1
+                - light.2ch_wi_fi_switch_module_3_switch_2
+              active_entities:
+                - light.kitchen_1
+                - light.2ch_wi_fi_switch_module_3_switch_1
+                - light.2ch_wi_fi_switch_module_3_switch_2
             tap_action:
               action: call-service
-              service: light.toggle
+              service: >
+                [[[
+                  const ids = Array.isArray(variables.lights) ? variables.lights : [];
+                  const anyOn = ids.some((eid) => states[eid]?.state === 'on');
+                  return anyOn ? 'light.turn_off' : 'light.turn_on';
+                ]]]
               target:
-                entity_id: light.kitchen_1
-          - type: custom:button-card
-            template: hemma_light
-            entity: light.2ch_wi_fi_switch_module_3_switch_1
-            name: Kitchen 2
-            variables:
-              icon: lightbulb-spot-v1
-            tap_action:
-              action: call-service
-              service: light.toggle
-              target:
-                entity_id: light.2ch_wi_fi_switch_module_3_switch_1
-          - type: custom:button-card
-            template: hemma_light
-            entity: light.2ch_wi_fi_switch_module_3_switch_2
-            name: Kitchen 3
-            variables:
-              icon: lightbulb-spot-v1
-            tap_action:
-              action: call-service
-              service: light.toggle
-              target:
-                entity_id: light.2ch_wi_fi_switch_module_3_switch_2
+                entity_id:
+                  - light.kitchen_1
+                  - light.2ch_wi_fi_switch_module_3_switch_1
+                  - light.2ch_wi_fi_switch_module_3_switch_2
           - type: custom:button-card
             template: hemma_light
             entity: light.kitchen_shelly2pmg4_d885ace4f060_output_1
