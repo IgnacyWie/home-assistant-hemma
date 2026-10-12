@@ -12,7 +12,7 @@
   actions:
   - delay:
       hours: 0
-      minutes: 20
+      minutes: 45
       seconds: 0
       milliseconds: 0
   - action: fan.turn_off
@@ -21,6 +21,25 @@
       entity_id: fan.bathroom_fan_bathroom
     data: {}
   mode: single
+
+- id: 'kitchen_extractor_fan_timeout'
+  alias: Kitchen Extractor Fan - 60-minute timeout
+  description: Turns off the kitchen extractor after 60 minutes at either speed.
+  triggers:
+  - trigger: state
+    entity_id: fan.kitchen_extractor_fan
+    to: 'on'
+  conditions: []
+  actions:
+  - delay:
+      hours: 0
+      minutes: 60
+      seconds: 0
+      milliseconds: 0
+  - action: fan.turn_off
+    target:
+      entity_id: fan.kitchen_extractor_fan
+  mode: restart
 
 - id: 'wake_up_music_zeppelin'
   alias: Wake up with music - Zeppelin
@@ -133,9 +152,9 @@
           entity_id: script.leave_home
     - conditions: "{{ trigger.id == 'turn_on' and nighttime }}"
       sequence:
-      - action: switch.turn_on
+      - action: light.turn_on
         target:
-          entity_id: switch.bathroom_lamp
+          entity_id: light.bathroom_led_bathroom
       - choose:
         - conditions: "{{ not is_state('light.3_in_1_controller_wifi_2_4g', 'on') }}"
           sequence:
@@ -176,9 +195,9 @@
           - light.bedroom_ikea_of_sweden_grillplats_plug
           - light.3_in_1_controller_wifi_2_4g
           - light.bedroom_accent_bedroom
-      - action: switch.turn_off
+      - action: light.turn_off
         target:
-          entity_id: switch.bathroom_lamp
+          entity_id: light.bathroom_led_bathroom
   mode: restart
 
 - id: 'lelit_espresso_machine_safety'
@@ -325,7 +344,7 @@
   triggers:
   - trigger: state
     entity_id:
-    - light.sonoff_zbminil2
+    - light.bathroom_led_bathroom
     - switch.bathroom_lamp
     to: 'on'
     for: "00:45:00"

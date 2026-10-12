@@ -99,11 +99,14 @@ config/
 [`config/automations.yaml`](config/automations.yaml) is the source-controlled
 copy of the active `/config/automations.yaml` file. It currently contains:
 
-- **Bathroom Fan - Delay** — turns off the bathroom fan 20 minutes after it is
+- **Bathroom Fan - Delay** — turns off the bathroom fan 45 minutes after it is
   switched on.
 - **Kitchen Extractor Fan - Relay interlock** — keeps the two relays behind the
   two-speed kitchen extractor mutually exclusive, including when a raw Tuya
   channel is operated directly.
+- **Kitchen Extractor Fan - 60-minute timeout** — turns off the kitchen extractor
+  after 60 minutes at either speed. Turning it off and back on starts a fresh
+  timeout.
 - **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
   then plays *Guten Morgen Sonnenschein* at the configured wake-up time when
   the wake-up helper is enabled.
@@ -132,9 +135,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 - **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
   - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
     LED Bed first, then Bedroom Accent.
-  - Single ON from 23:00 through 05:59 turns on the Bathroom Lamp and then
+  - Single ON from 23:00 through 05:59 turns on the Bathroom LED and then
     progressively enables LED Bed, Bed Lamp, and Bedroom Accent.
-  - Single OFF turns off all three bedroom lights and the Bathroom Lamp.
+  - Single OFF turns off all three bedroom lights and the Bathroom LED.
   - Double ON turns on all three bedroom lights.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
     15-target Leave Home scene, then conditionally turns off the one TV entity also
