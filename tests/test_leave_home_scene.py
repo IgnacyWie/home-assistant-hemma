@@ -20,14 +20,17 @@ LEAVE_HOME_TARGETS = {
     "light.bathroom_led_bathroom",
     "light.3_in_1_controller_wifi_2_4g",
     "light.bedroom_ikea_of_sweden_grillplats_plug",
+    "light.kitchen_1",
+    "light.2ch_wi_fi_switch_module_3_switch_1",
+    "light.2ch_wi_fi_switch_module_3_switch_2",
     "switch.ikea_of_sweden_grillplats_plug_2",
-    "fan.bathroom_fan_bathroom",
+    "fan.kitchen_extractor_fan",
     "media_player.zeppelin",
 }
 
 
 class LeaveHomeSceneTests(unittest.TestCase):
-    def test_scene_and_active_sensor_cover_the_same_new_leave_home_lights(self):
+    def test_scene_and_active_sensor_cover_the_exact_leave_home_targets(self):
         scenes = SCENES.read_text()
         leave_scene = scenes.split("- id: leave_home", 1)[1]
         scene_targets = set(
@@ -37,12 +40,19 @@ class LeaveHomeSceneTests(unittest.TestCase):
 
         helpers = HELPERS.read_text()
         active_sensor = helpers.split("- name: Leave Home Scene Active", 1)[1]
-        for entity_id in (
-            "light.zeppelin_light",
-            "light.bedroom_closet",
-            "light.bathroom_led_bathroom",
-        ):
+        for entity_id in LEAVE_HOME_TARGETS - {"media_player.zeppelin"}:
             self.assertIn(f"is_state('{entity_id}', 'off')", active_sensor)
+        self.assertIn(
+            "states('media_player.zeppelin') in ['off', 'idle', 'paused', 'standby']",
+            active_sensor,
+        )
+
+    def test_bathroom_fan_is_explicitly_excluded(self):
+        self.assertNotIn("fan.bathroom_fan_bathroom", SCENES.read_text())
+        active_sensor = HELPERS.read_text().split(
+            "- name: Leave Home Scene Active", 1
+        )[1]
+        self.assertNotIn("fan.bathroom_fan_bathroom", active_sensor)
 
 
 if __name__ == "__main__":

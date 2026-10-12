@@ -55,9 +55,15 @@
       state: "off"
     light.bedroom_ikea_of_sweden_grillplats_plug:
       state: "off"
+    light.kitchen_1:
+      state: "off"
+    light.2ch_wi_fi_switch_module_3_switch_1:
+      state: "off"
+    light.2ch_wi_fi_switch_module_3_switch_2:
+      state: "off"
     switch.ikea_of_sweden_grillplats_plug_2:
       state: "off"
-    fan.bathroom_fan_bathroom:
+    fan.kitchen_extractor_fan:
       state: "off"
     media_player.zeppelin:
       state: "off"

@@ -254,8 +254,11 @@ template:
              and is_state('light.bathroom_led_bathroom', 'off')
              and is_state('light.3_in_1_controller_wifi_2_4g', 'off')
              and is_state('light.bedroom_ikea_of_sweden_grillplats_plug', 'off')
+             and is_state('light.kitchen_1', 'off')
+             and is_state('light.2ch_wi_fi_switch_module_3_switch_1', 'off')
+             and is_state('light.2ch_wi_fi_switch_module_3_switch_2', 'off')
              and is_state('switch.ikea_of_sweden_grillplats_plug_2', 'off')
-             and is_state('fan.bathroom_fan_bathroom', 'off')
+             and is_state('fan.kitchen_extractor_fan', 'off')
              and states('media_player.zeppelin') in ['off', 'idle', 'paused', 'standby']
              and states('media_player.tv_w_salonie_4') in ['off', 'idle', 'paused', 'standby', 'unavailable'] }}
 

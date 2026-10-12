@@ -140,12 +140,13 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - Single OFF turns off all three bedroom lights and the Bathroom LED.
   - Double ON turns on all three bedroom lights.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
-    15-target Leave Home scene, then conditionally turns off the one TV entity also
-    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 16 enabled,
-    visible household entities are managed: twelve lights, the Lelit espresso
-    machine, bathroom fan, Zeppelin, and the living-room TV. Hidden, disabled,
-    diagnostic, unavailable, duplicate-TV, and infrastructure entities are
-    intentionally excluded.
+    18-target Leave Home scene, then conditionally turns off the one TV entity also
+    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 19 enabled,
+    visible household entities are managed: fifteen lights, the Lelit espresso
+    machine, kitchen extractor fan, Zeppelin, and the living-room TV. The bathroom
+    fan stays outside the routine so its humidity schedule remains authoritative.
+    Hidden, disabled, diagnostic, unavailable, duplicate-TV, and infrastructure
+    entities are intentionally excluded.
   - While the configured wake-up alarm is playing, any mapped button press
     stops only the alarm without changing lights, running the bedtime shutdown,
     or switching off the espresso machine.
@@ -202,8 +203,8 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 [`config/scenes.yaml`](config/scenes.yaml) defines **Leave Home** from the exact
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
-registry. The scene sets twelve responsive physical lights, the Lelit
-espresso-machine switch, the bathroom fan, and Zeppelin to `off`. The physical
+registry. The scene sets fifteen responsive physical lights, the Lelit
+espresso-machine switch, the kitchen extractor fan, and Zeppelin to `off`. The physical
 living-room TV is handled separately by `script.leave_home`, using only
 `media_player.living_room_tv_2`—the same entity displayed by Hemma. The script
 skips the TV command when that entity is already `off`, `unknown`, or
@@ -211,15 +212,17 @@ skips the TV command when that entity is already `off`, `unknown`, or
 BRAVIA to turn off again. Other entities representing the same physical TV are
 not shutdown targets.
 
-Leave Home does not include the Bathroom Lamp because that entity was not part of
-the established bedside shutdown allowlist. The unavailable Bathroom Sonoff LED
-is temporarily excluded from both Leave Home and its active-state sensor, so it
-cannot block execution or status feedback. Hidden, disabled, diagnostic, and
-infrastructure entities remain excluded.
+Leave Home does not include the bathroom fan, allowing its humidity-removal
+schedule to keep running independently. It also does not include the Bathroom
+Lamp because that entity was not part of the established bedside shutdown
+allowlist. The unavailable Bathroom Sonoff LED is temporarily excluded from both
+Leave Home and its active-state sensor, so it cannot block execution or status
+feedback. Hidden, disabled, diagnostic, and infrastructure entities remain
+excluded.
 
 The bedside double-OFF branch and the Home chip's **All Off** action both call
 `script.leave_home`. The script applies `scene.leave_home`, then turns off the
-selected Hemma TV only when needed. The chip summarizes the same 16-target
+selected Hemma TV only when needed. The chip summarizes the same 19-target
 allowlist, opens a compact sheet containing only active devices, and gives each
 device its own turn-off control. It replaces the old one-way **Leave Home** chip
 and the temporary active-device cards on the Home view.

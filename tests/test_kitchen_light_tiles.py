@@ -8,7 +8,7 @@ ICON = ROOT / "config/www/hemma/icons/lightbulb-spot-v1.svg"
 
 
 class KitchenLightTileTests(unittest.TestCase):
-    def test_kitchen_lights_are_only_in_kitchen_view(self):
+    def test_kitchen_light_tiles_stay_in_kitchen_view(self):
         dashboard = DASHBOARD.read_text()
         home = dashboard.split(
             "  - type: custom:grid-layout\n    title: Kitchen", 1
@@ -17,9 +17,9 @@ class KitchenLightTileTests(unittest.TestCase):
             "  - type: custom:grid-layout\n    title: Kitchen", 1
         )[1].split("  - type: custom:grid-layout\n    title: Bedroom", 1)[0]
 
-        self.assertNotIn("light.kitchen_1", home)
-        self.assertNotIn("light.2ch_wi_fi_switch_module_3_switch_1", home)
-        self.assertNotIn("light.2ch_wi_fi_switch_module_3_switch_2", home)
+        self.assertEqual(1, home.count("light.kitchen_1"))
+        self.assertEqual(1, home.count("light.2ch_wi_fi_switch_module_3_switch_1"))
+        self.assertEqual(1, home.count("light.2ch_wi_fi_switch_module_3_switch_2"))
         self.assertNotIn("light.kitchen_shelly2pmg4_d885ace4f060_output_1", home)
         self.assertEqual(5, kitchen.count("light.kitchen_1"))
         self.assertEqual(4, kitchen.count("light.2ch_wi_fi_switch_module_3_switch_1"))

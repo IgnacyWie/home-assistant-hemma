@@ -20,12 +20,15 @@ ACTIVE_DEVICE_IDS = {
     "light.3_in_1_controller_wifi_2_4g",
     "light.bedroom_ikea_of_sweden_grillplats_plug",
     "switch.ikea_of_sweden_grillplats_plug_2",
-    "fan.bathroom_fan_bathroom",
     "media_player.zeppelin",
     "media_player.living_room_tv_2",
     "light.zeppelin_light",
     "light.bedroom_closet",
     "light.bathroom_led_bathroom",
+    "light.kitchen_1",
+    "light.2ch_wi_fi_switch_module_3_switch_1",
+    "light.2ch_wi_fi_switch_module_3_switch_2",
+    "fan.kitchen_extractor_fan",
 }
 
 
@@ -44,6 +47,7 @@ class ActiveDevicesChipTests(unittest.TestCase):
         dashboard = DASHBOARD.read_text()
         configured = set(re.findall(r"active_device_entity_\d+:\s+([^\s#]+)", dashboard))
         self.assertEqual(ACTIVE_DEVICE_IDS, configured)
+        self.assertNotIn("fan.bathroom_fan_bathroom", configured)
 
     def test_chip_has_live_summary_individual_controls_and_all_off(self):
         template = TEMPLATE.read_text()
