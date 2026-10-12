@@ -243,12 +243,13 @@ scene only when a whole-home shutdown is safe.
 ## Kitchen dashboard
 
 The Kitchen view is included in the shared room navigation on desktop, tablet,
-and phone. It contains three light tiles: **Kitchen 1** and **Kitchen 2** use the
-served lightbulb-spot icon, while **Kitchen LED** uses Hemma's standard LED-strip
-icon. All three tiles call `light.toggle` on tap and keep the inherited detailed
-controls for a long press. The view also contains a dedicated **Lelit Espresso
-Machine** switch tile using an espresso-maker silhouette. The tile controls the
-IKEA GRILLPLATS plug and reports its current on/off state.
+and phone. It contains four light tiles: **Kitchen 1**, **Kitchen 2**, and
+**Kitchen 3** use the served lightbulb-spot icon, while **Kitchen LED** uses
+Hemma's standard LED-strip icon. All four tiles call `light.toggle` on tap and
+keep the inherited detailed controls for a long press. The view also contains a
+dedicated **Lelit Espresso Machine** switch tile using an espresso-maker
+silhouette. The tile controls the IKEA GRILLPLATS plug and reports its current
+on/off state.
 
 The **Extractor Fan** tile now controls `fan.kitchen_extractor_fan`, a two-speed
 template fan backed by the two relays of **2CH Wi-Fi Switch Module 4**. Speed 1

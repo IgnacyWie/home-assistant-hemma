@@ -236,6 +236,7 @@ views:
           light_entity_1: light.kitchen_1
           light_entity_2: light.kitchen_shelly2pmg4_d885ace4f060_output_1
           light_entity_3: light.2ch_wi_fi_switch_module_3_switch_1
+          light_entity_4: light.2ch_wi_fi_switch_module_3_switch_2
       - !include /config/dashboards/templates/includes/hemma_navbar_tablet.yaml
       - type: custom:hemma-smart-row
         cards:
@@ -261,6 +262,17 @@ views:
               service: light.toggle
               target:
                 entity_id: light.2ch_wi_fi_switch_module_3_switch_1
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.2ch_wi_fi_switch_module_3_switch_2
+            name: Kitchen 3
+            variables:
+              icon: lightbulb-spot-v1
+            tap_action:
+              action: call-service
+              service: light.toggle
+              target:
+                entity_id: light.2ch_wi_fi_switch_module_3_switch_2
           - type: custom:button-card
             template: hemma_light
             entity: light.kitchen_shelly2pmg4_d885ace4f060_output_1
