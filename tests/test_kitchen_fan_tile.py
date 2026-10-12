@@ -14,7 +14,8 @@ class KitchenFanTileTests(unittest.TestCase):
             "  - type: custom:grid-layout\n    title: Kitchen", 1
         )[1].split("  - type: custom:grid-layout\n    title: Bedroom", 1)[0]
 
-        self.assertEqual(1, kitchen.count("fan.kitchen_fan_kitchen"))
+        self.assertEqual(1, kitchen.count("fan.kitchen_extractor_fan"))
+        self.assertNotIn("fan.kitchen_fan_kitchen", dashboard)
         self.assertIn("template: hemma_fan", kitchen)
         self.assertIn("name: Extractor Fan", kitchen)
         self.assertIn("icon: kitchen-extractor-v1", kitchen)

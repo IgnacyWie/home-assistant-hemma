@@ -88,7 +88,8 @@ config/
 │   └── templates/             # Cards, badges, popups and responsive layouts
 ├── packages/
 │   ├── hemma_helpers.yaml     # Helpers, scripts and dashboard automations
-│   └── homekit_tv.yaml        # TV wrapper and remote-key forwarding
+│   ├── homekit_tv.yaml        # TV wrapper and remote-key forwarding
+│   └── kitchen_fan.yaml       # Two-speed Tuya fan wrapper and relay interlock
 ├── themes/hemma/              # Hemma theme and typography
 └── www/hemma/                 # Icons and room images
 ```
@@ -100,6 +101,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 
 - **Bathroom Fan - Delay** — turns off the bathroom fan 20 minutes after it is
   switched on.
+- **Kitchen Extractor Fan - Relay interlock** — keeps the two relays behind the
+  two-speed kitchen extractor mutually exclusive, including when a raw Tuya
+  channel is operated directly.
 - **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
   then plays *Guten Morgen Sonnenschein* at the configured wake-up time when
   the wake-up helper is enabled.
@@ -245,6 +249,14 @@ Both tiles call `light.toggle` on tap and keep the inherited detailed controls
 for a long press. The view also contains a dedicated **Lelit Espresso Machine**
 switch tile using an espresso-maker silhouette. The tile controls the IKEA
 GRILLPLATS plug and reports its current on/off state.
+
+The **Extractor Fan** tile now controls `fan.kitchen_extractor_fan`, a two-speed
+template fan backed by the two relays of **2CH Wi-Fi Switch Module 4**. Speed 1
+uses the first relay at 50%, Speed 2 uses the second relay at 100%, and changing
+speed switches both relays off for 500 ms before energizing the selected relay.
+A relay interlock also turns the opposite channel off if either raw Tuya switch
+is operated directly. The two underlying `switch.*` entities are hidden in Home
+Assistant's entity registry so the fan is the only user-facing control.
 
 ## Potential improvements
 

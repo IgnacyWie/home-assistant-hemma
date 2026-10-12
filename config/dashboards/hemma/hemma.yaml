@@ -274,7 +274,7 @@ views:
                 entity_id: switch.ikea_of_sweden_grillplats_plug_2
           - type: custom:button-card
             template: hemma_fan
-            entity: fan.kitchen_fan_kitchen
+            entity: fan.kitchen_extractor_fan
             name: Extractor Fan
             variables:
               icon: kitchen-extractor-v1
