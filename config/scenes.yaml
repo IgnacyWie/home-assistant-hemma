@@ -13,6 +13,8 @@
       state: "on"
     light.bedroom_ikea_of_sweden_grillplats_plug:
       state: "on"
+    light.zeppelin_light:
+      state: "on"
 
     # All other physical lighting remains off.
     light.living_room_2ch_wi_fi_switch_module_2_switch_1:
@@ -22,6 +24,12 @@
     light.living_room_2ch_wi_fi_switch_module_switch_1:
       state: "off"
     light.living_room_balcony:
+      state: "off"
+    light.kitchen_1:
+      state: "off"
+    light.2ch_wi_fi_switch_module_3_switch_1:
+      state: "off"
+    light.2ch_wi_fi_switch_module_3_switch_2:
       state: "off"
     switch.bathroom_lamp:
       state: "off"

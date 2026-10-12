@@ -232,10 +232,14 @@ template:
              and is_state('light.living_room_2ch_wi_fi_switch_module_switch_2', 'on')
              and is_state('light.3_in_1_controller_wifi_2_4g', 'on')
              and is_state('light.bedroom_ikea_of_sweden_grillplats_plug', 'on')
+             and is_state('light.zeppelin_light', 'on')
              and is_state('light.living_room_2ch_wi_fi_switch_module_2_switch_1', 'off')
              and is_state('light.living_room_2ch_wi_fi_switch_module_2_switch_2', 'off')
              and is_state('light.living_room_2ch_wi_fi_switch_module_switch_1', 'off')
              and is_state('light.living_room_balcony', 'off')
+             and is_state('light.kitchen_1', 'off')
+             and is_state('light.2ch_wi_fi_switch_module_3_switch_1', 'off')
+             and is_state('light.2ch_wi_fi_switch_module_3_switch_2', 'off')
              and is_state('switch.bathroom_lamp', 'off') }}
 
       - name: Leave Home Scene Active

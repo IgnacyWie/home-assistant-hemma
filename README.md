@@ -154,18 +154,19 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 ## Welcome Home scene
 
 [`config/scenes.yaml`](config/scenes.yaml) defines **Welcome Home** as a complete
-physical-lighting snapshot. It turns on the five lights that were active when the
-scene was captured and explicitly keeps the remaining responsive lighting
-entities, including the Bathroom Lamp switch, off. The unavailable Bathroom
-Sonoff LED is temporarily excluded from this scene and its active-state sensor,
-so it cannot block activation or the Hemma status indication. Derived light
-groups and disabled infrastructure entities are excluded to avoid duplicate or
-conflicting commands.
+physical-lighting snapshot. It turns on six cozy lights, including **Zeppelin
+Light**, and explicitly keeps the remaining responsive lighting entities off.
+Kitchen 1, Kitchen 2, and Kitchen 3 are included with `state: "off"` so the
+overhead spots stay dark. The Bathroom Lamp switch also remains off. The
+unavailable Bathroom Sonoff LED is temporarily excluded from this scene and its
+active-state sensor, so it cannot block activation or the Hemma status
+indication. Derived light groups and disabled infrastructure entities are
+excluded to avoid duplicate or conflicting commands.
 
 The Home view exposes the scene as a **Welcome Home** action tile. It is kept
 first in the configured Home rail so Hemma's active-card sorting cannot push the
 stateless scene beyond the initially visible controls. A template binary sensor,
-`binary_sensor.welcome_home_scene_active`, compares the 10 currently included
+`binary_sensor.welcome_home_scene_active`, compares the 14 currently included
 physical lighting controls with the scene and drives both the tile highlight and
 its **Active** or **Inactive** label. Unknown or unavailable included accessories
 do not count as matching; the unavailable Bathroom Sonoff LED is not currently
