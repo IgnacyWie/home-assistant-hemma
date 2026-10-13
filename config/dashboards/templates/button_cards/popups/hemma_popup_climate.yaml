@@ -9,7 +9,7 @@ hemma_climate_popup:
     sensors: null
   tap_action:
     hemma_popup:
-      title: "[[[ const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split(String.fromCharCode(123) + p + String.fromCharCode(125)).join(String(v[p])); return s; }); return T('air_quality.title', 'Air Quality'); ]]]"
+      title: "[[[ const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split(String.fromCharCode(123) + p + String.fromCharCode(125)).join(String(v[p])); return s; }); const sensors = Array.isArray(variables.sensors) ? variables.sensors.filter(Boolean) : []; const dc = String(entity?.attributes?.device_class || '').toLowerCase(); const hasAirQuality = !!variables.entity_quality || sensors.length > 0 || !['temperature','humidity'].includes(dc); return hasAirQuality ? T('air_quality.title', 'Air Quality') : T('filter.climate', 'Climate'); ]]]"
       dismiss_on_background: true
       popup_styles:
       - style: data-hemma-charts-ready
@@ -129,11 +129,15 @@ hemma_climate_popup:
         [[[
           const L = (k, en) => { const v = hass?.localize?.(k); return (v && v !== k) ? v : en; };
           const T = window._hemmaT || ((k, en, v) => { let s = String(en); if (v) for (const p in v) s = s.split(String.fromCharCode(123) + p + String.fromCharCode(125)).join(String(v[p])); return s; });
-          const sensors  = Array.isArray(variables.sensors) ? variables.sensors.filter(Boolean) : [];
-          const tempId   = variables.entity_temp;
-          const humidId  = variables.entity_humidity;
-          const qualId   = variables.entity_quality || sensors[0] || entity?.entity_id;
-          const roomName = variables.room_name || T('filter.climate', 'Climate');
+          const sensors      = Array.isArray(variables.sensors) ? variables.sensors.filter(Boolean) : [];
+          const clickedId    = entity?.entity_id || null;
+          const clickedClass = String(entity?.attributes?.device_class || '').toLowerCase();
+          const tempId       = variables.entity_temp || (clickedClass === 'temperature' ? clickedId : null);
+          const humidId      = variables.entity_humidity || (clickedClass === 'humidity' ? clickedId : null);
+          const qualId       = variables.entity_quality || sensors[0]
+            || (!['temperature','humidity'].includes(clickedClass) ? clickedId : null);
+          const hasAirQuality = !!(qualId || sensors.length);
+          const roomName     = variables.room_name || T('filter.climate', 'Climate');
 
           const safeNum = (id) => {
             if (!id) return null;
@@ -961,13 +965,15 @@ hemma_climate_popup:
               metricStyle[n2] = [{ 'justify-self': 'stretch' }, { overflow: 'visible' }];
             };
 
-            /* "Excellent" already says it - "Air quality is great" underneath is
-               the same sentence twice, and the room name is context you had from
-               the card you tapped. The bar carries the name now. */
+            const climateSummary = bits.length
+              ? bits.join(' · ')
+              : L('state.default.unknown', 'Unknown');
             addMetric('head', UI.hero({
               compact: true,
-              label: T('air_quality.label', 'Air quality'),
-              value: scoreLabel,
+              label: hasAirQuality
+                ? T('air_quality.label', 'Air quality')
+                : T('filter.climate', 'Climate'),
+              value: hasAirQuality ? scoreLabel : climateSummary,
             }));
 
             /* The chart goes under the number it explains, not at the foot of

@@ -1739,8 +1739,8 @@ hemma_room:
               temp_unit: '[[[ return variables.temp_unit ]]]'
               room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
               entity_quality: '[[[ return variables.quality_sensor ]]]'
-              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
-              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp || variables.temp_sensor_1 ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity || variables.humidity_sensor ]]]'
               sensors: >-
                 [[[
                   return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
@@ -1753,8 +1753,8 @@ hemma_room:
               enabled: '[[[ return !!((variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && variables.show_climate_inline && variables.humidity_sensor) ]]]'
               room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
               entity_quality: '[[[ return variables.quality_sensor ]]]'
-              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
-              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp || variables.temp_sensor_1 ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity || variables.humidity_sensor ]]]'
               sensors: >-
                 [[[
                   return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
@@ -1767,8 +1767,8 @@ hemma_room:
               enabled: '[[[ return !!((variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && variables.show_climate_inline && variables.quality_sensor) ]]]'
               room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
               entity_quality: '[[[ return variables.quality_sensor ]]]'
-              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
-              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp || variables.temp_sensor_1 ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity || variables.humidity_sensor ]]]'
               sensors: >-
                 [[[
                   return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
@@ -1888,8 +1888,8 @@ hemma_room:
               temp_unit: '[[[ return variables.temp_unit ]]]'
               room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
               entity_quality: '[[[ return variables.quality_sensor ]]]'
-              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
-              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp || variables.temp_sensor_1 ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity || variables.humidity_sensor ]]]'
               sensors: >-
                 [[[
                   return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
@@ -1902,8 +1902,8 @@ hemma_room:
               enabled: '[[[ return (variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && !!variables.humidity_sensor ]]]'
               room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
               entity_quality: '[[[ return variables.quality_sensor ]]]'
-              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
-              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp || variables.temp_sensor_1 ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity || variables.humidity_sensor ]]]'
               sensors: >-
                 [[[
                   return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
@@ -1916,8 +1916,8 @@ hemma_room:
               enabled: '[[[ return (variables.show_climate!==false&&(!!variables.climate_entity_1||!!variables.temp_sensor_1||!!variables.humidity_sensor||!!variables.quality_sensor)) && !!variables.quality_sensor ]]]'
               room_name: '[[[ return variables.aqi_room_name || this._config?.name || hass?.config?.location_name || "" ]]]'
               entity_quality: '[[[ return variables.quality_sensor ]]]'
-              entity_temp: '[[[ return variables.aqi_entity_temp ]]]'
-              entity_humidity: '[[[ return variables.aqi_entity_humidity ]]]'
+              entity_temp: '[[[ return variables.aqi_entity_temp || variables.temp_sensor_1 ]]]'
+              entity_humidity: '[[[ return variables.aqi_entity_humidity || variables.humidity_sensor ]]]'
               sensors: >-
                 [[[
                   return [variables.aqi_entity_pm25,variables.aqi_entity_pm10,variables.aqi_entity_voc,variables.aqi_entity_co2].filter(Boolean);
