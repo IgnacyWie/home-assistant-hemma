@@ -28,6 +28,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
 - Bedroom Closet light tile with an outlined shirt icon
+- Bedroom climate chip showing live temperature and humidity from the IKEA TIMMERFLOTTE sensor
 - Living Room Balcony light tile with a dedicated balcony-and-railing icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Kitchen extractor-fan tile with a dedicated range-hood icon
@@ -273,9 +274,6 @@ Assistant's entity registry so the fan is the only user-facing control.
 The next sensor expansion under consideration is:
 
 - A temperature/humidity sensor in the Bathroom for ventilation control.
-- A second temperature/humidity sensor in the Bedroom, where overnight comfort
-  measurements are likely to be more actionable than Living Room readings. It
-  can also provide a household humidity baseline for the Bathroom.
 - One motion sensor in the Bathroom for occupancy-aware lighting.
 - One motion sensor in the Corridor for nighttime pathway lighting.
 

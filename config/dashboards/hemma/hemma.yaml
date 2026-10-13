@@ -318,6 +318,9 @@ views:
         variables:
           image: bedroom-demo
           preload_rooms: *room_images
+          temp_sensor_1: sensor.timmerflotte_temp_hmd_sensor_temperature
+          humidity_sensor: sensor.timmerflotte_temp_hmd_sensor_humidity
+          temp_unit: 'C'
           light_entity_1: light.bedroom_accent_bedroom
           light_entity_2: light.3_in_1_controller_wifi_2_4g
           light_entity_3: light.bedroom_ikea_of_sweden_grillplats_plug
