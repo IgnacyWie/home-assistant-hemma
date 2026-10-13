@@ -28,7 +28,8 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
 - Bedroom Closet light tile with an outlined shirt icon
-- Bedroom climate chip showing live temperature and humidity from the IKEA TIMMERFLOTTE sensor; tapping either reading opens a Climate overlay with both current values and their six-hour history
+- Bedroom climate chip showing live indoor temperature and humidity from the IKEA TIMMERFLOTTE sensor; tapping a reading opens the combined current values and six-hour history
+- Home-view air-quality chip showing outdoor European AQI, PM2.5, and PM10 estimates from Open-Meteo without an API key
 - Living Room Balcony light tile with a dedicated balcony-and-railing icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Kitchen extractor-fan tile with a dedicated range-hood icon

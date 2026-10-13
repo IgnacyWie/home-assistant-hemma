@@ -25,6 +25,10 @@ views:
             - livingroom-demo
             - bedroom-demo
           weather_entity: weather.forecast_home
+          quality_sensor: sensor.outdoor_air_quality
+          aqi_entity_pm25: sensor.open_meteo_pm2_5
+          aqi_entity_pm10: sensor.open_meteo_pm10
+          aqi_room_name: Outdoor
           presence_entity_1: person.ignacy_wie
           presence_battery_entity_1: sensor.phi_battery_level
           presence_icon_1: cellphone-mobile-v1
