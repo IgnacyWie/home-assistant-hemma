@@ -200,6 +200,33 @@
           entity_id: light.bathroom_led_bathroom
   mode: restart
 
+- id: 'bedroom_closet_door_light'
+  alias: Bedroom Closet - Door light
+  description: Turns the bedroom closet light on when the MYGGBETT door opens and off when it closes.
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.myggbett_door_window_sensor_door
+    to: 'on'
+    id: door_opened
+  - trigger: state
+    entity_id: binary_sensor.myggbett_door_window_sensor_door
+    to: 'off'
+    id: door_closed
+  conditions: []
+  actions:
+  - choose:
+    - conditions: "{{ trigger.id == 'door_opened' }}"
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: light.bedroom_closet
+    - conditions: "{{ trigger.id == 'door_closed' }}"
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.bedroom_closet
+  mode: restart
+
 - id: 'lelit_espresso_machine_safety'
   alias: Lelit Espresso Machine - Two-hour safety shutoff
   description: Keeps a restorable two-hour safety timer while the espresso machine is on.
