@@ -393,3 +393,149 @@
           entity_id: script.leave_home
   mode: restart
 
+- id: 'living_room_tradfri_media_remote'
+  alias: Living Room - TRADFRI media remote
+  description: >-
+    Uses the five-button TRADFRI remote for the active Zeppelin or TV: volume,
+    play/pause, previous/next or TV navigation, and a long-press power-off.
+  triggers:
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_short_press
+    subtype: turn_on
+    id: pause
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_long_press
+    subtype: turn_on
+    id: power_off
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_short_press
+    subtype: dim_up
+    id: volume_up
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_long_press
+    subtype: dim_up
+    id: volume_up
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_short_press
+    subtype: dim_down
+    id: volume_down
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_long_press
+    subtype: dim_down
+    id: volume_down
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_short_press
+    subtype: left
+    id: previous_or_left
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_short_press
+    subtype: right
+    id: next_or_right
+  conditions: []
+  actions:
+  - variables:
+      zeppelin_playing: "{{ is_state('media_player.zeppelin', 'playing') }}"
+      tv_playing: "{{ is_state('media_player.tv_w_salonie', 'playing') }}"
+      tv_powered: >-
+        {{ states('media_player.living_room_tv_2') not in
+           ['off', 'unavailable', 'unknown'] }}
+      active_volume_player: >-
+        {% if is_state('media_player.zeppelin', 'playing') %}
+          media_player.zeppelin
+        {% elif states('media_player.living_room_tv_2') not in ['off', 'unavailable', 'unknown'] %}
+          media_player.living_room_tv_2
+        {% else %}
+          {{ '' }}
+        {% endif %}
+      active_transport_player: >-
+        {% set zeppelin_active = states('media_player.zeppelin') in ['playing', 'paused'] %}
+        {% set tv_active = states('media_player.tv_w_salonie') in ['playing', 'paused'] %}
+        {% if zeppelin_active and tv_active %}
+          {% if states.media_player.zeppelin.last_changed >= states.media_player.tv_w_salonie.last_changed %}
+            media_player.zeppelin
+          {% else %}
+            media_player.tv_w_salonie
+          {% endif %}
+        {% elif zeppelin_active %}
+          media_player.zeppelin
+        {% elif tv_active %}
+          media_player.tv_w_salonie
+        {% else %}
+          {{ '' }}
+        {% endif %}
+  - choose:
+    - conditions: "{{ trigger.id == 'volume_up' and active_volume_player | length > 0 }}"
+      sequence:
+      - action: media_player.volume_up
+        target:
+          entity_id: "{{ active_volume_player }}"
+    - conditions: "{{ trigger.id == 'volume_down' and active_volume_player | length > 0 }}"
+      sequence:
+      - action: media_player.volume_down
+        target:
+          entity_id: "{{ active_volume_player }}"
+    - conditions: "{{ trigger.id == 'pause' and active_transport_player | length > 0 }}"
+      sequence:
+      - action: media_player.media_play_pause
+        target:
+          entity_id: "{{ active_transport_player }}"
+    - conditions: "{{ trigger.id == 'pause' and tv_powered }}"
+      sequence:
+      - action: remote.send_command
+        target:
+          entity_id: remote.living_room_tv
+        data:
+          command: MEDIA_PLAY_PAUSE
+    - conditions: "{{ trigger.id == 'power_off' }}"
+      sequence:
+      - action: media_player.turn_off
+        continue_on_error: true
+        target:
+          entity_id: media_player.zeppelin
+      - action: media_player.turn_off
+        continue_on_error: true
+        target:
+          entity_id: media_player.living_room_tv_2
+    - conditions: "{{ trigger.id == 'previous_or_left' and zeppelin_playing }}"
+      sequence:
+      - action: media_player.media_previous_track
+        target:
+          entity_id: media_player.zeppelin
+    - conditions: "{{ trigger.id == 'previous_or_left' and tv_powered }}"
+      sequence:
+      - action: remote.send_command
+        target:
+          entity_id: remote.living_room_tv
+        data:
+          command: DPAD_LEFT
+    - conditions: "{{ trigger.id == 'next_or_right' and zeppelin_playing }}"
+      sequence:
+      - action: media_player.media_next_track
+        target:
+          entity_id: media_player.zeppelin
+    - conditions: "{{ trigger.id == 'next_or_right' and tv_powered }}"
+      sequence:
+      - action: remote.send_command
+        target:
+          entity_id: remote.living_room_tv
+        data:
+          command: DPAD_RIGHT
+  mode: queued
+  max: 10
+

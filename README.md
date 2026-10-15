@@ -184,6 +184,16 @@ The source-controlled automation set is split between
   Button 1's single press runs `scene.welcome_home`, Button 1's double press starts
   the French Jazz Lounge playlist on the Zeppelin, and Button 2's single press runs
   `script.leave_home`.
+- **Living Room - TRADFRI media remote** — maps the ZHA five-button remote to the
+  active entertainment endpoint. Brightness up/down changes volume on the Zeppelin
+  while it is playing, otherwise on the powered TV. A short center press toggles
+  play/pause on the active Zeppelin or TV session, including resuming a paused
+  session (falling back to the TV play/pause key); a long
+  center press turns off both `media_player.zeppelin` and
+  `media_player.living_room_tv_2`. Left/right skips tracks while Zeppelin music is
+  playing and otherwise sends `DPAD_LEFT`/`DPAD_RIGHT` to
+  `remote.living_room_tv`. Short and long presses on either brightness button each
+  produce one volume step.
 - **Ignacy Wi-Fi presence** — scans the local `/24` every 15 seconds with ARP-aware
   Nmap discovery and reports `home` only when the phone's fixed private Wi-Fi MAC
   is present. The MAC is read from `/config/private/ignacy_phone_wifi_mac`, which
