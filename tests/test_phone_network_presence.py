@@ -16,8 +16,8 @@ def test_wifi_presence_package_is_private_and_bounded() -> None:
     sensor = package["command_line"][0]["sensor"]
 
     assert sensor["unique_id"] == "ignacy_wifi_presence"
-    assert sensor["scan_interval"] == 60
-    assert sensor["command_timeout"] == 45
+    assert sensor["scan_interval"] == 15
+    assert sensor["command_timeout"] == 12
     assert PRIVATE_MAC_PATH in sensor["command"]
 
     script = SCRIPT.read_text()

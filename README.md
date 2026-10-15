@@ -184,7 +184,7 @@ The source-controlled automation set is split between
   Button 1's single press runs `scene.welcome_home`, Button 1's double press starts
   the French Jazz Lounge playlist on the Zeppelin, and Button 2's single press runs
   `script.leave_home`.
-- **Ignacy Wi-Fi presence** — scans the local `/24` once per minute with ARP-aware
+- **Ignacy Wi-Fi presence** — scans the local `/24` every 15 seconds with ARP-aware
   Nmap discovery and reports `home` only when the phone's fixed private Wi-Fi MAC
   is present. The MAC is read from `/config/private/ignacy_phone_wifi_mac`, which
   is intentionally excluded from this repository. Hemma's Home presence chip uses
@@ -200,10 +200,10 @@ The source-controlled automation set is split between
   activates `scene.welcome_home` when Ignacy's phone is connected to the home
   Wi-Fi. Guest Mode does not suppress this lighting scene.
 - **Presence - Welcome Home when Ignacy returns** — when the Wi-Fi presence
-  sensor reconnects before 23:00, activates `scene.welcome_home` after the
-  connection remains stable for one minute. The previous away state must have
-  lasted at least two minutes, preventing a single missed network scan from
-  replaying the scene while Ignacy is already home.
+  sensor reconnects before 23:00, activates `scene.welcome_home` immediately.
+  The previous away state must have lasted at least two minutes, preventing a
+  single missed network scan from replaying the scene while Ignacy is already
+  home.
 
 ### Corridor French Jazz Lounge
 

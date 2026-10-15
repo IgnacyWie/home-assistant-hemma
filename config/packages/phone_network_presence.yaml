@@ -8,5 +8,5 @@ command_line:
       command: >-
         /bin/sh /config/shell/network_presence.sh
         /config/private/ignacy_phone_wifi_mac
-      scan_interval: 60
-      command_timeout: 45
+      scan_interval: 15
+      command_timeout: 12

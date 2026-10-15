@@ -51,13 +51,12 @@ automation:
     alias: Presence - Welcome Home when Ignacy returns
     description: >-
       Activates the Welcome Home scene before 23:00 after Ignacy's phone returns
-      from a real absence and remains connected to the home Wi-Fi for one minute.
+      from a real absence.
     triggers:
       - trigger: state
         entity_id: sensor.ignacy_wi_fi_presence
         from: not_home
         to: home
-        for: "00:01:00"
     conditions:
       - condition: time
         before: "23:00:00"

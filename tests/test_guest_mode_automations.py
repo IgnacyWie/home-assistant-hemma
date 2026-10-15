@@ -73,7 +73,6 @@ def test_welcome_home_runs_on_stable_return_before_23() -> None:
             "entity_id": "sensor.ignacy_wi_fi_presence",
             "from": "not_home",
             "to": "home",
-            "for": "00:01:00",
         }
     ]
     assert automation["conditions"][0] == {
