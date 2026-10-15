@@ -80,23 +80,10 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
   <img src="docs/screenshots/mobile-living-room.jpg" width="360" alt="Living Room phone dashboard">
 </p>
 
-## Architecture diagrams
+## Automation and safety control plane
 
-The editable Excalidraw sources and generated SVG previews live in
+The editable Excalidraw source and generated SVG preview live in
 [`docs/diagrams/`](docs/diagrams/README.md).
-
-### System architecture
-
-[![Hemma system architecture](docs/diagrams/system-architecture.svg)](docs/diagrams/system-architecture.excalidraw)
-
-### Network topology and observability
-
-This is a logical view of the entities supported by the Hemma network card;
-router, gateway, and access-point names remain deployment-specific.
-
-[![Network topology and observability](docs/diagrams/network-observability.svg)](docs/diagrams/network-observability.excalidraw)
-
-### Automation and safety control plane
 
 [![Automation and safety control plane](docs/diagrams/automation-control-plane.svg)](docs/diagrams/automation-control-plane.excalidraw)
 
