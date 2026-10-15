@@ -6,6 +6,12 @@ leave_home:
     - action: scene.turn_on
       target:
         entity_id: scene.leave_home
+    - action: media_player.media_pause
+      continue_on_error: true
+      target:
+        entity_id:
+          - media_player.zeppelin
+          - media_player.living_room
     - if:
         - condition: template
           value_template: >-

@@ -26,7 +26,6 @@ LEAVE_HOME_TARGETS = {
     "light.kitchen_shelly2pmg4_d885ace4f060_output_1",
     "switch.ikea_of_sweden_grillplats_plug_2",
     "fan.kitchen_extractor_fan",
-    "media_player.zeppelin",
 }
 
 
@@ -47,6 +46,13 @@ class LeaveHomeSceneTests(unittest.TestCase):
             "states('media_player.zeppelin') in ['off', 'idle', 'paused', 'standby']",
             active_sensor,
         )
+
+    def test_leave_home_script_pauses_both_zeppelin_paths(self):
+        scripts = (ROOT / "config/scripts.yaml").read_text()
+        leave_script = scripts.split("leave_home:", 1)[1]
+        self.assertIn("action: media_player.media_pause", leave_script)
+        self.assertIn("media_player.zeppelin", leave_script)
+        self.assertIn("media_player.living_room", leave_script)
 
     def test_bathroom_fan_is_explicitly_excluded(self):
         self.assertNotIn("fan.bathroom_fan_bathroom", SCENES.read_text())

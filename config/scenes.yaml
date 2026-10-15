@@ -77,5 +77,3 @@
       state: "off"
     fan.kitchen_extractor_fan:
       state: "off"
-    media_player.zeppelin:
-      state: "off"

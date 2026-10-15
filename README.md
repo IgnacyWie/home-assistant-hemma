@@ -25,6 +25,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Jellyfin cinema mode with living-room light state restoration
 - Bathroom forgotten-on protection for both bathroom lights
 - IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
+- Corridor BILRESA dual-button mapping: Button 1 runs **Welcome Home** and Button 2 runs the universal **Leave Home** routine
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
 - Bedroom Closet light tile with an outlined shirt icon
@@ -153,6 +154,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   - While the configured wake-up alarm is playing, any mapped button press
     stops only the alarm without changing lights, running the bedtime shutdown,
     or switching off the espresso machine.
+- **Corridor - Welcome Home / Leave Home** — maps the Matter BILRESA dual button:
+  Button 1's single press runs `scene.welcome_home`; Button 2's single press runs
+  `script.leave_home`.
 
 ## Welcome Home scene
 
@@ -209,9 +213,13 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
 registry. The scene sets sixteen responsive physical lights, the Lelit
-espresso-machine switch, the kitchen extractor fan, and Zeppelin to `off`. The physical
-living-room TV is handled separately by `script.leave_home`, using only
+espresso-machine switch, and the kitchen extractor fan to `off`. The Zeppelin
+players are handled separately by `script.leave_home`, which sends
+`media_player.media_pause` to both the Music Assistant entity
+`media_player.zeppelin` and the hidden native DLNA entity `media_player.living_room`.
+The physical living-room TV is handled separately by `script.leave_home`, using only
 `media_player.living_room_tv_2`—the same entity displayed by Hemma. The script
+continues when a media endpoint is already idle or rejects a redundant pause, and
 skips the TV command when that entity is already `off`, `unknown`, or
 `unavailable`, avoiding the Sony integration error caused by asking an already-off
 BRAVIA to turn off again. Other entities representing the same physical TV are
@@ -225,17 +233,19 @@ Leave Home and its active-state sensor, so it cannot block execution or status
 feedback. Hidden, disabled, diagnostic, and infrastructure entities remain
 excluded.
 
-The bedside double-OFF branch and the Home chip's **All Off** action both call
-`script.leave_home`. The script applies `scene.leave_home`, then turns off the
-selected Hemma TV only when needed. The chip summarizes the same 20-target
-allowlist, opens a compact sheet containing only active devices, and gives each
-device its own turn-off control. It replaces the old one-way **Leave Home** chip
-and the temporary active-device cards on the Home view.
+The bedside double-OFF branch, the corridor Button 2, and the Home chip's
+**All Off** action all call `script.leave_home`. The script applies
+`scene.leave_home`, pauses both Zeppelin control paths, then turns off the selected
+Hemma TV only when needed. The chip summarizes the same physical-device allowlist,
+opens a compact sheet containing only active devices, and gives each device its own
+turn-off control. It replaces the old one-way **Leave Home** chip and the temporary
+active-device cards on the Home view.
 
 When changing the Leave Home allowlist, update these places together:
 
 1. The non-TV targets in `scene.leave_home` in `config/scenes.yaml`.
-2. The conditional TV target in `script.leave_home` in `config/scripts.yaml`.
+2. The conditional Zeppelin pause targets and TV target in `script.leave_home` in
+   `config/scripts.yaml`.
 3. `binary_sensor.leave_home_scene_active` in
    `config/packages/hemma_helpers.yaml`.
 4. The Home view's active-device allowlist in
