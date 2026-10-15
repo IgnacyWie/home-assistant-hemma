@@ -403,18 +403,6 @@
     domain: zha
     device_id: a8940bb7824bdae5bfe525f2e61e95f3
     type: remote_button_short_press
-    subtype: turn_on
-    id: pause
-  - trigger: device
-    domain: zha
-    device_id: a8940bb7824bdae5bfe525f2e61e95f3
-    type: remote_button_long_press
-    subtype: turn_on
-    id: power_off
-  - trigger: device
-    domain: zha
-    device_id: a8940bb7824bdae5bfe525f2e61e95f3
-    type: remote_button_short_press
     subtype: dim_up
     id: volume_up
   - trigger: device
@@ -459,9 +447,6 @@
       zeppelin_selected: >-
         {{ zeppelin_playing or
            (tv_music_assistant_display and zeppelin_available) }}
-      tv_playing: >-
-        {{ is_state('media_player.tv_w_salonie', 'playing') and
-           not tv_music_assistant_display }}
       tv_powered: >-
         {{ states('media_player.living_room_tv_2') not in
            ['off', 'unavailable', 'unknown'] }}
@@ -473,22 +458,7 @@
         {% else %}
           {{ '' }}
         {% endif %}
-      active_transport_player: >-
-        {% set zeppelin_active = states('media_player.zeppelin') in ['playing', 'paused'] %}
-        {% set tv_active = states('media_player.tv_w_salonie') in ['playing', 'paused'] and not tv_music_assistant_display %}
-        {% if zeppelin_active and tv_active %}
-          {% if states.media_player.zeppelin.last_changed >= states.media_player.tv_w_salonie.last_changed %}
-            media_player.zeppelin
-          {% else %}
-            media_player.tv_w_salonie
-          {% endif %}
-        {% elif zeppelin_active %}
-          media_player.zeppelin
-        {% elif tv_active %}
-          media_player.tv_w_salonie
-        {% else %}
-          {{ '' }}
-        {% endif %}
+
   - choose:
     - conditions: "{{ trigger.id == 'volume_up' and active_volume_player | length > 0 }}"
       sequence:
@@ -500,28 +470,7 @@
       - action: media_player.volume_down
         target:
           entity_id: "{{ active_volume_player }}"
-    - conditions: "{{ trigger.id == 'pause' and active_transport_player | length > 0 }}"
-      sequence:
-      - action: media_player.media_play_pause
-        target:
-          entity_id: "{{ active_transport_player }}"
-    - conditions: "{{ trigger.id == 'pause' and tv_powered }}"
-      sequence:
-      - action: remote.send_command
-        target:
-          entity_id: remote.living_room_tv
-        data:
-          command: MEDIA_PLAY_PAUSE
-    - conditions: "{{ trigger.id == 'power_off' }}"
-      sequence:
-      - action: media_player.turn_off
-        continue_on_error: true
-        target:
-          entity_id: media_player.zeppelin
-      - action: media_player.turn_off
-        continue_on_error: true
-        target:
-          entity_id: media_player.living_room_tv_2
+
     - conditions: "{{ trigger.id == 'previous_or_left' and zeppelin_selected }}"
       sequence:
       - action: media_player.media_previous_track
@@ -548,4 +497,99 @@
           command: DPAD_RIGHT
   mode: queued
   max: 10
+
+- id: 'living_room_tradfri_center_button'
+  alias: Living Room - TRADFRI center button
+  description: >-
+    Distinguishes the remote's center-button tap from a hold. This firmware sends
+    one toggle immediately and repeated toggles while held, with no release event.
+  triggers:
+  - trigger: event
+    event_type: zha_event
+    event_data:
+      device_ieee: 14:b4:57:ff:fe:41:f0:e9
+      cluster_id: 6
+      command: toggle
+  conditions: []
+  actions:
+  - wait_for_trigger:
+    - trigger: event
+      event_type: zha_event
+      event_data:
+        device_ieee: 14:b4:57:ff:fe:41:f0:e9
+        cluster_id: 6
+        command: toggle
+    timeout: "00:00:03.2"
+    continue_on_timeout: true
+  - variables:
+      center_was_held: "{{ wait.trigger is not none }}"
+      tv_music_assistant_display: >-
+        {{ state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant' or
+           state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant' }}
+      tv_powered: >-
+        {{ states('media_player.living_room_tv_2') not in
+           ['off', 'unavailable', 'unknown'] }}
+      active_transport_player: >-
+        {% set zeppelin_active = states('media_player.zeppelin') in ['playing', 'paused'] %}
+        {% set tv_active = states('media_player.tv_w_salonie') in ['playing', 'paused'] and not tv_music_assistant_display %}
+        {% if zeppelin_active and tv_active %}
+          {% if states.media_player.zeppelin.last_changed >= states.media_player.tv_w_salonie.last_changed %}
+            media_player.zeppelin
+          {% else %}
+            media_player.tv_w_salonie
+          {% endif %}
+        {% elif zeppelin_active %}
+          media_player.zeppelin
+        {% elif tv_active %}
+          media_player.tv_w_salonie
+        {% else %}
+          {{ '' }}
+        {% endif %}
+  - choose:
+    - conditions: "{{ center_was_held }}"
+      sequence:
+      - action: media_player.turn_off
+        continue_on_error: true
+        target:
+          entity_id: media_player.zeppelin
+      - action: media_player.turn_off
+        continue_on_error: true
+        target:
+          entity_id: media_player.living_room_tv_2
+      # Absorb further toggle repeats until the button has been quiet for 3.2 s.
+      - repeat:
+          sequence:
+          - wait_for_trigger:
+            - trigger: event
+              event_type: zha_event
+              event_data:
+                device_ieee: 14:b4:57:ff:fe:41:f0:e9
+                cluster_id: 6
+                command: toggle
+            timeout: "00:00:03.2"
+            continue_on_timeout: true
+          until: "{{ wait.trigger is none }}"
+    - conditions: >-
+        {{ active_transport_player | length > 0 and
+           states(active_transport_player) == 'paused' }}
+      sequence:
+      - action: media_player.media_play
+        target:
+          entity_id: "{{ active_transport_player }}"
+    - conditions: >-
+        {{ active_transport_player | length > 0 and
+           states(active_transport_player) == 'playing' }}
+      sequence:
+      - action: media_player.media_pause
+        target:
+          entity_id: "{{ active_transport_player }}"
+    - conditions: "{{ tv_powered }}"
+      sequence:
+      - action: remote.send_command
+        target:
+          entity_id: remote.living_room_tv
+        data:
+          command: MEDIA_PLAY_PAUSE
+  mode: single
+  max_exceeded: silent
 

@@ -186,11 +186,14 @@ The source-controlled automation set is split between
   `script.leave_home`.
 - **Living Room - TRADFRI media remote** — maps the ZHA five-button remote to the
   active entertainment endpoint. Brightness up/down changes volume on the Zeppelin
-  while it is playing, otherwise on the powered TV. A short center press toggles
-  play/pause on the active Zeppelin or TV session, including resuming a paused
-  session (falling back to the TV play/pause key); a long
-  center press turns off both `media_player.zeppelin` and
-  `media_player.living_room_tv_2`. Left/right skips tracks while Zeppelin music is
+  while it is playing, otherwise on the powered TV. The center button is handled
+  from its raw ZHA `toggle` stream because firmware `2.3.014` emits no usable
+  center-button release event: one toggle followed by 3.2 seconds of silence is a
+  tap and explicitly resumes a paused session with `media_play` or pauses a playing
+  session with `media_pause`, while a repeated toggle within that window is a hold
+  and turns off both `media_player.zeppelin` and `media_player.living_room_tv_2`.
+  The delay prevents a hold from briefly pausing playback before shutdown.
+  Left/right skips tracks while Zeppelin music is
   selected and otherwise sends `DPAD_LEFT`/`DPAD_RIGHT` to
   `remote.living_room_tv`. When `media_player.tv_w_salonie` reports the Music
   Assistant app/title, it is treated only as the Zeppelin's display and is ignored
