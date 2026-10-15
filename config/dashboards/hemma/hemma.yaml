@@ -32,6 +32,7 @@ views:
           presence_entity_1: sensor.ignacy_wi_fi_presence
           presence_battery_entity_1: sensor.phi_battery_level
           presence_icon_1: cellphone-mobile-v1
+          guest_mode_entity: input_boolean.guest_mode
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled
           wake_alarm_time_entity: input_datetime.wake_up_time
           wake_alarm_evening_only: false

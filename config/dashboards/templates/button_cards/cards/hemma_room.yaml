@@ -111,6 +111,10 @@ hemma_room:
     presence_battery_entity_1:
     presence_icon_1: null
 
+    guest_mode_entity: null
+    guest_mode_label: Guest Mode
+    guest_mode_icon: person
+
     wake_alarm_enabled_entity: null
     wake_alarm_time_entity: null
     wake_alarm_icon: alarm
@@ -1656,6 +1660,14 @@ hemma_room:
               icon: '[[[ return variables.scene_icon_4 ]]]'
               active_entity: '[[[ return variables.scene_active_entity_4 ]]]'
               service: '[[[ return variables.scene_service_4 || "scene.turn_on" ]]]'
+
+          - type: custom:button-card
+            template: hemma_badge_guest_mode
+            entity: '[[[ return variables.guest_mode_entity ]]]'
+            variables:
+              enabled: '[[[ return !!variables.guest_mode_entity ]]]'
+              label: '[[[ return variables.guest_mode_label || "Guest Mode" ]]]'
+              icon: '[[[ return variables.guest_mode_icon || "person" ]]]'
 
           - type: custom:button-card
             template: hemma_badge_active_devices

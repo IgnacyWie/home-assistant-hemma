@@ -1,0 +1,48 @@
+# Household presence automations and a restorable guest-mode override.
+input_boolean:
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:account-group
+
+# Guest Mode suppresses automatic shutdown when Ignacy leaves, so visitors are
+# not left in a dark home. It deliberately does not suppress the sunset scene.
+automation:
+  - id: guest_mode_leave_when_phone_disconnects
+    alias: Presence - Leave home when Ignacy disconnects
+    description: >-
+      Runs the shared Leave Home routine after Ignacy's phone has been away from
+      the home Wi-Fi for two minutes, unless Guest Mode is enabled.
+    triggers:
+      - trigger: state
+        entity_id: sensor.ignacy_wi_fi_presence
+        from: home
+        to: not_home
+        for: "00:02:00"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+    actions:
+      - action: script.turn_on
+        target:
+          entity_id: script.leave_home
+    mode: single
+
+  - id: welcome_home_twenty_minutes_before_sunset
+    alias: Presence - Welcome Home before sunset
+    description: >-
+      Activates the Welcome Home scene twenty minutes before sunset when
+      Ignacy's phone is connected to the home Wi-Fi.
+    triggers:
+      - trigger: sun
+        event: sunset
+        offset: "-00:20:00"
+    conditions:
+      - condition: state
+        entity_id: sensor.ignacy_wi_fi_presence
+        state: home
+    actions:
+      - action: scene.turn_on
+        target:
+          entity_id: scene.welcome_home
+    mode: single

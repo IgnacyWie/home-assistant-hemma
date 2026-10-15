@@ -1,0 +1,67 @@
+hemma_badge_guest_mode:
+  template: [hemma_badge_base]
+
+  variables:
+    enabled: true
+    label: Guest Mode
+    icon: person
+
+  show_state: false
+  show_label: false
+  show_icon: false
+  show_entity_picture: true
+
+  entity_picture: |
+    [[[ return window.hemmaIconUrl(variables.icon || 'person'); ]]]
+
+  extra_styles: >
+    [[[
+      const configured = variables?.enabled;
+      const enabled = (configured === undefined || configured === null) ? true :
+        (typeof configured === 'boolean') ? configured :
+        (typeof configured === 'number') ? configured !== 0 :
+        !['false', '0', 'no', 'off', 'disabled'].includes(String(configured).trim().toLowerCase());
+      return `:host { display: ${enabled && entity?.entity_id ? 'inline-block' : 'none'} !important; }`;
+    ]]]
+
+  tap_action:
+    action: call-service
+    service: input_boolean.toggle
+    target:
+      entity_id: '[[[ return entity?.entity_id ]]]'
+
+  hold_action:
+    action: more-info
+
+  double_tap_action:
+    action: none
+
+  name: |
+    [[[
+      const active = entity?.state === 'on';
+      const label = variables.label || entity?.attributes?.friendly_name || 'Guest Mode';
+      return `<div class="badge-wrap"><div class="badge-title">${label}</div><div class="badge-sub">${active ? 'On' : 'Off'}</div></div>`;
+    ]]]
+
+  styles:
+    card:
+      - background: var(--badge-background, rgba(10,12,14,0.65))
+      - --badge-title-color: var(--primary-text-color)
+      - --badge-sub-color: var(--secondary-text-color)
+    entity_picture:
+      - background: >
+          [[[
+            return entity?.state === 'on'
+              ? 'var(--hemma-color-blue, #0A84FF)'
+              : 'rgba(255,255,255,0.10)';
+          ]]]
+      - filter: >
+          [[[
+            return entity?.state === 'on'
+              ? 'none'
+              : 'grayscale(1) contrast(.96) brightness(.94)';
+          ]]]
+      - opacity: >
+          [[[ return entity?.state === 'on' ? '1' : '.88'; ]]]
+      - padding: 5px
+      - box-sizing: border-box

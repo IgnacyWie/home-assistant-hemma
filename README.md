@@ -33,6 +33,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bedroom climate chip showing live indoor temperature and humidity from the IKEA TIMMERFLOTTE sensor; tapping a reading opens the combined current values and six-hour history
 - Home-view air-quality chip showing outdoor European AQI, PM2.5, and PM10 estimates from Open-Meteo without an API key
 - Home-view presence chip driven by a local Wi-Fi scan of the phone's fixed per-network private MAC, so presence follows connection to this building's network instead of the wider GPS home zone
+- Restorable **Guest Mode** Home chip that suppresses automatic whole-home shutdown while visitors remain in the apartment
 - Living Room Balcony light tile with a dedicated balcony-and-railing icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Kitchen extractor-fan tile with a dedicated range-hood icon
@@ -100,6 +101,7 @@ config/
 │   └── templates/             # Cards, badges, popups and responsive layouts
 ├── packages/
 │   ├── hemma_helpers.yaml         # Helpers, scripts and dashboard automations
+│   ├── guest_mode.yaml            # Guest override and network-presence automations
 │   ├── homekit_tv.yaml            # TV wrapper and remote-key forwarding
 │   ├── kitchen_fan.yaml           # Two-speed Tuya fan wrapper and relay interlock
 │   ├── phone_network_presence.yaml # Local Wi-Fi presence sensor
@@ -188,6 +190,15 @@ The source-controlled automation set is split between
   is intentionally excluded from this repository. Hemma's Home presence chip uses
   `sensor.ignacy_wi_fi_presence`; the Companion app battery remains attached to
   the chip.
+- **Presence - Leave home when Ignacy disconnects** — waits until the Wi-Fi
+  presence sensor has remained `not_home` for two minutes, checks that
+  `input_boolean.guest_mode` is off, then starts the same centralized
+  `script.leave_home` routine used by the bedside and corridor buttons. Guest
+  Mode restores its previous state after a restart and is controlled from a
+  compact Home header chip.
+- **Presence - Welcome Home before sunset** — twenty minutes before sunset,
+  activates `scene.welcome_home` when Ignacy's phone is connected to the home
+  Wi-Fi. Guest Mode does not suppress this lighting scene.
 
 ### Corridor French Jazz Lounge
 
