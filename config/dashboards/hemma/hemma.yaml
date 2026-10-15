@@ -29,7 +29,7 @@ views:
           aqi_entity_pm25: sensor.open_meteo_pm2_5
           aqi_entity_pm10: sensor.open_meteo_pm10
           aqi_room_name: Outdoor
-          presence_entity_1: person.ignacy_wie
+          presence_entity_1: sensor.ignacy_wi_fi_presence
           presence_battery_entity_1: sensor.phi_battery_level
           presence_icon_1: cellphone-mobile-v1
           wake_alarm_enabled_entity: input_boolean.wake_up_enabled

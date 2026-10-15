@@ -1,0 +1,12 @@
+# Local-network presence for Ignacy's phone.
+# The fixed per-network Wi-Fi MAC stays outside source control in:
+# /config/private/ignacy_phone_wifi_mac
+command_line:
+  - sensor:
+      name: Ignacy Wi-Fi presence
+      unique_id: ignacy_wifi_presence
+      command: >-
+        /bin/sh /config/shell/network_presence.sh
+        /config/private/ignacy_phone_wifi_mac
+      scan_interval: 60
+      command_timeout: 45

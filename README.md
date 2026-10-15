@@ -32,6 +32,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bedroom Closet light tile with an outlined shirt icon
 - Bedroom climate chip showing live indoor temperature and humidity from the IKEA TIMMERFLOTTE sensor; tapping a reading opens the combined current values and six-hour history
 - Home-view air-quality chip showing outdoor European AQI, PM2.5, and PM10 estimates from Open-Meteo without an API key
+- Home-view presence chip driven by a local Wi-Fi scan of the phone's fixed per-network private MAC, so presence follows connection to this building's network instead of the wider GPS home zone
 - Living Room Balcony light tile with a dedicated balcony-and-railing icon
 - Living Room Zeppelin Light tile, included in the room lighting summary
 - Kitchen extractor-fan tile with a dedicated range-hood icon
@@ -101,7 +102,9 @@ config/
 │   ├── hemma_helpers.yaml         # Helpers, scripts and dashboard automations
 │   ├── homekit_tv.yaml            # TV wrapper and remote-key forwarding
 │   ├── kitchen_fan.yaml           # Two-speed Tuya fan wrapper and relay interlock
+│   ├── phone_network_presence.yaml # Local Wi-Fi presence sensor
 │   └── bathroom_fan_humidity.yaml # Humidity control and restorable fan timer
+├── shell/network_presence.sh      # MAC-targeted LAN scan used by the presence sensor
 ├── themes/hemma/              # Hemma theme and typography
 └── www/hemma/                 # Icons and room images
 ```
@@ -179,6 +182,12 @@ The source-controlled automation set is split between
   Button 1's single press runs `scene.welcome_home`, Button 1's double press starts
   the French Jazz Lounge playlist on the Zeppelin, and Button 2's single press runs
   `script.leave_home`.
+- **Ignacy Wi-Fi presence** — scans the local `/24` once per minute with ARP-aware
+  Nmap discovery and reports `home` only when the phone's fixed private Wi-Fi MAC
+  is present. The MAC is read from `/config/private/ignacy_phone_wifi_mac`, which
+  is intentionally excluded from this repository. Hemma's Home presence chip uses
+  `sensor.ignacy_wi_fi_presence`; the Companion app battery remains attached to
+  the chip.
 
 ### Corridor French Jazz Lounge
 
