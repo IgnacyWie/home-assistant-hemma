@@ -111,8 +111,9 @@ copy of the active `/config/automations.yaml` file. It currently contains:
   after 60 minutes at either speed. Turning it off and back on starts a fresh
   timeout.
 - **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
-  then plays *Guten Morgen Sonnenschein* at the configured wake-up time when
-  the wake-up helper is enabled.
+  then plays the shuffled Spotify playlist *Happy Jazz ☕ Relaxing Instrumental
+  Bossa Nova Piano to Positive Mood* at the configured wake-up time when the
+  wake-up helper is enabled. The playlist ID is `6j2DUZglv11u2UgCdozFXM`.
 - **Stop wake-up music** — stops only the Zeppelin from the dashboard stop
   button; the espresso machine remains on.
 - **Lelit Espresso Machine - Two-hour safety shutoff** — starts a restorable

@@ -43,7 +43,7 @@
 
 - id: 'wake_up_music_zeppelin'
   alias: Wake up with music - Zeppelin
-  description: Plays Guten Morgen Sonnenschein by Nana Mouskouri at the configured wake-up time.
+  description: Plays a shuffled Happy Jazz and Bossa Nova morning playlist at the configured wake-up time.
   triggers:
   - trigger: time
     at: input_datetime.wake_up_time
@@ -64,11 +64,15 @@
     target:
       entity_id: media_player.zeppelin
     data:
-      media_id: Guten Morgen Sonnenschein
-      media_type: track
-      artist: Nana Mouskouri
+      media_id: spotify://playlist/6j2DUZglv11u2UgCdozFXM
+      media_type: playlist
       enqueue: replace
   - delay: "00:00:03"
+  - action: media_player.shuffle_set
+    target:
+      entity_id: media_player.zeppelin
+    data:
+      shuffle: true
   - action: media_player.volume_set
     target:
       entity_id: media_player.zeppelin
