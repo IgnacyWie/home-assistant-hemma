@@ -49,6 +49,16 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         self.assertIn("entity_id: media_player.zeppelin", power_off)
         self.assertIn("entity_id: media_player.living_room_tv_2", power_off)
 
+    def test_music_assistant_tv_receiver_is_treated_as_zeppelin_display(self):
+        remote = self.remote_source()
+        self.assertIn("tv_music_assistant_display", remote)
+        self.assertIn("state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant'", remote)
+        self.assertIn("state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant'", remote)
+        self.assertIn("and not tv_music_assistant_display", remote)
+        self.assertIn("tv_music_assistant_display and zeppelin_available", remote)
+        self.assertIn("previous_or_left' and zeppelin_selected", remote)
+        self.assertIn("next_or_right' and zeppelin_selected", remote)
+
     def test_side_buttons_skip_music_or_navigate_the_tv(self):
         remote = self.remote_source()
         self.assertIn("action: media_player.media_previous_track", remote)

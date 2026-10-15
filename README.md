@@ -191,9 +191,11 @@ The source-controlled automation set is split between
   session (falling back to the TV play/pause key); a long
   center press turns off both `media_player.zeppelin` and
   `media_player.living_room_tv_2`. Left/right skips tracks while Zeppelin music is
-  playing and otherwise sends `DPAD_LEFT`/`DPAD_RIGHT` to
-  `remote.living_room_tv`. Short and long presses on either brightness button each
-  produce one volume step.
+  selected and otherwise sends `DPAD_LEFT`/`DPAD_RIGHT` to
+  `remote.living_room_tv`. When `media_player.tv_w_salonie` reports the Music
+  Assistant app/title, it is treated only as the Zeppelin's display and is ignored
+  as a separate TV playback target. Short and long presses on either brightness
+  button each produce one volume step.
 - **Ignacy Wi-Fi presence** — scans the local `/24` every 15 seconds with ARP-aware
   Nmap discovery and reports `home` only when the phone's fixed private Wi-Fi MAC
   is present. The MAC is read from `/config/private/ignacy_phone_wifi_mac`, which

@@ -451,12 +451,22 @@
   actions:
   - variables:
       zeppelin_playing: "{{ is_state('media_player.zeppelin', 'playing') }}"
-      tv_playing: "{{ is_state('media_player.tv_w_salonie', 'playing') }}"
+      zeppelin_available: >-
+        {{ states('media_player.zeppelin') in ['playing', 'paused'] }}
+      tv_music_assistant_display: >-
+        {{ state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant' or
+           state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant' }}
+      zeppelin_selected: >-
+        {{ zeppelin_playing or
+           (tv_music_assistant_display and zeppelin_available) }}
+      tv_playing: >-
+        {{ is_state('media_player.tv_w_salonie', 'playing') and
+           not tv_music_assistant_display }}
       tv_powered: >-
         {{ states('media_player.living_room_tv_2') not in
            ['off', 'unavailable', 'unknown'] }}
       active_volume_player: >-
-        {% if is_state('media_player.zeppelin', 'playing') %}
+        {% if zeppelin_playing or (tv_music_assistant_display and zeppelin_available) %}
           media_player.zeppelin
         {% elif states('media_player.living_room_tv_2') not in ['off', 'unavailable', 'unknown'] %}
           media_player.living_room_tv_2
@@ -465,7 +475,7 @@
         {% endif %}
       active_transport_player: >-
         {% set zeppelin_active = states('media_player.zeppelin') in ['playing', 'paused'] %}
-        {% set tv_active = states('media_player.tv_w_salonie') in ['playing', 'paused'] %}
+        {% set tv_active = states('media_player.tv_w_salonie') in ['playing', 'paused'] and not tv_music_assistant_display %}
         {% if zeppelin_active and tv_active %}
           {% if states.media_player.zeppelin.last_changed >= states.media_player.tv_w_salonie.last_changed %}
             media_player.zeppelin
@@ -512,7 +522,7 @@
         continue_on_error: true
         target:
           entity_id: media_player.living_room_tv_2
-    - conditions: "{{ trigger.id == 'previous_or_left' and zeppelin_playing }}"
+    - conditions: "{{ trigger.id == 'previous_or_left' and zeppelin_selected }}"
       sequence:
       - action: media_player.media_previous_track
         target:
@@ -524,7 +534,7 @@
           entity_id: remote.living_room_tv
         data:
           command: DPAD_LEFT
-    - conditions: "{{ trigger.id == 'next_or_right' and zeppelin_playing }}"
+    - conditions: "{{ trigger.id == 'next_or_right' and zeppelin_selected }}"
       sequence:
       - action: media_player.media_next_track
         target:
