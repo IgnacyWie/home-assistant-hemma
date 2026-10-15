@@ -14,6 +14,8 @@ class CorridorBilresaAutomationTests(unittest.TestCase):
         self.assertIn("entity_id: event.bilresa_dual_button_button_2", automation)
         self.assertIn("id: welcome_home", automation)
         self.assertIn("id: leave_home", automation)
+        self.assertNotIn("attribute: event_type", automation)
+        self.assertIn("trigger.to_state.attributes.event_type == 'multi_press_1'", automation)
         self.assertIn("entity_id: scene.welcome_home", automation)
         self.assertIn("entity_id: script.leave_home", automation)
 
