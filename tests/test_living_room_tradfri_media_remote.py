@@ -41,15 +41,15 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         self.assertIn("action: media_player.volume_down", remote)
         self.assertIn("entity_id: \"{{ active_volume_player }}\"", remote)
 
-    def test_center_button_toggles_active_media_and_hold_turns_both_off(self):
+    def test_center_button_instantly_pauses_or_resumes_active_media(self):
         center = self.center_source()
-        self.assertIn("event_type: zha_event", center)
-        self.assertEqual(3, center.count("device_ieee: 14:b4:57:ff:fe:41:f0:e9"))
-        self.assertEqual(3, center.count("command: toggle"))
-        self.assertIn("wait_for_trigger:", center)
-        self.assertIn('timeout: "00:00:03.2"', center)
-        self.assertIn("wait.trigger is not none", center)
-        self.assertIn("mode: single", center)
+        self.assertIn(f"device_id: {DEVICE_ID}", center)
+        self.assertIn("type: remote_button_short_press", center)
+        self.assertIn("subtype: turn_on", center)
+        self.assertNotIn("wait_for_trigger:", center)
+        self.assertNotIn("timeout:", center)
+        self.assertNotIn("media_player.turn_off", center)
+        self.assertIn("mode: restart", center)
         self.assertIn("action: media_player.media_play", center)
         self.assertIn("action: media_player.media_pause", center)
         self.assertNotIn("action: media_player.media_play_pause", center)
@@ -59,9 +59,6 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         self.assertIn("states('media_player.tv_w_salonie') in ['playing', 'paused']", center)
         self.assertIn("last_changed", center)
         self.assertIn("entity_id: \"{{ active_transport_player }}\"", center)
-        self.assertIn("action: media_player.turn_off", center)
-        self.assertIn("entity_id: media_player.zeppelin", center)
-        self.assertIn("entity_id: media_player.living_room_tv_2", center)
 
     def test_music_assistant_tv_receiver_is_treated_as_zeppelin_display(self):
         remote = self.remote_source()

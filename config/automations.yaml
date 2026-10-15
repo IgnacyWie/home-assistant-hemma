@@ -500,29 +500,16 @@
 
 - id: 'living_room_tradfri_center_button'
   alias: Living Room - TRADFRI center button
-  description: >-
-    Distinguishes the remote's center-button tap from a hold. This firmware sends
-    one toggle immediately and repeated toggles while held, with no release event.
+  description: Instantly pauses or resumes the active Zeppelin or TV session.
   triggers:
-  - trigger: event
-    event_type: zha_event
-    event_data:
-      device_ieee: 14:b4:57:ff:fe:41:f0:e9
-      cluster_id: 6
-      command: toggle
+  - trigger: device
+    domain: zha
+    device_id: a8940bb7824bdae5bfe525f2e61e95f3
+    type: remote_button_short_press
+    subtype: turn_on
   conditions: []
   actions:
-  - wait_for_trigger:
-    - trigger: event
-      event_type: zha_event
-      event_data:
-        device_ieee: 14:b4:57:ff:fe:41:f0:e9
-        cluster_id: 6
-        command: toggle
-    timeout: "00:00:03.2"
-    continue_on_timeout: true
   - variables:
-      center_was_held: "{{ wait.trigger is not none }}"
       tv_music_assistant_display: >-
         {{ state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant' or
            state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant' }}
@@ -546,29 +533,6 @@
           {{ '' }}
         {% endif %}
   - choose:
-    - conditions: "{{ center_was_held }}"
-      sequence:
-      - action: media_player.turn_off
-        continue_on_error: true
-        target:
-          entity_id: media_player.zeppelin
-      - action: media_player.turn_off
-        continue_on_error: true
-        target:
-          entity_id: media_player.living_room_tv_2
-      # Absorb further toggle repeats until the button has been quiet for 3.2 s.
-      - repeat:
-          sequence:
-          - wait_for_trigger:
-            - trigger: event
-              event_type: zha_event
-              event_data:
-                device_ieee: 14:b4:57:ff:fe:41:f0:e9
-                cluster_id: 6
-                command: toggle
-            timeout: "00:00:03.2"
-            continue_on_timeout: true
-          until: "{{ wait.trigger is none }}"
     - conditions: >-
         {{ active_transport_player | length > 0 and
            states(active_transport_player) == 'paused' }}
@@ -590,6 +554,5 @@
           entity_id: remote.living_room_tv
         data:
           command: MEDIA_PLAY_PAUSE
-  mode: single
-  max_exceeded: silent
+  mode: restart
 
