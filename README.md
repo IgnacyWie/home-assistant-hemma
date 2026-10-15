@@ -199,6 +199,11 @@ The source-controlled automation set is split between
 - **Presence - Welcome Home before sunset** — twenty minutes before sunset,
   activates `scene.welcome_home` when Ignacy's phone is connected to the home
   Wi-Fi. Guest Mode does not suppress this lighting scene.
+- **Presence - Welcome Home when Ignacy returns** — when the Wi-Fi presence
+  sensor reconnects before 23:00, activates `scene.welcome_home` after the
+  connection remains stable for one minute. The previous away state must have
+  lasted at least two minutes, preventing a single missed network scan from
+  replaying the scene while Ignacy is already home.
 
 ### Corridor French Jazz Lounge
 

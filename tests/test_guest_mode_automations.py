@@ -65,6 +65,31 @@ def test_welcome_home_runs_twenty_minutes_before_sunset_only_when_home() -> None
     ]
 
 
+def test_welcome_home_runs_on_stable_return_before_23() -> None:
+    automation = _automations_by_id()["welcome_home_when_ignacy_reconnects_before_23"]
+    assert automation["triggers"] == [
+        {
+            "trigger": "state",
+            "entity_id": "sensor.ignacy_wi_fi_presence",
+            "from": "not_home",
+            "to": "home",
+            "for": "00:01:00",
+        }
+    ]
+    assert automation["conditions"][0] == {
+        "condition": "time",
+        "before": "23:00:00",
+    }
+    assert automation["conditions"][1]["condition"] == "template"
+    assert ">= 120" in automation["conditions"][1]["value_template"]
+    assert automation["actions"] == [
+        {
+            "action": "scene.turn_on",
+            "target": {"entity_id": "scene.welcome_home"},
+        }
+    ]
+
+
 def test_home_dashboard_exposes_guest_mode_as_one_toggle_chip() -> None:
     dashboard = DASHBOARD.read_text()
     room_template = ROOM_TEMPLATE.read_text()
