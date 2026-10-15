@@ -29,6 +29,8 @@ class CorridorBilresaAutomationTests(unittest.TestCase):
         self.assertIn("spotify://playlist/75tpCkAq8iJogkzHn7q6AW", lounge)
         self.assertIn("media_type: playlist", lounge)
         self.assertIn("enqueue: replace", lounge)
+        self.assertIn("action: media_player.shuffle_set", lounge)
+        self.assertIn("shuffle: true", lounge)
 
 
 if __name__ == "__main__":

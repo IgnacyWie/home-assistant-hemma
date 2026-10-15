@@ -164,7 +164,8 @@ copy of the active `/config/automations.yaml` file. It currently contains:
 Button 1's double press calls `script.french_jazz_lounge`, which uses Music Assistant
 to replace the Zeppelin queue with Spotify playlist
 `Jazzy Restaurant Music | Luxury Hotel Lounge Music` by Chill Ghost. It preserves the
-current Zeppelin volume; the playlist ID is `75tpCkAq8iJogkzHn7q6AW`.
+current Zeppelin volume and enables shuffle after the queue loads; the playlist ID is
+`75tpCkAq8iJogkzHn7q6AW`.
 
 ## Welcome Home scene
 

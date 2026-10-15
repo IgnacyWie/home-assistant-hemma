@@ -10,6 +10,12 @@ french_jazz_lounge:
         media_id: spotify://playlist/75tpCkAq8iJogkzHn7q6AW
         media_type: playlist
         enqueue: replace
+    - delay: "00:00:01"
+    - action: media_player.shuffle_set
+      target:
+        entity_id: media_player.zeppelin
+      data:
+        shuffle: true
 
 leave_home:
   alias: Leave Home
