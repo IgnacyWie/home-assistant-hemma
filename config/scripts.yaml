@@ -9,9 +9,7 @@ leave_home:
     - action: media_player.media_pause
       continue_on_error: true
       target:
-        entity_id:
-          - media_player.zeppelin
-          - media_player.living_room
+        entity_id: media_player.zeppelin
     - if:
         - condition: template
           value_template: >-

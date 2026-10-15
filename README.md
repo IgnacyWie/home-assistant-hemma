@@ -214,9 +214,11 @@ allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
 registry. The scene sets sixteen responsive physical lights, the Lelit
 espresso-machine switch, and the kitchen extractor fan to `off`. The Zeppelin
-players are handled separately by `script.leave_home`, which sends
-`media_player.media_pause` to both the Music Assistant entity
-`media_player.zeppelin` and the hidden native DLNA entity `media_player.living_room`.
+music is handled separately by `script.leave_home`, which sends
+`media_player.media_pause` to the Music Assistant player entity
+`media_player.zeppelin`. That player is backed by the Zeppelin DLNA player.
+The hidden native DLNA entity `media_player.living_room` is not targeted because
+its live feature set does not advertise pause support.
 The physical living-room TV is handled separately by `script.leave_home`, using only
 `media_player.living_room_tv_2`—the same entity displayed by Hemma. The script
 continues when a media endpoint is already idle or rejects a redundant pause, and
