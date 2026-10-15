@@ -3,6 +3,11 @@ french_jazz_lounge:
   icon: mdi:music
   mode: restart
   sequence:
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.zeppelin
+      data:
+        volume_level: 0.30
     - action: music_assistant.play_media
       target:
         entity_id: media_player.zeppelin
@@ -16,6 +21,11 @@ french_jazz_lounge:
         entity_id: media_player.zeppelin
       data:
         shuffle: true
+    - action: media_player.volume_set
+      target:
+        entity_id: media_player.zeppelin
+      data:
+        volume_level: 0.30
 
 leave_home:
   alias: Leave Home

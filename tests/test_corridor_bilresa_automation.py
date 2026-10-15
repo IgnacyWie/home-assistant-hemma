@@ -24,6 +24,8 @@ class CorridorBilresaAutomationTests(unittest.TestCase):
     def test_french_jazz_lounge_script_replaces_music_on_zeppelin(self):
         scripts = (ROOT / "config/scripts.yaml").read_text()
         lounge = scripts.split("french_jazz_lounge:", 1)[1].split("leave_home:", 1)[0]
+        self.assertIn("action: media_player.volume_set", lounge)
+        self.assertIn("volume_level: 0.30", lounge)
         self.assertIn("action: music_assistant.play_media", lounge)
         self.assertIn("entity_id: media_player.zeppelin", lounge)
         self.assertIn("spotify://playlist/75tpCkAq8iJogkzHn7q6AW", lounge)
