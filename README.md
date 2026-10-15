@@ -155,14 +155,23 @@ copy of the active `/config/automations.yaml` file. It currently contains:
     stops only the alarm without changing lights, running the bedtime shutdown,
     or switching off the espresso machine.
 - **Corridor - Welcome Home / Leave Home** — maps the Matter BILRESA dual button:
-  Button 1's single press runs `scene.welcome_home`; Button 2's single press runs
+  Button 1's single press runs `scene.welcome_home`, Button 1's double press starts
+  the French Jazz Lounge playlist on the Zeppelin, and Button 2's single press runs
   `script.leave_home`.
+
+### Corridor French Jazz Lounge
+
+Button 1's double press calls `script.french_jazz_lounge`, which uses Music Assistant
+to replace the Zeppelin queue with Spotify playlist
+`Jazzy Restaurant Music | Luxury Hotel Lounge Music` by Chill Ghost. It preserves the
+current Zeppelin volume; the playlist ID is `75tpCkAq8iJogkzHn7q6AW`.
 
 ## Welcome Home scene
 
 [`config/scenes.yaml`](config/scenes.yaml) defines **Welcome Home** as a complete
-physical-lighting snapshot. It turns on six cozy lights, including **Zeppelin
-Light**, and explicitly keeps the remaining responsive lighting entities off.
+physical-lighting snapshot. It turns on five cozy lights and explicitly keeps the
+remaining responsive lighting entities off. **Zeppelin Light** is intentionally not
+part of Welcome Home; it is still available as a separate Living Room light control.
 Kitchen 1, Kitchen 2, Kitchen 3, and Kitchen LED are included with
 `state: "off"` so the overhead and cabinet lighting stay dark. The Bathroom Lamp
 switch also remains off. The

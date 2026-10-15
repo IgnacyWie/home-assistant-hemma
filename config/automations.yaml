@@ -385,7 +385,7 @@
 
 - id: 'corridor_bilresa_home_modes'
   alias: Corridor - Welcome Home / Leave Home
-  description: Maps the corridor BILRESA buttons to the universal home scenes.
+  description: Maps the corridor BILRESA buttons to home scenes and French jazz lounge music.
   triggers:
   - trigger: state
     entity_id: event.bilresa_dual_button_button_1
@@ -401,6 +401,11 @@
       - action: scene.turn_on
         target:
           entity_id: scene.welcome_home
+    - conditions: "{{ trigger.id == 'welcome_home' and trigger.to_state.attributes.event_type == 'multi_press_2' }}"
+      sequence:
+      - action: script.turn_on
+        target:
+          entity_id: script.french_jazz_lounge
     - conditions: "{{ trigger.id == 'leave_home' and trigger.to_state.attributes.event_type == 'multi_press_1' }}"
       sequence:
       - action: script.turn_on
