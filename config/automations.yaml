@@ -396,8 +396,7 @@
 - id: 'living_room_tradfri_media_remote'
   alias: Living Room - TRADFRI media remote
   description: >-
-    Uses the five-button TRADFRI remote for the active Zeppelin or TV: volume,
-    play/pause, previous/next or TV navigation, and a long-press power-off.
+    Uses the five-button TRADFRI remote only for Zeppelin volume and track skips.
   triggers:
   - trigger: device
     domain: zha
@@ -437,70 +436,33 @@
     id: next_or_right
   conditions: []
   actions:
-  - variables:
-      zeppelin_playing: "{{ is_state('media_player.zeppelin', 'playing') }}"
-      zeppelin_available: >-
-        {{ states('media_player.zeppelin') in ['playing', 'paused'] }}
-      tv_music_assistant_display: >-
-        {{ state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant' or
-           state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant' }}
-      zeppelin_selected: >-
-        {{ zeppelin_playing or
-           (tv_music_assistant_display and zeppelin_available) }}
-      tv_powered: >-
-        {{ states('media_player.living_room_tv_2') not in
-           ['off', 'unavailable', 'unknown'] }}
-      active_volume_player: >-
-        {% if zeppelin_playing or (tv_music_assistant_display and zeppelin_available) %}
-          media_player.zeppelin
-        {% elif states('media_player.living_room_tv_2') not in ['off', 'unavailable', 'unknown'] %}
-          media_player.living_room_tv_2
-        {% else %}
-          {{ '' }}
-        {% endif %}
-
   - choose:
-    - conditions: "{{ trigger.id == 'volume_up' and active_volume_player | length > 0 }}"
+    - conditions: "{{ trigger.id == 'volume_up' }}"
       sequence:
       - action: media_player.volume_up
         target:
-          entity_id: "{{ active_volume_player }}"
-    - conditions: "{{ trigger.id == 'volume_down' and active_volume_player | length > 0 }}"
+          entity_id: media_player.zeppelin
+    - conditions: "{{ trigger.id == 'volume_down' }}"
       sequence:
       - action: media_player.volume_down
         target:
-          entity_id: "{{ active_volume_player }}"
-
-    - conditions: "{{ trigger.id == 'previous_or_left' and zeppelin_selected }}"
+          entity_id: media_player.zeppelin
+    - conditions: "{{ trigger.id == 'previous_or_left' }}"
       sequence:
       - action: media_player.media_previous_track
         target:
           entity_id: media_player.zeppelin
-    - conditions: "{{ trigger.id == 'previous_or_left' and tv_powered }}"
-      sequence:
-      - action: remote.send_command
-        target:
-          entity_id: remote.living_room_tv
-        data:
-          command: DPAD_LEFT
-    - conditions: "{{ trigger.id == 'next_or_right' and zeppelin_selected }}"
+    - conditions: "{{ trigger.id == 'next_or_right' }}"
       sequence:
       - action: media_player.media_next_track
         target:
           entity_id: media_player.zeppelin
-    - conditions: "{{ trigger.id == 'next_or_right' and tv_powered }}"
-      sequence:
-      - action: remote.send_command
-        target:
-          entity_id: remote.living_room_tv
-        data:
-          command: DPAD_RIGHT
   mode: queued
   max: 10
 
 - id: 'living_room_tradfri_center_button'
   alias: Living Room - TRADFRI center button
-  description: Instantly pauses or resumes the active Zeppelin or TV session.
+  description: Instantly pauses or resumes the Zeppelin.
   triggers:
   - trigger: device
     domain: zha
@@ -510,28 +472,7 @@
   conditions: []
   actions:
   - variables:
-      tv_music_assistant_display: >-
-        {{ state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant' or
-           state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant' }}
-      tv_powered: >-
-        {{ states('media_player.living_room_tv_2') not in
-           ['off', 'unavailable', 'unknown'] }}
-      active_transport_player: >-
-        {% set zeppelin_active = states('media_player.zeppelin') in ['playing', 'paused'] %}
-        {% set tv_active = states('media_player.tv_w_salonie') in ['playing', 'paused'] and not tv_music_assistant_display %}
-        {% if zeppelin_active and tv_active %}
-          {% if states.media_player.zeppelin.last_changed >= states.media_player.tv_w_salonie.last_changed %}
-            media_player.zeppelin
-          {% else %}
-            media_player.tv_w_salonie
-          {% endif %}
-        {% elif zeppelin_active %}
-          media_player.zeppelin
-        {% elif tv_active %}
-          media_player.tv_w_salonie
-        {% else %}
-          {{ '' }}
-        {% endif %}
+      active_transport_player: media_player.zeppelin
   - choose:
     - conditions: >-
         {{ active_transport_player | length > 0 and
@@ -539,20 +480,19 @@
       sequence:
       - action: media_player.media_play
         target:
-          entity_id: "{{ active_transport_player }}"
+          entity_id: media_player.zeppelin
     - conditions: >-
         {{ active_transport_player | length > 0 and
            states(active_transport_player) == 'playing' }}
       sequence:
       - action: media_player.media_pause
         target:
-          entity_id: "{{ active_transport_player }}"
-    - conditions: "{{ tv_powered }}"
+          entity_id: media_player.zeppelin
+    - conditions: >-
+        {{ states(active_transport_player) not in ['playing', 'paused'] }}
       sequence:
-      - action: remote.send_command
+      - action: script.turn_on
         target:
-          entity_id: remote.living_room_tv
-        data:
-          command: MEDIA_PLAY_PAUSE
+          entity_id: script.french_jazz_lounge
   mode: restart
 

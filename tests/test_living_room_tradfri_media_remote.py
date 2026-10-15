@@ -33,13 +33,13 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         ):
             self.assertIn(trigger, remote)
 
-    def test_volume_buttons_follow_the_currently_playing_endpoint(self):
+    def test_volume_buttons_only_control_zeppelin(self):
         remote = self.remote_source()
-        self.assertIn("is_state('media_player.zeppelin', 'playing')", remote)
-        self.assertIn("media_player.living_room_tv_2", remote)
         self.assertIn("action: media_player.volume_up", remote)
         self.assertIn("action: media_player.volume_down", remote)
-        self.assertIn("entity_id: \"{{ active_volume_player }}\"", remote)
+        self.assertEqual(4, remote.count("entity_id: media_player.zeppelin"))
+        self.assertNotIn("living_room_tv", remote)
+        self.assertNotIn("tv_w_salonie", remote)
 
     def test_center_button_instantly_pauses_or_resumes_active_media(self):
         center = self.center_source()
@@ -55,30 +55,22 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         self.assertNotIn("action: media_player.media_play_pause", center)
         self.assertIn("states(active_transport_player) == 'paused'", center)
         self.assertIn("states(active_transport_player) == 'playing'", center)
-        self.assertIn("states('media_player.zeppelin') in ['playing', 'paused']", center)
-        self.assertIn("states('media_player.tv_w_salonie') in ['playing', 'paused']", center)
-        self.assertIn("last_changed", center)
-        self.assertIn("entity_id: \"{{ active_transport_player }}\"", center)
+        self.assertIn("active_transport_player: media_player.zeppelin", center)
+        self.assertIn("entity_id: media_player.zeppelin", center)
+        self.assertIn("states(active_transport_player) not in ['playing', 'paused']", center)
+        self.assertIn("action: script.turn_on", center)
+        self.assertIn("entity_id: script.french_jazz_lounge", center)
+        self.assertNotIn("living_room_tv", center)
+        self.assertNotIn("tv_w_salonie", center)
 
-    def test_music_assistant_tv_receiver_is_treated_as_zeppelin_display(self):
-        remote = self.remote_source()
-        self.assertIn("tv_music_assistant_display", remote)
-        self.assertIn("state_attr('media_player.tv_w_salonie', 'app_name') == 'Music Assistant'", remote)
-        self.assertIn("state_attr('media_player.tv_w_salonie', 'media_title') == 'Music Assistant'", remote)
-        self.assertIn("and not tv_music_assistant_display", self.center_source())
-        self.assertIn("tv_music_assistant_display and zeppelin_available", remote)
-        self.assertIn("previous_or_left' and zeppelin_selected", remote)
-        self.assertIn("next_or_right' and zeppelin_selected", remote)
-
-    def test_side_buttons_skip_music_or_navigate_the_tv(self):
+    def test_side_buttons_only_skip_zeppelin_tracks(self):
         remote = self.remote_source()
         self.assertIn("action: media_player.media_previous_track", remote)
         self.assertIn("action: media_player.media_next_track", remote)
-        self.assertIn("entity_id: media_player.zeppelin", remote)
-        self.assertIn("action: remote.send_command", remote)
-        self.assertIn("entity_id: remote.living_room_tv", remote)
-        self.assertIn("command: DPAD_LEFT", remote)
-        self.assertIn("command: DPAD_RIGHT", remote)
+        self.assertEqual(4, remote.count("entity_id: media_player.zeppelin"))
+        self.assertNotIn("remote.send_command", remote)
+        self.assertNotIn("DPAD_LEFT", remote)
+        self.assertNotIn("DPAD_RIGHT", remote)
 
 
 if __name__ == "__main__":
