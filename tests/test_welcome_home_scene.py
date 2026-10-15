@@ -13,7 +13,6 @@ WELCOME_HOME_STATES = {
     "light.living_room_2ch_wi_fi_switch_module_switch_2": "on",
     "light.3_in_1_controller_wifi_2_4g": "on",
     "light.bedroom_ikea_of_sweden_grillplats_plug": "on",
-    "light.zeppelin_light": "on",
     "light.living_room_2ch_wi_fi_switch_module_2_switch_1": "off",
     "light.living_room_2ch_wi_fi_switch_module_2_switch_2": "off",
     "light.living_room_2ch_wi_fi_switch_module_switch_1": "off",
