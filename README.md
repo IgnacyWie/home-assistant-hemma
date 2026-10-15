@@ -23,6 +23,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - A live **What's still on?** Home chip with per-device shutdown controls and one-tap **All Off**
 - Two-hour Lelit espresso-machine safety shutoff with a restart-restorable timer
 - Jellyfin cinema mode with living-room light state restoration
+- Bathroom humidity-driven ventilation using the bathroom sensor against the bedroom humidity baseline, with a restorable 60-minute maximum-runtime timer
 - Bathroom forgotten-on protection for both bathroom lights
 - IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
 - Corridor BILRESA dual-button mapping: Button 1 runs **Welcome Home** and Button 2 runs the universal **Leave Home** routine
@@ -90,20 +91,32 @@ config/
 │   ├── hemma/hemma.yaml       # Room and entity configuration
 │   └── templates/             # Cards, badges, popups and responsive layouts
 ├── packages/
-│   ├── hemma_helpers.yaml     # Helpers, scripts and dashboard automations
-│   ├── homekit_tv.yaml        # TV wrapper and remote-key forwarding
-│   └── kitchen_fan.yaml       # Two-speed Tuya fan wrapper and relay interlock
+│   ├── hemma_helpers.yaml         # Helpers, scripts and dashboard automations
+│   ├── homekit_tv.yaml            # TV wrapper and remote-key forwarding
+│   ├── kitchen_fan.yaml           # Two-speed Tuya fan wrapper and relay interlock
+│   └── bathroom_fan_humidity.yaml # Humidity control and restorable fan timer
 ├── themes/hemma/              # Hemma theme and typography
 └── www/hemma/                 # Icons and room images
 ```
 
 ## Automations
 
-[`config/automations.yaml`](config/automations.yaml) is the source-controlled
-copy of the active `/config/automations.yaml` file. It currently contains:
-
-- **Bathroom Fan - Delay** — turns off the bathroom fan 45 minutes after it is
-  switched on.
+The source-controlled automation set is split between
+[`config/automations.yaml`](config/automations.yaml) and the package files under
+[`config/packages/`](config/packages/). The active behavior includes:
+- **Bathroom Fan - Humidity control** — compares the bathroom humidity entity
+  `sensor.timmerflotte_temp_hmd_sensor_humidity_2` with the bedroom reference
+  `sensor.timmerflotte_temp_hmd_sensor_humidity`. It starts
+  `fan.bathroom_fan_bathroom` when bathroom humidity stays for three minutes at
+  or above `max(65%, bedroom humidity + 7 percentage points)`. It stops the fan
+  after bathroom humidity remains within three percentage points of the bedroom
+  reference for ten minutes. Both sensors must report valid values, so an
+  unavailable reference cannot accidentally start or stop the fan.
+- **Bathroom Fan runtime safety branch** — the humidity package uses the
+  `timer.bathroom_fan_humidity_max_runtime` helper with `restore: true`. Manual
+  or automatic fan activation starts a one-hour safety timer; stopping the fan
+  cancels it, and timer expiry turns the fan off. The startup path re-establishes
+  the one-hour protection if Home Assistant restarts while the fan is running.
 - **Kitchen Extractor Fan - Relay interlock** — keeps the two relays behind the
   two-speed kitchen extractor mutually exclusive, including when a raw Tuya
   channel is operated directly.
@@ -296,18 +309,18 @@ Assistant's entity registry so the fan is the only user-facing control.
 
 ## Potential improvements
 
-The next sensor expansion under consideration is:
+The remaining sensor expansion under consideration is:
 
-- A temperature/humidity sensor in the Bathroom for ventilation control.
 - One motion sensor in the Bathroom for occupancy-aware lighting.
 - One motion sensor in the Corridor for nighttime pathway lighting.
 
+The bathroom temperature/humidity sensor and ventilation automation are now
+implemented in [`config/packages/bathroom_fan_humidity.yaml`](config/packages/bathroom_fan_humidity.yaml).
+The bedroom TIMMERFLOTTE sensor is the reference baseline; the bathroom sensor
+must remain assigned to the Bathroom area and the bedroom sensor to Bedroom.
+
 Potential follow-up automations:
 
-- **Humidity-driven bathroom fan** — start the fan when Bathroom humidity rises
-  rapidly, exceeds the Bedroom baseline by roughly 8–10 percentage points, or
-  passes a high absolute threshold. Stop it after humidity returns close to the
-  baseline, while retaining a maximum-runtime fallback.
 - **Occupancy-aware bathroom lighting** — turn on the appropriate bathroom light
   when motion is detected and turn it off after 8–10 minutes without motion.
   The existing 45-minute forgotten-on automation should remain as a hard

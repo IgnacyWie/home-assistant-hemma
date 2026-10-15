@@ -1,0 +1,110 @@
+timer:
+  bathroom_fan_humidity_max_runtime:
+    name: Bathroom fan humidity maximum runtime
+    duration: "01:00:00"
+    restore: true
+
+automation:
+  - id: bathroom_fan_humidity_control
+    alias: Bathroom Fan - Humidity control
+    description: >-
+      Starts the bathroom fan when bathroom humidity stays at least 7 percentage
+      points above the bedroom reference and stops it after humidity recovers.
+    triggers:
+      - trigger: template
+        value_template: >-
+          {% set bathroom = states('sensor.timmerflotte_temp_hmd_sensor_humidity_2') %}
+          {% set bedroom = states('sensor.timmerflotte_temp_hmd_sensor_humidity') %}
+          {{ bathroom not in ['unknown', 'unavailable', 'none', ''] and
+             bedroom not in ['unknown', 'unavailable', 'none', ''] and
+             bathroom | float(0) >= ([65, bedroom | float(0) + 7] | max) }}
+        for: "00:03:00"
+        id: humidity_high
+      - trigger: template
+        value_template: >-
+          {% set bathroom = states('sensor.timmerflotte_temp_hmd_sensor_humidity_2') %}
+          {% set bedroom = states('sensor.timmerflotte_temp_hmd_sensor_humidity') %}
+          {{ bathroom not in ['unknown', 'unavailable', 'none', ''] and
+             bedroom not in ['unknown', 'unavailable', 'none', ''] and
+             bathroom | float(0) <= bedroom | float(0) + 3 }}
+        for: "00:10:00"
+        id: humidity_recovered
+      - trigger: state
+        entity_id: fan.bathroom_fan_bathroom
+        to: "on"
+        id: fan_turned_on
+      - trigger: state
+        entity_id: fan.bathroom_fan_bathroom
+        to: "off"
+        id: fan_turned_off
+      - trigger: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.bathroom_fan_humidity_max_runtime
+        id: max_runtime
+      - trigger: homeassistant
+        event: start
+        id: home_assistant_start
+    conditions: []
+    actions:
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: humidity_high
+              - condition: state
+                entity_id: fan.bathroom_fan_bathroom
+                state: "off"
+            sequence:
+              - action: fan.turn_on
+                target:
+                  entity_id: fan.bathroom_fan_bathroom
+          - conditions:
+              - condition: trigger
+                id: humidity_recovered
+              - condition: state
+                entity_id: fan.bathroom_fan_bathroom
+                state: "on"
+            sequence:
+              - action: fan.turn_off
+                target:
+                  entity_id: fan.bathroom_fan_bathroom
+          - conditions:
+              - condition: trigger
+                id: fan_turned_on
+            sequence:
+              - action: timer.start
+                target:
+                  entity_id: timer.bathroom_fan_humidity_max_runtime
+                data:
+                  duration: "01:00:00"
+          - conditions:
+              - condition: trigger
+                id: fan_turned_off
+            sequence:
+              - action: timer.cancel
+                target:
+                  entity_id: timer.bathroom_fan_humidity_max_runtime
+          - conditions:
+              - condition: trigger
+                id: max_runtime
+              - condition: state
+                entity_id: fan.bathroom_fan_bathroom
+                state: "on"
+            sequence:
+              - action: fan.turn_off
+                target:
+                  entity_id: fan.bathroom_fan_bathroom
+          - conditions:
+              - condition: trigger
+                id: home_assistant_start
+              - condition: state
+                entity_id: fan.bathroom_fan_bathroom
+                state: "on"
+            sequence:
+              - action: timer.start
+                target:
+                  entity_id: timer.bathroom_fan_humidity_max_runtime
+                data:
+                  duration: "01:00:00"
+    mode: parallel
+    max: 10

@@ -1,27 +1,3 @@
-- id: '1789991756664'
-  alias: Bathroom Fan - Delay
-  description: ''
-  triggers:
-  - trigger: fan.turned_on
-    target:
-      device_id: b572cc1bc87d089d41c93900d5ec5bae
-    options:
-      behavior: each
-      for: 00:00:00
-  conditions: []
-  actions:
-  - delay:
-      hours: 0
-      minutes: 45
-      seconds: 0
-      milliseconds: 0
-  - action: fan.turn_off
-    metadata: {}
-    target:
-      entity_id: fan.bathroom_fan_bathroom
-    data: {}
-  mode: single
-
 - id: 'kitchen_extractor_fan_timeout'
   alias: Kitchen Extractor Fan - 60-minute timeout
   description: Turns off the kitchen extractor after 60 minutes at either speed.

@@ -4,6 +4,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTOMATIONS = ROOT / "config/automations.yaml"
+BATHROOM_PACKAGE = ROOT / "config/packages/bathroom_fan_humidity.yaml"
 
 
 def automation_block(text: str, alias: str) -> str:
@@ -19,13 +20,23 @@ def automation_block(text: str, alias: str) -> str:
 
 
 class FanTimeoutAutomationTests(unittest.TestCase):
-    def test_bathroom_fan_turns_off_after_45_minutes(self):
-        block = automation_block(AUTOMATIONS.read_text(), "Bathroom Fan - Delay")
+    def test_bathroom_fan_uses_humidity_control_and_sixty_minute_failsafe(self):
+        package = BATHROOM_PACKAGE.read_text()
 
-        self.assertIn("minutes: 45", block)
-        self.assertIn("action: fan.turn_off", block)
-        self.assertIn("entity_id: fan.bathroom_fan_bathroom", block)
-        self.assertNotIn("minutes: 20", block)
+        self.assertIn("id: bathroom_fan_humidity_control", package)
+        self.assertIn("sensor.timmerflotte_temp_hmd_sensor_humidity_2", package)
+        self.assertIn("sensor.timmerflotte_temp_hmd_sensor_humidity", package)
+        self.assertIn("bathroom | float(0) >= ([65, bedroom | float(0) + 7] | max)", package)
+        self.assertIn("bathroom | float(0) <= bedroom | float(0) + 3", package)
+        self.assertIn('for: "00:03:00"', package)
+        self.assertIn('for: "00:10:00"', package)
+        self.assertIn('duration: "01:00:00"', package)
+        self.assertIn("restore: true", package)
+        self.assertIn("entity_id: fan.bathroom_fan_bathroom", package)
+        self.assertIn("action: fan.turn_on", package)
+        self.assertIn("action: fan.turn_off", package)
+        self.assertNotIn("00:45:00", package)
+        self.assertNotIn("Bathroom Fan - Delay", AUTOMATIONS.read_text())
 
     def test_kitchen_fan_turns_off_after_60_minutes_at_either_speed(self):
         block = automation_block(
