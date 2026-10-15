@@ -27,7 +27,6 @@ def test_guest_mode_restores_and_guards_shared_leave_home_routine() -> None:
             "entity_id": "sensor.ignacy_wi_fi_presence",
             "from": "home",
             "to": "not_home",
-            "for": "00:02:00",
         }
     ]
     assert automation["conditions"] == [
@@ -65,7 +64,7 @@ def test_welcome_home_runs_twenty_minutes_before_sunset_only_when_home() -> None
     ]
 
 
-def test_welcome_home_runs_on_stable_return_before_23() -> None:
+def test_welcome_home_runs_immediately_on_return_before_23() -> None:
     automation = _automations_by_id()["welcome_home_when_ignacy_reconnects_before_23"]
     assert automation["triggers"] == [
         {
@@ -75,12 +74,9 @@ def test_welcome_home_runs_on_stable_return_before_23() -> None:
             "to": "home",
         }
     ]
-    assert automation["conditions"][0] == {
-        "condition": "time",
-        "before": "23:00:00",
-    }
-    assert automation["conditions"][1]["condition"] == "template"
-    assert ">= 120" in automation["conditions"][1]["value_template"]
+    assert automation["conditions"] == [
+        {"condition": "time", "before": "23:00:00"}
+    ]
     assert automation["actions"] == [
         {
             "action": "scene.turn_on",

@@ -190,8 +190,8 @@ The source-controlled automation set is split between
   is intentionally excluded from this repository. Hemma's Home presence chip uses
   `sensor.ignacy_wi_fi_presence`; the Companion app battery remains attached to
   the chip.
-- **Presence - Leave home when Ignacy disconnects** — waits until the Wi-Fi
-  presence sensor has remained `not_home` for two minutes, checks that
+- **Presence - Leave home when Ignacy disconnects** — reacts immediately when
+  the Wi-Fi presence sensor changes to `not_home`, checks that
   `input_boolean.guest_mode` is off, then starts the same centralized
   `script.leave_home` routine used by the bedside and corridor buttons. Guest
   Mode restores its previous state after a restart and is controlled from a
@@ -201,9 +201,7 @@ The source-controlled automation set is split between
   Wi-Fi. Guest Mode does not suppress this lighting scene.
 - **Presence - Welcome Home when Ignacy returns** — when the Wi-Fi presence
   sensor reconnects before 23:00, activates `scene.welcome_home` immediately.
-  The previous away state must have lasted at least two minutes, preventing a
-  single missed network scan from replaying the scene while Ignacy is already
-  home.
+  There is no arrival debounce or minimum-away requirement.
 
 ### Corridor French Jazz Lounge
 

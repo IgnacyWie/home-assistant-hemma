@@ -10,14 +10,13 @@ automation:
   - id: guest_mode_leave_when_phone_disconnects
     alias: Presence - Leave home when Ignacy disconnects
     description: >-
-      Runs the shared Leave Home routine after Ignacy's phone has been away from
-      the home Wi-Fi for two minutes, unless Guest Mode is enabled.
+      Runs the shared Leave Home routine as soon as Ignacy's phone leaves the
+      home Wi-Fi, unless Guest Mode is enabled.
     triggers:
       - trigger: state
         entity_id: sensor.ignacy_wi_fi_presence
         from: home
         to: not_home
-        for: "00:02:00"
     conditions:
       - condition: state
         entity_id: input_boolean.guest_mode
@@ -51,7 +50,7 @@ automation:
     alias: Presence - Welcome Home when Ignacy returns
     description: >-
       Activates the Welcome Home scene before 23:00 after Ignacy's phone returns
-      from a real absence.
+      to the home Wi-Fi.
     triggers:
       - trigger: state
         entity_id: sensor.ignacy_wi_fi_presence
@@ -60,10 +59,6 @@ automation:
     conditions:
       - condition: time
         before: "23:00:00"
-      - condition: template
-        value_template: >-
-          {{ as_timestamp(trigger.to_state.last_changed)
-             - as_timestamp(trigger.from_state.last_changed) >= 120 }}
     actions:
       - action: scene.turn_on
         target:
