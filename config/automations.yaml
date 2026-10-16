@@ -182,25 +182,28 @@
 
 - id: 'bedroom_closet_door_light'
   alias: Bedroom Closet - Door light
-  description: Turns the bedroom closet light on when the MYGGBETT door opens and off when it closes.
+  description: Turns the bedroom closet light on when the MYGGBETT door opens and off when it closes; resynchronizes after Home Assistant or the light reconnects.
   triggers:
   - trigger: state
     entity_id: binary_sensor.myggbett_door_window_sensor_door
     to: 'on'
-    id: door_opened
   - trigger: state
     entity_id: binary_sensor.myggbett_door_window_sensor_door
     to: 'off'
-    id: door_closed
+  - trigger: homeassistant
+    event: start
+  - trigger: state
+    entity_id: light.bedroom_closet
+    from: 'unavailable'
   conditions: []
   actions:
   - choose:
-    - conditions: "{{ trigger.id == 'door_opened' }}"
+    - conditions: "{{ is_state('binary_sensor.myggbett_door_window_sensor_door', 'on') }}"
       sequence:
       - action: light.turn_on
         target:
           entity_id: light.bedroom_closet
-    - conditions: "{{ trigger.id == 'door_closed' }}"
+    - conditions: "{{ is_state('binary_sensor.myggbett_door_window_sensor_door', 'off') }}"
       sequence:
       - action: light.turn_off
         target:

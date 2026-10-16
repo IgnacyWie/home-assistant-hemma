@@ -161,7 +161,7 @@ The source-controlled automation set is split between
 - **Bathroom - Forgotten lights protection** — independently switches off the
   Bathroom LED Strip or Bathroom Lamp after either has remained on for 45
   minutes.
-- **Bedroom Closet - Door light** — turns `light.bedroom_closet` on when `binary_sensor.myggbett_door_window_sensor_door` opens and off when it closes.
+- **Bedroom Closet - Door light** — turns `light.bedroom_closet` on when `binary_sensor.myggbett_door_window_sensor_door` opens and off when it closes; it also resynchronizes the light after Home Assistant starts or the light entity reconnects from `unavailable`.
 - **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
   - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
     LED Bed first, then Bedroom Accent.
