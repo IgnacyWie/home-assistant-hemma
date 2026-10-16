@@ -45,22 +45,3 @@ automation:
         target:
           entity_id: scene.welcome_home
     mode: single
-
-  - id: welcome_home_when_ignacy_reconnects_before_23
-    alias: Presence - Welcome Home when Ignacy returns
-    description: >-
-      Activates the Welcome Home scene before 23:00 after Ignacy's phone returns
-      to the home Wi-Fi.
-    triggers:
-      - trigger: state
-        entity_id: sensor.ignacy_wi_fi_presence
-        from: not_home
-        to: home
-    conditions:
-      - condition: time
-        before: "23:00:00"
-    actions:
-      - action: scene.turn_on
-        target:
-          entity_id: scene.welcome_home
-    mode: single

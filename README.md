@@ -202,12 +202,9 @@ The source-controlled automation set is split between
   `script.leave_home` routine used by the bedside and corridor buttons. Guest
   Mode restores its previous state after a restart and is controlled from a
   compact Home header chip.
-- **Presence - Welcome Home before sunset** — twenty minutes before sunset,
-  activates `scene.welcome_home` when Ignacy's phone is connected to the home
-  Wi-Fi. Guest Mode does not suppress this lighting scene.
-- **Presence - Welcome Home when Ignacy returns** — when the Wi-Fi presence
-  sensor reconnects before 23:00, activates `scene.welcome_home` immediately.
-  There is no arrival debounce or minimum-away requirement.
+- Wi-Fi reconnection never turns lights on automatically. The before-sunset
+  Welcome Home automation remains enabled and runs once per day, twenty minutes
+  before sunset, when Ignacy is home.
 
 ### Corridor French Jazz Lounge
 

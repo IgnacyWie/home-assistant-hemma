@@ -44,6 +44,11 @@ def test_guest_mode_restores_and_guards_shared_leave_home_routine() -> None:
     ]
 
 
+def test_wifi_reconnect_never_turns_lights_on() -> None:
+    automations = _automations_by_id()
+    assert "welcome_home_when_ignacy_reconnects_before_23" not in automations
+
+
 def test_welcome_home_runs_twenty_minutes_before_sunset_only_when_home() -> None:
     automation = _automations_by_id()["welcome_home_twenty_minutes_before_sunset"]
     assert automation["triggers"] == [
@@ -55,27 +60,6 @@ def test_welcome_home_runs_twenty_minutes_before_sunset_only_when_home() -> None
             "entity_id": "sensor.ignacy_wi_fi_presence",
             "state": "home",
         }
-    ]
-    assert automation["actions"] == [
-        {
-            "action": "scene.turn_on",
-            "target": {"entity_id": "scene.welcome_home"},
-        }
-    ]
-
-
-def test_welcome_home_runs_immediately_on_return_before_23() -> None:
-    automation = _automations_by_id()["welcome_home_when_ignacy_reconnects_before_23"]
-    assert automation["triggers"] == [
-        {
-            "trigger": "state",
-            "entity_id": "sensor.ignacy_wi_fi_presence",
-            "from": "not_home",
-            "to": "home",
-        }
-    ]
-    assert automation["conditions"] == [
-        {"condition": "time", "before": "23:00:00"}
     ]
     assert automation["actions"] == [
         {
