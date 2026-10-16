@@ -135,6 +135,12 @@ The source-controlled automation set is split between
 - **Kitchen Extractor Fan - 60-minute timeout** — turns off the kitchen extractor
   after 60 minutes at either speed. Turning it off and back on starts a fresh
   timeout.
+- **Kitchen - Motion light after sunset** — watches
+  `binary_sensor.kitchen_kitchen_motion_sensor_occupancy`. After sunset, when
+  all four physical kitchen lights and five physical living-room lights are
+  off, motion turns on `light.kitchen_shelly2pmg4_d885ace4f060_output_1` (Kitchen
+  LED); the LED turns off when occupancy clears. The sunset trigger also handles
+  motion that was already active when the sun went down.
 - **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
   then plays the shuffled Spotify playlist *Happy Jazz ☕ Relaxing Instrumental
   Bossa Nova Piano to Positive Mood* at the configured wake-up time when the
