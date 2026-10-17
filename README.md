@@ -142,6 +142,13 @@ The source-controlled automation set is split between
   off, motion turns on `light.kitchen_shelly2pmg4_d885ace4f060_output_1` (Kitchen
   LED); the LED turns off when occupancy clears. The sunset trigger also handles
   motion that was already active when the sun went down.
+- **Bathroom - Motion night LED** — watches
+  `binary_sensor.myggspray_wrlss_mtn_sensor_occupancy`. From 22:00 through
+  05:59, motion turns on `light.bathroom_led_bathroom` only when
+  `switch.bathroom_lamp` is exactly off; an unknown or unavailable lamp state
+  therefore blocks activation. The 22:00 time trigger also handles occupancy
+  that was already active when the night window begins, and the LED turns off
+  when occupancy clears.
 - **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
   then plays the shuffled Spotify playlist *Happy Jazz ☕ Relaxing Instrumental
   Bossa Nova Piano to Positive Mood* at the configured wake-up time when the
@@ -174,7 +181,8 @@ The source-controlled automation set is split between
     LED Bed first, then Bedroom Accent.
   - Single ON from 23:00 through 05:59 turns on the Bathroom LED and then
     progressively enables LED Bed, Bed Lamp, and Bedroom Accent.
-  - Single OFF turns off all three bedroom lights and the Bathroom LED.
+  - Single OFF turns off the three bedroom lights and leaves the Bathroom LED
+    unchanged.
   - Double ON transfers the current Music Assistant queue from the Zeppelin to
     the B&W A7 (`media_player.bedroom`) and starts playback there.
   - Double OFF activates `script.leave_home`. The centralized routine applies the

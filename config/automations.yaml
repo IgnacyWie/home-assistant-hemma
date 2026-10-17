@@ -61,6 +61,40 @@
           entity_id: light.kitchen_shelly2pmg4_d885ace4f060_output_1
   mode: restart
 
+- id: 'bathroom_motion_night_led'
+  alias: Bathroom - Motion night LED
+  description: Turns on the Bathroom LED for occupancy from 22:00 through 05:59 only when the Bathroom Lamp is off, then turns the LED off when occupancy clears.
+  triggers:
+  - trigger: state
+    entity_id: binary_sensor.myggspray_wrlss_mtn_sensor_occupancy
+    to: 'on'
+    id: motion_detected
+  - trigger: state
+    entity_id: binary_sensor.myggspray_wrlss_mtn_sensor_occupancy
+    to: 'off'
+    id: motion_cleared
+  - trigger: time
+    at: "22:00:00"
+    id: night_start
+  conditions: []
+  actions:
+  - choose:
+    - conditions: >-
+        {{ trigger.id in ['motion_detected', 'night_start'] and
+           is_state('binary_sensor.myggspray_wrlss_mtn_sensor_occupancy', 'on') and
+           (now().hour >= 22 or now().hour < 6) and
+           is_state('switch.bathroom_lamp', 'off') }}
+      sequence:
+      - action: light.turn_on
+        target:
+          entity_id: light.bathroom_led_bathroom
+    - conditions: "{{ trigger.id == 'motion_cleared' }}"
+      sequence:
+      - action: light.turn_off
+        target:
+          entity_id: light.bathroom_led_bathroom
+  mode: restart
+
 - id: 'wake_up_music_zeppelin'
   alias: Wake up with music - Zeppelin
   description: Plays a shuffled Happy Jazz and Bossa Nova morning playlist at the configured wake-up time.
@@ -219,9 +253,6 @@
           - light.bedroom_ikea_of_sweden_grillplats_plug
           - light.3_in_1_controller_wifi_2_4g
           - light.bedroom_accent_bedroom
-      - action: light.turn_off
-        target:
-          entity_id: light.bathroom_led_bathroom
   mode: restart
 
 - id: 'bedroom_closet_door_light'
