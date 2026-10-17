@@ -39,6 +39,10 @@ leave_home:
       continue_on_error: true
       target:
         entity_id: media_player.zeppelin
+    - action: media_player.media_pause
+      continue_on_error: true
+      target:
+        entity_id: media_player.bedroom
     - if:
         - condition: template
           value_template: >-

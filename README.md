@@ -25,7 +25,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Jellyfin cinema mode with living-room light state restoration
 - Bathroom humidity-driven ventilation using the bathroom sensor against the bedroom humidity baseline, with a restorable 60-minute maximum-runtime timer
 - Bathroom forgotten-on protection for both bathroom lights
-- IKEA BILRESA bedside remote with progressive night lighting and whole-home bedtime shutdown
+- IKEA BILRESA bedside remote with progressive night lighting, Zeppelin-to-A7 queue transfer, and whole-home bedtime shutdown
 - Corridor BILRESA dual-button mapping: Button 1 runs **Welcome Home** and Button 2 runs the universal **Leave Home** routine
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
@@ -175,13 +175,16 @@ The source-controlled automation set is split between
   - Single ON from 23:00 through 05:59 turns on the Bathroom LED and then
     progressively enables LED Bed, Bed Lamp, and Bedroom Accent.
   - Single OFF turns off all three bedroom lights and the Bathroom LED.
-  - Double ON turns on all three bedroom lights.
+  - Double ON transfers the current Music Assistant queue from the Zeppelin to
+    the B&W A7 (`media_player.bedroom`) and starts playback there.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
-    19-target Leave Home scene, then conditionally turns off the one TV entity also
-    used by Hemma: `media_player.living_room_tv_2`. Across the routine, 20 enabled,
-    visible household entities are managed: sixteen lights, the Lelit espresso
-    machine, kitchen extractor fan, Zeppelin, and the living-room TV. The bathroom
-    fan stays outside the routine so its humidity schedule remains authoritative.
+    18-target Leave Home scene, pauses both the Zeppelin and the B&W A7, then
+    conditionally turns off the one TV entity also used by Hemma:
+    `media_player.living_room_tv_2`. Across the routine, 21 enabled, visible
+    household entities are managed: sixteen lights, the Lelit espresso machine,
+    kitchen extractor fan, both Music Assistant speakers, and the living-room TV.
+    The bathroom fan stays outside the routine so its humidity schedule remains
+    authoritative.
     Hidden, disabled, diagnostic, unavailable, duplicate-TV, and infrastructure
     entities are intentionally excluded.
   - While the configured wake-up alarm is playing, any mapped button press
@@ -191,12 +194,15 @@ The source-controlled automation set is split between
   Button 1's single press runs `scene.welcome_home`, Button 1's double press starts
   the French Jazz Lounge playlist on the Zeppelin, and Button 2's single press runs
   `script.leave_home`.
-- **Living Room - TRADFRI media remote** — maps the ZHA five-button remote only
-  to `media_player.zeppelin`: brightness up/down changes its volume, left/right
-  skips to the previous/next track, and a center-button tap acts immediately.
-  The center button resumes the Zeppelin when paused, pauses it when playing, and
-  starts `script.french_jazz_lounge` when the Zeppelin is otherwise idle or off.
-  Center-button holds have no separate action.
+- **Living Room - TRADFRI media remote** — maps the ZHA five-button remote to
+  `media_player.zeppelin`: brightness up/down changes its volume and left/right
+  skips to the previous/next track. A single center press resumes the Zeppelin
+  when paused, pauses it when playing, and starts `script.french_jazz_lounge`
+  when the Zeppelin is otherwise idle or off. The remote does not expose a native
+  double-press event, so the single-press action waits up to 450 ms for a second
+  center press. Two center presses transfer the current Music Assistant queue
+  from the B&W A7 to the Zeppelin and start playback there. Center-button holds
+  have no separate action.
 - **Ignacy Wi-Fi presence** — scans the local `/24` every 15 seconds with ARP-aware
   Nmap discovery and reports `home` only when the phone's fixed private Wi-Fi MAC
   is present. The MAC is read from `/config/private/ignacy_phone_wifi_mac`, which
@@ -277,10 +283,11 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
 registry. The scene sets sixteen responsive physical lights, the Lelit
-espresso-machine switch, and the kitchen extractor fan to `off`. The Zeppelin
-music is handled separately by `script.leave_home`, which sends
-`media_player.media_pause` to the Music Assistant player entity
-`media_player.zeppelin`. That player is backed by the Zeppelin DLNA player.
+espresso-machine switch, and the kitchen extractor fan to `off`. Music playback is handled separately by `script.leave_home`, which sends
+independent `media_player.media_pause` actions to the Music Assistant player
+entities `media_player.zeppelin` and `media_player.bedroom`. Separate actions
+ensure one receiver rejecting a redundant pause cannot prevent the other from
+being paused. The Zeppelin entity is backed by the Zeppelin DLNA player.
 The hidden native DLNA entity `media_player.living_room` is not targeted because
 its live feature set does not advertise pause support.
 The physical living-room TV is handled separately by `script.leave_home`, using only
@@ -301,7 +308,7 @@ excluded.
 
 The bedside double-OFF branch, the corridor Button 2, and the Home chip's
 **All Off** action all call `script.leave_home`. The script applies
-`scene.leave_home`, pauses both Zeppelin control paths, then turns off the selected
+`scene.leave_home`, pauses both Music Assistant speakers, then turns off the selected
 Hemma TV only when needed. The chip summarizes the same physical-device allowlist,
 opens a compact sheet containing only active devices, and gives each device its own
 turn-off control. It replaces the old one-way **Leave Home** chip and the temporary
@@ -310,7 +317,7 @@ active-device cards on the Home view.
 When changing the Leave Home allowlist, update these places together:
 
 1. The non-TV targets in `scene.leave_home` in `config/scenes.yaml`.
-2. The conditional Zeppelin pause targets and TV target in `script.leave_home` in
+2. The Zeppelin and A7 pause targets plus the TV target in `script.leave_home` in
    `config/scripts.yaml`.
 3. `binary_sensor.leave_home_scene_active` in
    `config/packages/hemma_helpers.yaml`.

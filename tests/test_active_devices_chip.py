@@ -21,6 +21,7 @@ ACTIVE_DEVICE_IDS = {
     "light.bedroom_ikea_of_sweden_grillplats_plug",
     "switch.ikea_of_sweden_grillplats_plug_2",
     "media_player.zeppelin",
+    "media_player.bedroom",
     "media_player.living_room_tv_2",
     "light.zeppelin_light",
     "light.bedroom_closet",
@@ -46,9 +47,15 @@ class ActiveDevicesChipTests(unittest.TestCase):
 
     def test_chip_covers_the_exact_leave_home_allowlist(self):
         dashboard = DASHBOARD.read_text()
+        room_template = ROOM_TEMPLATE.read_text()
+        template = TEMPLATE.read_text()
         configured = set(re.findall(r"active_device_entity_\d+:\s+([^\s#]+)", dashboard))
         self.assertEqual(ACTIVE_DEVICE_IDS, configured)
         self.assertNotIn("fan.bathroom_fan_bathroom", configured)
+        self.assertIn("active_device_entity_21: null", room_template)
+        self.assertIn("entity_21: '[[[ return variables.active_device_entity_21 ]]]'", room_template)
+        self.assertIn("entity_21: null", template)
+        self.assertEqual(4, template.count("variables.entity_21"))
 
     def test_chip_has_live_summary_individual_controls_and_all_off(self):
         template = TEMPLATE.read_text()

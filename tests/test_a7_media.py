@@ -14,9 +14,10 @@ class A7MediaDashboardTests(unittest.TestCase):
         cls.home = cls.source.split("title: Home", 1)[1].split("title: Living Room", 1)[0]
         cls.bedroom = cls.source.split("title: Bedroom", 1)[1].split("title: Bathroom", 1)[0]
 
-    def test_home_media_panel_and_tile_use_a7(self):
+    def test_home_media_panel_tile_and_shutdown_status_use_a7(self):
+        self.assertIn("active_device_entity_21: media_player.bedroom", self.home)
         self.assertIn("media_player_3: media_player.bedroom", self.home)
-        self.assertEqual(2, self.home.count("media_player.bedroom"))
+        self.assertEqual(3, self.home.count("media_player.bedroom"))
         self.assertIn("name: B&W A7", self.home)
         self.assertIn("icon: bw-a7-speaker-v1", self.home)
 

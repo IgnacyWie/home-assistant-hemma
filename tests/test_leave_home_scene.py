@@ -47,12 +47,19 @@ class LeaveHomeSceneTests(unittest.TestCase):
             active_sensor,
         )
 
-    def test_leave_home_script_pauses_dlna_backed_zeppelin_player(self):
+    def test_leave_home_script_pauses_both_music_assistant_players(self):
         scripts = (ROOT / "config/scripts.yaml").read_text()
         leave_script = scripts.split("leave_home:", 1)[1]
-        self.assertIn("action: media_player.media_pause", leave_script)
+        self.assertEqual(2, leave_script.count("action: media_player.media_pause"))
         self.assertIn("media_player.zeppelin", leave_script)
+        self.assertIn("media_player.bedroom", leave_script)
         self.assertNotIn("entity_id: media_player.living_room\n", leave_script)
+
+        helpers = HELPERS.read_text().split("- name: Leave Home Scene Active", 1)[1]
+        self.assertIn(
+            "states('media_player.bedroom') in ['off', 'idle', 'paused', 'standby']",
+            helpers,
+        )
 
     def test_bathroom_fan_is_explicitly_excluded(self):
         self.assertNotIn("fan.bathroom_fan_bathroom", SCENES.read_text())

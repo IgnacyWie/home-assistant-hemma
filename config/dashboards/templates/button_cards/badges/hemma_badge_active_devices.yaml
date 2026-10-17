@@ -22,6 +22,11 @@ hemma_badge_active_devices:
     entity_14: null
     entity_15: null
     entity_16: null
+    entity_17: null
+    entity_18: null
+    entity_19: null
+    entity_20: null
+    entity_21: null
     all_off_entity: script.leave_home
 
   show_state: false
@@ -35,7 +40,9 @@ hemma_badge_active_devices:
         variables.entity_1, variables.entity_2, variables.entity_3, variables.entity_4,
         variables.entity_5, variables.entity_6, variables.entity_7, variables.entity_8,
         variables.entity_9, variables.entity_10, variables.entity_11, variables.entity_12,
-        variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16
+        variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16,
+        variables.entity_17, variables.entity_18, variables.entity_19, variables.entity_20,
+        variables.entity_21
       ].filter(Boolean);
       const v = variables.enabled;
       const enabled = v === true || v === 1 || String(v).toLowerCase() === 'true';
@@ -66,7 +73,9 @@ hemma_badge_active_devices:
             variables.entity_1, variables.entity_2, variables.entity_3, variables.entity_4,
             variables.entity_5, variables.entity_6, variables.entity_7, variables.entity_8,
             variables.entity_9, variables.entity_10, variables.entity_11, variables.entity_12,
-            variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16
+            variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16,
+            variables.entity_17, variables.entity_18, variables.entity_19, variables.entity_20,
+            variables.entity_21
           ].filter(Boolean);
           const allOffEntity = variables.all_off_entity || 'script.leave_home';
           const inactiveMedia = ['off', 'idle', 'paused', 'standby', 'unknown', 'unavailable'];
@@ -272,7 +281,9 @@ hemma_badge_active_devices:
         variables.entity_1, variables.entity_2, variables.entity_3, variables.entity_4,
         variables.entity_5, variables.entity_6, variables.entity_7, variables.entity_8,
         variables.entity_9, variables.entity_10, variables.entity_11, variables.entity_12,
-        variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16
+        variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16,
+        variables.entity_17, variables.entity_18, variables.entity_19, variables.entity_20,
+        variables.entity_21
       ].filter(Boolean);
       const inactiveMedia = ['off', 'idle', 'paused', 'standby', 'unknown', 'unavailable'];
       const active = ids.filter(id => {
@@ -307,7 +318,9 @@ hemma_badge_active_devices:
               variables.entity_1, variables.entity_2, variables.entity_3, variables.entity_4,
               variables.entity_5, variables.entity_6, variables.entity_7, variables.entity_8,
               variables.entity_9, variables.entity_10, variables.entity_11, variables.entity_12,
-              variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16
+              variables.entity_13, variables.entity_14, variables.entity_15, variables.entity_16,
+              variables.entity_17, variables.entity_18, variables.entity_19, variables.entity_20,
+              variables.entity_21
             ].filter(Boolean);
             const inactiveMedia = ['off', 'idle', 'paused', 'standby', 'unknown', 'unavailable'];
             const active = ids.some(id => {

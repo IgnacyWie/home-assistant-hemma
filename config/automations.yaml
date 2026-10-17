@@ -115,7 +115,7 @@
 
 - id: 'bedroom_bilresa_remote'
   alias: Bedroom - BILRESA bedside remote
-  description: Controls bedroom lights, handles bedtime shutdown, and dismisses the Zeppelin wake-up alarm.
+  description: Controls bedroom lights, transfers the Zeppelin queue to the A7, handles bedtime shutdown, and dismisses the Zeppelin wake-up alarm.
   triggers:
   - trigger: device
     domain: zha
@@ -162,12 +162,12 @@
           entity_id: media_player.zeppelin
     - conditions: "{{ trigger.id == 'turn_on_double' }}"
       sequence:
-      - action: light.turn_on
+      - action: music_assistant.transfer_queue
         target:
-          entity_id:
-          - light.3_in_1_controller_wifi_2_4g
-          - light.bedroom_ikea_of_sweden_grillplats_plug
-          - light.bedroom_accent_bedroom
+          entity_id: media_player.bedroom
+        data:
+          source_player: media_player.zeppelin
+          auto_play: true
     - conditions: "{{ trigger.id == 'turn_off_double' }}"
       sequence:
       - action: script.turn_on
@@ -509,7 +509,7 @@
 
 - id: 'living_room_tradfri_center_button'
   alias: Living Room - TRADFRI center button
-  description: Instantly pauses or resumes the Zeppelin.
+  description: A single press controls the Zeppelin; a double press transfers the A7 queue to the Zeppelin.
   triggers:
   - trigger: device
     domain: zha
@@ -518,28 +518,48 @@
     subtype: turn_on
   conditions: []
   actions:
-  - variables:
-      active_transport_player: media_player.zeppelin
+  - wait_for_trigger:
+    - trigger: device
+      domain: zha
+      device_id: a8940bb7824bdae5bfe525f2e61e95f3
+      type: remote_button_short_press
+      subtype: turn_on
+    timeout:
+      milliseconds: 450
+    continue_on_timeout: true
   - choose:
-    - conditions: >-
-        {{ active_transport_player | length > 0 and
-           states(active_transport_player) == 'paused' }}
+    - conditions: "{{ wait.completed }}"
       sequence:
-      - action: media_player.media_play
+      - action: music_assistant.transfer_queue
         target:
           entity_id: media_player.zeppelin
-    - conditions: >-
-        {{ active_transport_player | length > 0 and
-           states(active_transport_player) == 'playing' }}
-      sequence:
-      - action: media_player.media_pause
-        target:
-          entity_id: media_player.zeppelin
-    - conditions: >-
-        {{ states(active_transport_player) not in ['playing', 'paused'] }}
-      sequence:
-      - action: script.turn_on
-        target:
-          entity_id: script.french_jazz_lounge
-  mode: restart
+        data:
+          source_player: media_player.bedroom
+          auto_play: true
+    default:
+    - variables:
+        active_transport_player: media_player.zeppelin
+    - choose:
+      - conditions: >-
+          {{ active_transport_player | length > 0 and
+             states(active_transport_player) == 'paused' }}
+        sequence:
+        - action: media_player.media_play
+          target:
+            entity_id: media_player.zeppelin
+      - conditions: >-
+          {{ active_transport_player | length > 0 and
+             states(active_transport_player) == 'playing' }}
+        sequence:
+        - action: media_player.media_pause
+          target:
+            entity_id: media_player.zeppelin
+      - conditions: >-
+          {{ states(active_transport_player) not in ['playing', 'paused'] }}
+        sequence:
+        - action: script.turn_on
+          target:
+            entity_id: script.french_jazz_lounge
+  mode: single
+  max_exceeded: silent
 

@@ -189,6 +189,11 @@ hemma_room:
     active_device_entity_14: null
     active_device_entity_15: null
     active_device_entity_16: null
+    active_device_entity_17: null
+    active_device_entity_18: null
+    active_device_entity_19: null
+    active_device_entity_20: null
+    active_device_entity_21: null
 
     plex_stream_1:
     plex_stream_2:
@@ -1690,6 +1695,11 @@ hemma_room:
               entity_14: '[[[ return variables.active_device_entity_14 ]]]'
               entity_15: '[[[ return variables.active_device_entity_15 ]]]'
               entity_16: '[[[ return variables.active_device_entity_16 ]]]'
+              entity_17: '[[[ return variables.active_device_entity_17 ]]]'
+              entity_18: '[[[ return variables.active_device_entity_18 ]]]'
+              entity_19: '[[[ return variables.active_device_entity_19 ]]]'
+              entity_20: '[[[ return variables.active_device_entity_20 ]]]'
+              entity_21: '[[[ return variables.active_device_entity_21 ]]]'
 
           - type: custom:button-card
             template: hemma_badge_wake_alarm

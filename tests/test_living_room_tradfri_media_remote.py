@@ -41,15 +41,16 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         self.assertNotIn("living_room_tv", remote)
         self.assertNotIn("tv_w_salonie", remote)
 
-    def test_center_button_instantly_pauses_or_resumes_active_media(self):
+    def test_center_button_distinguishes_single_and_double_press(self):
         center = self.center_source()
-        self.assertIn(f"device_id: {DEVICE_ID}", center)
+        self.assertEqual(2, center.count(f"device_id: {DEVICE_ID}"))
         self.assertIn("type: remote_button_short_press", center)
         self.assertIn("subtype: turn_on", center)
-        self.assertNotIn("wait_for_trigger:", center)
-        self.assertNotIn("timeout:", center)
+        self.assertIn("wait_for_trigger:", center)
+        self.assertIn("milliseconds: 450", center)
+        self.assertIn("{{ wait.completed }}", center)
         self.assertNotIn("media_player.turn_off", center)
-        self.assertIn("mode: restart", center)
+        self.assertIn("mode: single", center)
         self.assertIn("action: media_player.media_play", center)
         self.assertIn("action: media_player.media_pause", center)
         self.assertNotIn("action: media_player.media_play_pause", center)
@@ -60,6 +61,9 @@ class LivingRoomTradfriMediaRemoteTests(unittest.TestCase):
         self.assertIn("states(active_transport_player) not in ['playing', 'paused']", center)
         self.assertIn("action: script.turn_on", center)
         self.assertIn("entity_id: script.french_jazz_lounge", center)
+        self.assertIn("action: music_assistant.transfer_queue", center)
+        self.assertIn("source_player: media_player.bedroom", center)
+        self.assertIn("auto_play: true", center)
         self.assertNotIn("living_room_tv", center)
         self.assertNotIn("tv_w_salonie", center)
 
