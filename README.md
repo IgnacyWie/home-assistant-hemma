@@ -30,6 +30,7 @@ My responsive Home Assistant setup built on [Hemma](https://github.com/willsande
 - Bathroom Lamp control with a filament-style bulb icon
 - Bedroom Bed Lamp tile with a dedicated bedside-lamp icon
 - Bedroom Closet light tile with an outlined shirt icon
+- Bowers & Wilkins A7 playback in the Home and Bedroom Media panels, with matching media tiles and a custom A7 grille-and-metal-band icon
 - Bedroom climate chip showing live indoor temperature and humidity from the IKEA TIMMERFLOTTE sensor; tapping a reading opens the combined current values and six-hour history
 - Home-view air-quality chip showing outdoor European AQI, PM2.5, and PM10 estimates from Open-Meteo without an API key
 - Home-view presence chip driven by a local Wi-Fi scan of the phone's fixed per-network private MAC, so presence follows connection to this building's network instead of the wider GPS home zone
