@@ -32,15 +32,14 @@ class BathroomMotionAutomationTests(unittest.TestCase):
         self.assertIn("action: light.turn_on", self.motion)
         self.assertIn("action: light.turn_off", self.motion)
 
-    def test_bedside_off_branch_does_not_turn_off_bathroom_led(self):
-        off_branch = self.bedside.split(
-            "conditions: \"{{ trigger.id == 'turn_off' }}\"", 1
-        )[1]
-        self.assertNotIn("light.bathroom_led_bathroom", off_branch)
+    def test_bedside_remote_does_not_control_bathroom_led(self):
+        self.assertNotIn("light.bathroom_led_bathroom", self.bedside)
         night_on_branch = self.bedside.split(
             "conditions: \"{{ trigger.id == 'turn_on' and nighttime }}\"", 1
         )[1].split("conditions: \"{{ trigger.id == 'turn_on' }}\"", 1)[0]
-        self.assertIn("light.bathroom_led_bathroom", night_on_branch)
+        self.assertIn("light.3_in_1_controller_wifi_2_4g", night_on_branch)
+        self.assertIn("light.bedroom_ikea_of_sweden_grillplats_plug", night_on_branch)
+        self.assertIn("light.bedroom_accent_bedroom", night_on_branch)
 
 
 if __name__ == "__main__":

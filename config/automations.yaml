@@ -210,9 +210,6 @@
           entity_id: script.leave_home
     - conditions: "{{ trigger.id == 'turn_on' and nighttime }}"
       sequence:
-      - action: light.turn_on
-        target:
-          entity_id: light.bathroom_led_bathroom
       - choose:
         - conditions: "{{ not is_state('light.3_in_1_controller_wifi_2_4g', 'on') }}"
           sequence:

@@ -179,8 +179,9 @@ The source-controlled automation set is split between
 - **Bedroom - BILRESA bedside remote** — maps the IKEA `09B9` ZHA remote:
   - Single ON from 06:00 through 22:59 keeps the daytime behavior: Bed Lamp and
     LED Bed first, then Bedroom Accent.
-  - Single ON from 23:00 through 05:59 turns on the Bathroom LED and then
-    progressively enables LED Bed, Bed Lamp, and Bedroom Accent.
+  - Single ON from 23:00 through 05:59 progressively enables LED Bed, Bed Lamp,
+    and Bedroom Accent; the Bathroom LED is controlled only by its motion
+    automation.
   - Single OFF turns off the three bedroom lights and leaves the Bathroom LED
     unchanged.
   - Double ON transfers the current Music Assistant queue from the Zeppelin to
