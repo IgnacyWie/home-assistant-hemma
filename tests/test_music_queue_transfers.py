@@ -29,6 +29,16 @@ class MusicQueueTransferTests(unittest.TestCase):
         self.assertIn("auto_play: true", branch)
         self.assertNotIn("action: light.turn_on", branch)
 
+    def test_bedside_off_turns_off_lights_and_pauses_native_a7_when_playing(self):
+        branch = self.bedside.split(
+            "conditions: \"{{ trigger.id == 'turn_off' }}\"", 1
+        )[1]
+        self.assertIn("action: light.turn_off", branch)
+        self.assertIn("entity_id: media_player.192_168_1_42", branch)
+        self.assertIn('state: "playing"', branch)
+        self.assertIn("action: media_player.media_pause", branch)
+        self.assertNotIn("entity_id: media_player.bedroom", branch)
+
     def test_living_room_double_center_transfers_a7_queue_to_zeppelin(self):
         self.assertIn("wait_for_trigger:", self.living_room)
         self.assertIn("milliseconds: 450", self.living_room)

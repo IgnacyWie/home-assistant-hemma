@@ -21,7 +21,7 @@ ACTIVE_DEVICE_IDS = {
     "light.bedroom_ikea_of_sweden_grillplats_plug",
     "switch.ikea_of_sweden_grillplats_plug_2",
     "media_player.zeppelin",
-    "media_player.bedroom",
+    "media_player.192_168_1_42",
     "media_player.living_room_tv_2",
     "light.zeppelin_light",
     "light.bedroom_closet",

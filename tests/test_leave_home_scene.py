@@ -47,17 +47,19 @@ class LeaveHomeSceneTests(unittest.TestCase):
             active_sensor,
         )
 
-    def test_leave_home_script_pauses_both_music_assistant_players(self):
+    def test_leave_home_script_pauses_zeppelin_and_native_a7_when_playing(self):
         scripts = (ROOT / "config/scripts.yaml").read_text()
         leave_script = scripts.split("leave_home:", 1)[1]
         self.assertEqual(2, leave_script.count("action: media_player.media_pause"))
         self.assertIn("media_player.zeppelin", leave_script)
-        self.assertIn("media_player.bedroom", leave_script)
+        self.assertIn("entity_id: media_player.192_168_1_42", leave_script)
+        self.assertIn('state: "playing"', leave_script)
+        self.assertNotIn("entity_id: media_player.bedroom", leave_script)
         self.assertNotIn("entity_id: media_player.living_room\n", leave_script)
 
         helpers = HELPERS.read_text().split("- name: Leave Home Scene Active", 1)[1]
         self.assertIn(
-            "states('media_player.bedroom') in ['off', 'idle', 'paused', 'standby']",
+            "states('media_player.192_168_1_42') in ['off', 'idle', 'paused', 'standby', 'unavailable']",
             helpers,
         )
 

@@ -182,16 +182,19 @@ The source-controlled automation set is split between
   - Single ON from 23:00 through 05:59 progressively enables LED Bed, Bed Lamp,
     and Bedroom Accent; the Bathroom LED is controlled only by its motion
     automation.
-  - Single OFF turns off the three bedroom lights and leaves the Bathroom LED
-    unchanged.
+  - Single OFF turns off the three bedroom lights, leaves the Bathroom LED
+    unchanged, and pauses the A7 through its native DLNA entity
+    `media_player.192_168_1_42` when that entity reports `playing`.
   - Double ON transfers the current Music Assistant queue from the Zeppelin to
     the B&W A7 (`media_player.bedroom`) and starts playback there.
   - Double OFF activates `script.leave_home`. The centralized routine applies the
-    18-target Leave Home scene, pauses both the Zeppelin and the B&W A7, then
+    18-target Leave Home scene, pauses the Zeppelin and the A7's native DLNA
+    entity when it is playing, then
     conditionally turns off the one TV entity also used by Hemma:
     `media_player.living_room_tv_2`. Across the routine, 21 enabled, visible
     household entities are managed: sixteen lights, the Lelit espresso machine,
-    kitchen extractor fan, both Music Assistant speakers, and the living-room TV.
+    kitchen extractor fan, the Zeppelin Music Assistant player, the A7 DLNA
+    player, and the living-room TV.
     The bathroom fan stays outside the routine so its humidity schedule remains
     authoritative.
     Hidden, disabled, diagnostic, unavailable, duplicate-TV, and infrastructure
@@ -292,11 +295,16 @@ Activating the tile calls `scene.turn_on` for `scene.welcome_home`.
 allowlist previously embedded in the bedside remote's double-OFF branch. Every
 included entity is enabled, visible, and non-diagnostic in the live entity
 registry. The scene sets sixteen responsive physical lights, the Lelit
-espresso-machine switch, and the kitchen extractor fan to `off`. Music playback is handled separately by `script.leave_home`, which sends
-independent `media_player.media_pause` actions to the Music Assistant player
-entities `media_player.zeppelin` and `media_player.bedroom`. Separate actions
-ensure one receiver rejecting a redundant pause cannot prevent the other from
-being paused. The Zeppelin entity is backed by the Zeppelin DLNA player.
+espresso-machine switch, and the kitchen extractor fan to `off`. Music playback
+is handled separately by `script.leave_home`: it pauses the Music Assistant
+Zeppelin entity `media_player.zeppelin`, then pauses the A7 through its native
+DLNA entity `media_player.192_168_1_42` when that entity reports `playing`.
+Separate actions ensure one receiver rejecting a command cannot prevent the
+other from being paused. The Zeppelin entity is backed by the Zeppelin DLNA
+player.
+The A7's native entity is treated as inactive while unavailable because the
+speaker drops off DLNA when asleep; a pause is sent only when it reports
+`playing`.
 The hidden native DLNA entity `media_player.living_room` is not targeted because
 its live feature set does not advertise pause support.
 The physical living-room TV is handled separately by `script.leave_home`, using only
@@ -317,8 +325,9 @@ excluded.
 
 The bedside double-OFF branch, the corridor Button 2, and the Home chip's
 **All Off** action all call `script.leave_home`. The script applies
-`scene.leave_home`, pauses both Music Assistant speakers, then turns off the selected
-Hemma TV only when needed. The chip summarizes the same physical-device allowlist,
+`scene.leave_home`, pauses the Zeppelin and the playing native A7 DLNA entity,
+then turns off the selected Hemma TV only when needed. The chip summarizes the
+same physical-device allowlist,
 opens a compact sheet containing only active devices, and gives each device its own
 turn-off control. It replaces the old one-way **Leave Home** chip and the temporary
 active-device cards on the Home view.

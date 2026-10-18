@@ -265,7 +265,7 @@ template:
              and is_state('switch.ikea_of_sweden_grillplats_plug_2', 'off')
              and is_state('fan.kitchen_extractor_fan', 'off')
              and states('media_player.zeppelin') in ['off', 'idle', 'paused', 'standby']
-             and states('media_player.bedroom') in ['off', 'idle', 'paused', 'standby']
+             and states('media_player.192_168_1_42') in ['off', 'idle', 'paused', 'standby', 'unavailable']
              and states('media_player.tv_w_salonie_4') in ['off', 'idle', 'paused', 'standby', 'unavailable'] }}
 
 # Updates restart button

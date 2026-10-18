@@ -250,6 +250,15 @@
           - light.bedroom_ikea_of_sweden_grillplats_plug
           - light.3_in_1_controller_wifi_2_4g
           - light.bedroom_accent_bedroom
+      - if:
+        - condition: state
+          entity_id: media_player.192_168_1_42
+          state: "playing"
+        then:
+        - action: media_player.media_pause
+          continue_on_error: true
+          target:
+            entity_id: media_player.192_168_1_42
   mode: restart
 
 - id: 'bedroom_closet_door_light'
