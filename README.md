@@ -137,18 +137,19 @@ The source-controlled automation set is split between
   after 60 minutes at either speed. Turning it off and back on starts a fresh
   timeout.
 - **Kitchen - Motion light after sunset** — watches
-  `binary_sensor.kitchen_kitchen_motion_sensor_occupancy`. After sunset, when
-  all four physical kitchen lights and five physical living-room lights are
-  off, motion turns on `light.kitchen_shelly2pmg4_d885ace4f060_output_1` (Kitchen
-  LED); the LED turns off when occupancy clears. The sunset trigger also handles
-  motion that was already active when the sun went down.
+  `binary_sensor.kitchen_kitchen_motion_sensor_occupancy`. From 20 minutes
+  before sunset until sunrise, when all four physical kitchen lights and five
+  physical living-room lights are off, motion turns on
+  `light.kitchen_shelly2pmg4_d885ace4f060_output_1` (Kitchen LED); the LED turns
+  off when occupancy clears or the sun rises. The sunset-offset trigger also
+  handles motion that was already active when the evening window begins.
 - **Bathroom - Motion night LED** — watches
-  `binary_sensor.myggspray_wrlss_mtn_sensor_occupancy`. From 22:00 through
-  05:59, motion turns on `light.bathroom_led_bathroom` only when
+  `binary_sensor.myggspray_wrlss_mtn_sensor_occupancy`. From 20 minutes before
+  sunset until sunrise, motion turns on `light.bathroom_led_bathroom` only when
   `switch.bathroom_lamp` is exactly off; an unknown or unavailable lamp state
-  therefore blocks activation. The 22:00 time trigger also handles occupancy
-  that was already active when the night window begins, and the LED turns off
-  when occupancy clears.
+  therefore blocks activation. The sunset-offset trigger also handles occupancy
+  that was already active when the evening window begins, and the LED turns off
+  when occupancy clears or the sun rises.
 - **Wake up with music - Zeppelin** — switches on the Lelit espresso machine,
   then plays the shuffled Spotify playlist *Happy Jazz ☕ Relaxing Instrumental
   Bossa Nova Piano to Positive Mood* at the configured wake-up time when the

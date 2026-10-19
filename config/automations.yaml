@@ -19,7 +19,7 @@
 
 - id: 'kitchen_motion_after_sunset_light'
   alias: Kitchen - Motion light after sunset
-  description: Turns on the Kitchen LED for motion after sunset only while the physical kitchen and living-room lights are all off, then turns it off when motion clears.
+  description: Turns on the Kitchen LED for motion from 20 minutes before sunset until sunrise only while the physical kitchen and living-room lights are all off, then turns it off when motion clears or the sun rises.
   triggers:
   - trigger: state
     entity_id: binary_sensor.kitchen_kitchen_motion_sensor_occupancy
@@ -31,30 +31,41 @@
     id: motion_cleared
   - trigger: sun
     event: sunset
-    id: sunset
+    offset: "-00:20:00"
+    id: evening_start
+  - trigger: sun
+    event: sunrise
+    id: sunrise
   conditions: []
   actions:
   - choose:
-    - conditions: >-
-        {{ trigger.id in ['motion_detected', 'sunset'] and
-           is_state('binary_sensor.kitchen_kitchen_motion_sensor_occupancy', 'on') and
-           is_state('sun.sun', 'below_horizon') and
-           expand([
-             'light.kitchen_1',
-             'light.kitchen_shelly2pmg4_d885ace4f060_output_1',
-             'light.2ch_wi_fi_switch_module_3_switch_1',
-             'light.2ch_wi_fi_switch_module_3_switch_2',
-             'light.living_room_accent_1',
-             'light.living_room_2ch_wi_fi_switch_module_switch_2',
-             'light.living_room_2ch_wi_fi_switch_module_2_switch_1',
-             'light.living_room_2ch_wi_fi_switch_module_switch_1',
-             'light.living_room_balcony'
-           ]) | selectattr('state', 'ne', 'off') | list | count == 0 }}
+    - conditions:
+      - condition: template
+        value_template: >-
+          {{ trigger.id in ['motion_detected', 'evening_start'] and
+             is_state('binary_sensor.kitchen_kitchen_motion_sensor_occupancy', 'on') }}
+      - condition: sun
+        after: sunset
+        after_offset: "-00:20:00"
+        before: sunrise
+      - condition: template
+        value_template: >-
+          {{ expand([
+               'light.kitchen_1',
+               'light.kitchen_shelly2pmg4_d885ace4f060_output_1',
+               'light.2ch_wi_fi_switch_module_3_switch_1',
+               'light.2ch_wi_fi_switch_module_3_switch_2',
+               'light.living_room_accent_1',
+               'light.living_room_2ch_wi_fi_switch_module_switch_2',
+               'light.living_room_2ch_wi_fi_switch_module_2_switch_1',
+               'light.living_room_2ch_wi_fi_switch_module_switch_1',
+               'light.living_room_balcony'
+             ]) | selectattr('state', 'ne', 'off') | list | count == 0 }}
       sequence:
       - action: light.turn_on
         target:
           entity_id: light.kitchen_shelly2pmg4_d885ace4f060_output_1
-    - conditions: "{{ trigger.id == 'motion_cleared' }}"
+    - conditions: "{{ trigger.id in ['motion_cleared', 'sunrise'] }}"
       sequence:
       - action: light.turn_off
         target:
@@ -63,7 +74,7 @@
 
 - id: 'bathroom_motion_night_led'
   alias: Bathroom - Motion night LED
-  description: Turns on the Bathroom LED for occupancy from 22:00 through 05:59 only when the Bathroom Lamp is off, then turns the LED off when occupancy clears.
+  description: Turns on the Bathroom LED for occupancy from 20 minutes before sunset until sunrise only when the Bathroom Lamp is off, then turns it off when occupancy clears or the sun rises.
   triggers:
   - trigger: state
     entity_id: binary_sensor.myggspray_wrlss_mtn_sensor_occupancy
@@ -73,22 +84,31 @@
     entity_id: binary_sensor.myggspray_wrlss_mtn_sensor_occupancy
     to: 'off'
     id: motion_cleared
-  - trigger: time
-    at: "22:00:00"
-    id: night_start
+  - trigger: sun
+    event: sunset
+    offset: "-00:20:00"
+    id: evening_start
+  - trigger: sun
+    event: sunrise
+    id: sunrise
   conditions: []
   actions:
   - choose:
-    - conditions: >-
-        {{ trigger.id in ['motion_detected', 'night_start'] and
-           is_state('binary_sensor.myggspray_wrlss_mtn_sensor_occupancy', 'on') and
-           (now().hour >= 22 or now().hour < 6) and
-           is_state('switch.bathroom_lamp', 'off') }}
+    - conditions:
+      - condition: template
+        value_template: >-
+          {{ trigger.id in ['motion_detected', 'evening_start'] and
+             is_state('binary_sensor.myggspray_wrlss_mtn_sensor_occupancy', 'on') and
+             is_state('switch.bathroom_lamp', 'off') }}
+      - condition: sun
+        after: sunset
+        after_offset: "-00:20:00"
+        before: sunrise
       sequence:
       - action: light.turn_on
         target:
           entity_id: light.bathroom_led_bathroom
-    - conditions: "{{ trigger.id == 'motion_cleared' }}"
+    - conditions: "{{ trigger.id in ['motion_cleared', 'sunrise'] }}"
       sequence:
       - action: light.turn_off
         target:
